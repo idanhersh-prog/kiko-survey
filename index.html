@@ -730,7 +730,7 @@
         <section class="step" data-step="11" id="doneStep">
           <div class="eyebrow">סיימנו 🎉</div>
           <h1>תודה שעזרתם לנו להכיר את KIKO טוב יותר</h1>
-          <p class="lead">התשובות נשמרות כרגע בדפדפן רק לצורך ההדגמה. אפשר לחבר את אותו מבנה ל-Base44 או למסד נתונים.</p>
+          <p class="lead" id="saveStatus">התשובה נשמרה במערכת KIKO. תודה על המילוי.</p>
           <div class="summary">
             <div class="summary-card"><small>החלק שעבד יותר</small><b id="sumBest">—</b></div>
             <div class="summary-card"><small>החלק שעבד פחות</small><b id="sumLess">—</b></div>
@@ -764,6 +764,7 @@
   const root = document.getElementById('kikoApp');
   const steps = [...root.querySelectorAll('.step')];
   const totalQuestionSteps = 10;
+  const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwn93zgMeYSAE_lDQz3pwGWq2TntzFecGqSDjl0RdBVcZwbK6HE6cXk2xCmv4eUyivjMw/exec';
   const data = {
     sensory_preferences: [],
     parts_tested: [],
@@ -955,6 +956,23 @@
     return true;
   }
 
+  async function submitSurveyData(){
+    const payload = {
+      ...data,
+      survey_version: 'v1',
+      source: 'github-pages'
+    };
+
+    const body = new URLSearchParams();
+    body.set('payload', JSON.stringify(payload));
+
+    await fetch(SUBMIT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body
+    });
+  }
+
   function render(){
     steps.forEach((s,i) => s.classList.toggle('active', i===current));
     updateChildRefs();
@@ -982,16 +1000,35 @@
     if(current===5 || current===6) buildDynamicParts();
   }
 
-  nextBtn.addEventListener('click', () => {
+  nextBtn.addEventListener('click', async () => {
     if(!validate()) return;
+
     if(current===10){
       data.feedback_text = root.querySelector('#feedbackText').value.trim();
       data.completed_at = new Date().toISOString();
-      current=11;
-      render();
-      showSummary();
+
+      nextBtn.disabled = true;
+      backBtn.disabled = true;
+      nextBtn.textContent = 'שומר...';
+      validation.textContent = 'שומרים את התשובה...';
+
+      try{
+        await submitSurveyData();
+        validation.textContent = '';
+        current=11;
+        render();
+        showSummary();
+        const saveStatus = root.querySelector('#saveStatus');
+        if(saveStatus) saveStatus.textContent = 'התשובה נשלחה ונשמרה במערכת KIKO. תודה על המילוי.';
+      }catch(err){
+        validation.textContent = 'לא הצלחנו לשמור את התשובה. בדקו את החיבור לאינטרנט ולחצו שוב על “נסה שוב”.';
+        nextBtn.disabled = false;
+        backBtn.disabled = false;
+        nextBtn.textContent = 'נסה שוב';
+      }
       return;
     }
+
     current++;
     render();
     window.scrollTo({top:0,behavior:'smooth'});
