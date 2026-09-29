@@ -1035,3 +1035,42 @@
   });
 
   backBtn.addEventListener('click', () => {
+    if(current>0){ current--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+  });
+
+  function showSummary(){
+    root.querySelector('#sumBest').textContent = partLabels[data.best_part] || '—';
+    root.querySelector('#sumLess').textContent = partLabels[data.less_part] || '—';
+    root.querySelector('#sumInitiative').textContent = data.initiative_score ? `${data.initiative_score}/5` : '—';
+    root.querySelector('#sumEngagement').textContent = data.engagement_score ? `${data.engagement_score}/5` : '—';
+    root.querySelector('#dataPreview').textContent = JSON.stringify(data,null,2);
+  }
+
+  function download(filename, content, type){
+    const blob = new Blob([content], {type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download=filename; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),500);
+  }
+
+  root.querySelector('#downloadJson').addEventListener('click', () =>
+    download('kiko-survey-response.json', JSON.stringify(data,null,2), 'application/json')
+  );
+
+  root.querySelector('#downloadCsv').addEventListener('click', () => {
+    const flat = {};
+    Object.entries(data).forEach(([k,v]) => flat[k] = Array.isArray(v) ? v.join('; ') : (v ?? ''));
+    const keys = Object.keys(flat);
+    const esc = v => `"${String(v).replaceAll('"','""')}"`;
+    const csv = keys.map(esc).join(',') + '\n' + keys.map(k=>esc(flat[k])).join(',');
+    download('kiko-survey-response.csv', '\ufeff'+csv, 'text/csv;charset=utf-8');
+  });
+
+  root.querySelector('#restart').addEventListener('click', () => location.reload());
+
+  render();
+})();
+</script>
+</body>
+</html>
