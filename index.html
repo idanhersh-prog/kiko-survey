@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
   <title>KIKO – שאלון חוויית שימוש</title>
   <style>
     :root{
@@ -21,6 +22,7 @@
       --pink-soft:#fdebe7;
       --shadow:0 18px 50px rgba(74,49,35,.10);
     }
+    html{color-scheme:only light;background:#f7ead8;}
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -439,6 +441,34 @@
       filter:drop-shadow(0 12px 22px rgba(112,35,47,.10));
       background:transparent;
       mix-blend-mode:multiply;
+    }
+
+    @media(prefers-color-scheme:dark){
+      :root{
+        --cream:#f7ead8;
+        --cream-2:#fffaf3;
+        --paper:#fffdf9;
+        --orange:#ed5b2d;
+        --orange-soft:#fff0e7;
+        --red:#b72f3e;
+        --red-dark:#8f2533;
+        --ink:#342d2a;
+        --muted:#776c66;
+        --line:#ead9ca;
+        --green:#5c8d46;
+        --green-soft:#eef5e8;
+        --pink-soft:#fdebe7;
+        --shadow:0 18px 50px rgba(74,49,35,.10);
+      }
+      html,body{background:#f7ead8!important;color:#342d2a!important;}
+      .card{background:#fffdf9!important;color:#342d2a!important;}
+      .choice,.part,.summary-card,details,input,textarea,.export-row button{
+        background:#fff!important;
+        color:#342d2a!important;
+      }
+      .hero-point{background:#fff0e7!important;color:#342d2a!important;}
+      .goal-strip{background:#eef5e8!important;color:#49683c!important;}
+      .progress{background:#e6d5c7!important;}
     }
 
     @media(max-width:820px){
