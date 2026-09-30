@@ -470,16 +470,6 @@
       border:1px solid var(--orange);
       box-shadow:0 8px 20px rgba(237,91,45,.16);
     }
-    .done-secondary{
-      background:transparent;
-      color:var(--ink);
-      border:1px solid var(--line);
-    }
-    .exit-hint{
-      min-height:20px;
-      color:var(--muted);
-      font-size:13px;
-    }
     .follow-block{
       margin-top:14px;
       padding-top:18px;
@@ -876,9 +866,7 @@
 
             <div class="done-actions">
               <button type="button" class="done-primary" id="restartSurvey">מילוי שאלון נוסף</button>
-              <button type="button" class="done-secondary" id="exitSurvey">יציאה</button>
             </div>
-            <div class="exit-hint" id="exitHint" aria-live="polite"></div>
 
             <div class="follow-block">
               <div class="follow-title">רוצים להמשיך לעקוב אחרי KIKO?</div>
@@ -1182,20 +1170,9 @@
   });
 
   const restartSurvey = root.querySelector('#restartSurvey');
-  const exitSurvey = root.querySelector('#exitSurvey');
-  const exitHint = root.querySelector('#exitHint');
 
   if(restartSurvey){
     restartSurvey.addEventListener('click', () => location.reload());
-  }
-
-  if(exitSurvey){
-    exitSurvey.addEventListener('click', () => {
-      window.close();
-      setTimeout(() => {
-        if(exitHint) exitHint.textContent = 'אפשר לסגור את הלשונית בבטחה.';
-      }, 350);
-    });
   }
 
   render();
