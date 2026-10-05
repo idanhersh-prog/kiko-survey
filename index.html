@@ -244,6 +244,8 @@
     }
     .choice-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .choice-grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .choice-grid.cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+    .choice-grid.one-col{grid-template-columns:1fr}
     .choice{
       border:1px solid var(--line);
       background:#fff;
@@ -288,6 +290,7 @@
       font-size:12px;
     }
     .scale .emo{font-size:28px}
+    [data-single="independent_exploration_score"] .choice{min-height:128px;font-size:12px;line-height:1.45}
     .section-gap{margin-top:24px}
     .part-grid{
       display:grid;
@@ -595,7 +598,7 @@
       .card{min-height:0;padding:28px 24px}
       .hero-points{grid-template-columns:1fr}
       .part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .choice-grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .choice-grid.cols-4,.choice-grid.cols-5{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:560px){
       .app{padding:16px 12px 40px}
@@ -642,15 +645,17 @@
           <div class="eyebrow">היכרות קצרה</div>
           <h2>עם מי אנחנו נפגשים היום? 👋</h2>
           <p class="lead">כמה פרטים קצרים על הילד/ה יעזרו לנו להבין את החוויה בהקשר הנכון.</p>
+
           <label class="field-label" for="childName">איך נקרא לילד/ה בשאלון?</label>
           <input id="childName" placeholder="שם פרטי או כינוי – לא חובה" autocomplete="off" />
           <div class="hint">אפשר להשתמש בכינוי בלבד.</div>
 
           <div class="field-label">מה גיל הילד/ה?</div>
-          <div class="choice-grid cols-4" data-single="age_range">
-            <button type="button" class="choice center" data-value="3-4"><span class="emo">🌱</span>3–4</button>
-            <button type="button" class="choice center" data-value="5-6"><span class="emo">🧸</span>5–6</button>
-            <button type="button" class="choice center" data-value="7-9"><span class="emo">🎲</span>7–9</button>
+          <div class="choice-grid cols-5" data-single="age_range">
+            <button type="button" class="choice center" data-value="2–3"><span class="emo">🌱</span>2–3</button>
+            <button type="button" class="choice center" data-value="4–5"><span class="emo">🧸</span>4–5</button>
+            <button type="button" class="choice center" data-value="6–7"><span class="emo">🎲</span>6–7</button>
+            <button type="button" class="choice center" data-value="8–9"><span class="emo">🧩</span>8–9</button>
             <button type="button" class="choice center" data-value="10+"><span class="emo">✨</span>10+</button>
           </div>
 
@@ -663,48 +668,56 @@
         </section>
 
         <section class="step" data-step="2">
-          <div class="eyebrow">תמונת מצב סנסורית</div>
-          <h2>איך <span class="childRef">הילד/ה</span> בדרך כלל מגיב/ה למרקם חדש?</h2>
-          <p class="lead">לא אבחון — רק הקשר קצר שיעזור לנו להבין את התגובה ל-KIKO.</p>
-          <div class="choice-grid" data-single="new_texture_response">
-            <button type="button" class="choice" data-value="seeks"><span class="emo">🤩</span>מיד רוצה לנסות</button>
-            <button type="button" class="choice" data-value="curious"><span class="emo">👀</span>סקרן/ית ובודק/ת</button>
-            <button type="button" class="choice" data-value="careful"><span class="emo">🌱</span>צריך/ה קצת זמן</button>
-            <button type="button" class="choice" data-value="avoids"><span class="emo">↩️</span>לעיתים מעדיף/ה להתרחק</button>
+          <div class="eyebrow">היכרות ותחושה</div>
+          <h2>איך <span class="childRef">הילד/ה</span> בדרך כלל מגיב/ה למקום חדש?</h2>
+          <p class="lead">המטרה היא להבין איך הילד/ה ניגש/ת לסביבה ולמשחק חדש, כדי לפרש את המפגש עם KIKO בהקשר הנכון.</p>
+
+          <div class="choice-grid one-col" data-single="new_place_response">
+            <button type="button" class="choice" data-value="independent_explore"><span class="emo">🔍</span>ניגש/ת לחקור את הסביבה ומחפש/ת דרכי משחק באופן עצמאי.</button>
+            <button type="button" class="choice" data-value="observes_then_joins"><span class="emo">👀</span>מתבונן/ת באחרים משחקים ולאחר מכן מצטרף/ת.</button>
+            <button type="button" class="choice" data-value="joins_with_model"><span class="emo">🤲</span>משחק/ת כאשר מציגים לו/ה מודל למשחק ומעודדים אותו/ה להשתתף.</button>
+            <button type="button" class="choice" data-value="prefers_familiar"><span class="emo">↩️</span>מסרב/ת להתנסות ומעדיף/ה לעסוק בחפצים מוכרים.</button>
           </div>
 
-          <div class="subhead">איזה סוג תחושות בדרך כלל מושך אותו/ה?</div>
-          <div class="choice-grid cols-3" data-multi="sensory_preferences">
-            <button type="button" class="choice" data-value="pressure"><span class="emo">🤲</span>לחץ / חיבוק</button>
-            <button type="button" class="choice" data-value="bumps"><span class="emo">⭕</span>בליטות</button>
-            <button type="button" class="choice" data-value="ribs"><span class="emo">〰️</span>צלעות</button>
-            <button type="button" class="choice" data-value="spiky"><span class="emo">🌵</span>קוצני</button>
-            <button type="button" class="choice" data-value="cold"><span class="emo">❄️</span>קור</button>
-            <button type="button" class="choice" data-value="soft"><span class="emo">🧸</span>רך ונעים</button>
+          <div class="subhead">אילו סוגי תחושה מושכים את <span class="childRef">הילד/ה</span> בדרך כלל?</div>
+          <div class="choice-grid" data-multi="sensory_preferences">
+            <button type="button" class="choice" data-value="deep_pressure"><span class="emo">🤲</span>לחץ וחיבוק – מגע עמוק, לחיצה רציפה וחיבוק.</button>
+            <button type="button" class="choice" data-value="soft_touch"><span class="emo">🧸</span>מגע רך ונעים – פרווה, בדים רכים ומשטחים חלקים.</button>
+            <button type="button" class="choice" data-value="rough_raised"><span class="emo">〰️</span>מגע מחוספס ובולט – משטחים עם בליטות, צלעות או דוגמאות זיגזג.</button>
+            <button type="button" class="choice" data-value="cool_touch"><span class="emo">❄️</span>מגע קריר – משטחים קרירים למגע.</button>
+            <button type="button" class="choice" data-value="dynamic_stimuli"><span class="emo">🔄</span>גירויים דינמיים – מתיחה, סיבוב והפעלת כוח באמצעות הידיים.</button>
           </div>
         </section>
 
         <section class="step" data-step="3">
           <div class="eyebrow">המפגש עצמו</div>
           <h2>איפה ואיך KIKO נכנס לפעילות?</h2>
-          <p class="lead">זה עוזר לנו להבין את הסיטואציה שבה המוצר פגש את הילד/ה.</p>
+          <p class="lead">ההפרדה בין מיקום, סוג הפעילות ואופן תחילת האינטראקציה תעזור לנו להבין טוב יותר את ההקשר שבו KIKO פגש את הילד/ה.</p>
 
-          <div class="field-label">איפה השתמשתם ב-KIKO?</div>
-          <div class="choice-grid cols-3" data-single="context">
-            <button type="button" class="choice" data-value="therapy"><span class="emo">🪑</span>מפגש טיפולי</button>
-            <button type="button" class="choice" data-value="play"><span class="emo">🧸</span>משחק / זמן חופשי</button>
-            <button type="button" class="choice" data-value="home"><span class="emo">🏠</span>בבית</button>
-            <button type="button" class="choice" data-value="structured"><span class="emo">🎯</span>פעילות מובנית</button>
-            <button type="button" class="choice" data-value="group"><span class="emo">👥</span>עם ילדים נוספים</button>
-            <button type="button" class="choice" data-value="other"><span class="emo">✏️</span>אחר</button>
+          <div class="field-label">היכן השתמשתם ב-KIKO?</div>
+          <div class="choice-grid cols-4" data-single="usage_location">
+            <button type="button" class="choice center" data-value="home"><span class="emo">🏠</span>בבית</button>
+            <button type="button" class="choice center" data-value="clinic"><span class="emo">🪑</span>בקליניקה / חדר טיפול</button>
+            <button type="button" class="choice center" data-value="educational"><span class="emo">🏫</span>במסגרת חינוכית<br>(גן / בית ספר)</button>
+            <button type="button" class="choice center" data-value="other"><span class="emo">📍</span>במקום אחר</button>
           </div>
 
-          <div class="field-label">מי עשה את הצעד הראשון?</div>
-          <div class="choice-grid" data-single="initiation">
-            <button type="button" class="choice" data-value="adult_offered"><span class="emo">🙋</span>אני הצעתי את KIKO</button>
-            <button type="button" class="choice" data-value="child_noticed"><span class="emo">👀</span><span class="childRef">הילד/ה</span> הבחין/ה בו לבד</button>
-            <button type="button" class="choice" data-value="child_requested"><span class="emo">👉</span><span class="childRef">הילד/ה</span> ביקש/ה אותו</button>
-            <button type="button" class="choice" data-value="already_in_play"><span class="emo">🎲</span>KIKO כבר היה בתוך הפעילות</button>
+          <div class="field-label">באיזה סוג פעילות השתמשתם ב-KIKO?</div>
+          <div class="choice-grid cols-5" data-single="activity_type">
+            <button type="button" class="choice center" data-value="free_play"><span class="emo">🧸</span>משחק חופשי</button>
+            <button type="button" class="choice center" data-value="structured_play"><span class="emo">🎯</span>משחק מובנה</button>
+            <button type="button" class="choice center" data-value="therapeutic_activity"><span class="emo">🌱</span>פעילות טיפולית</button>
+            <button type="button" class="choice center" data-value="adult_guided"><span class="emo">🤝</span>פעילות בהנחיית מבוגר</button>
+            <button type="button" class="choice center" data-value="other"><span class="emo">✏️</span>אחר</button>
+          </div>
+
+          <div class="field-label">כיצד התחילה האינטראקציה הראשונית עם KIKO?</div>
+          <div class="choice-grid one-col" data-single="initiation">
+            <button type="button" class="choice" data-value="independent_start"><span class="emo">🚀</span><span class="childRef">הילד/ה</span> ניגש/ה ל-KIKO והתחיל/ה לחקור או לשחק בו באופן עצמאי.</button>
+            <button type="button" class="choice" data-value="observed_then_started"><span class="emo">👀</span><span class="childRef">הילד/ה</span> התבונן/ה ב-KIKO, ולאחר מכן ניגש/ה אליו והתחיל/ה לשחק.</button>
+            <button type="button" class="choice" data-value="adult_prompted"><span class="emo">🤲</span><span class="childRef">הילד/ה</span> ניגש/ה ל-KIKO או התחיל/ה להשתמש בו בעקבות הזמנה, הדגמה או עידוד מצד המבוגר.</button>
+            <button type="button" class="choice" data-value="started_then_left"><span class="emo">➡️</span><span class="childRef">הילד/ה</span> ניגש/ה ל-KIKO והתחיל/ה לשחק, אך איבד/ה עניין ועזב/ה אותו זמן קצר לאחר מכן.</button>
+            <button type="button" class="choice" data-value="no_interest_after_presentation"><span class="emo">—</span><span class="childRef">הילד/ה</span> לא ניגש/ה ל-KIKO ולא הביע/ה עניין בו, גם לאחר שהמבוגר הציג אותו בחלל.</button>
           </div>
         </section>
 
@@ -739,16 +752,23 @@
         <section class="step" data-step="5">
           <div class="eyebrow">מה עבד יותר?</div>
           <h2>איזה חלק עבד הכי טוב במפגש הזה? ✨</h2>
-          <p class="lead">בחרו את החלק שמשך הכי הרבה, עודד חקירה או פשוט השתלב הכי טוב בפעילות.</p>
+          <p class="lead">בחרו את החלק שנראה מתאים במיוחד לילד/ה במפגש הזה.</p>
+
           <div id="bestPartChoices" class="part-grid"></div>
-          <div class="subhead">מה גרם לכם לבחור בו?</div>
-          <div class="choice-grid cols-3" data-multi="best_part_reasons">
-            <button type="button" class="choice" data-value="returned"><span class="emo">🔁</span>חזר/ה אליו</button>
-            <button type="button" class="choice" data-value="initiated"><span class="emo">💡</span>עודד יוזמה</button>
-            <button type="button" class="choice" data-value="positive_response"><span class="emo">😊</span>תגובה חיובית</button>
-            <button type="button" class="choice" data-value="curiosity"><span class="emo">👀</span>משך סקרנות</button>
-            <button type="button" class="choice" data-value="fit_play"><span class="emo">🎲</span>השתלב במשחק</button>
-            <button type="button" class="choice" data-value="calming"><span class="emo">🌱</span>הרגיש נעים / מרגיע</button>
+
+          <div class="subhead">מה גרם לכם לזהות את החלק הזה כמוצלח ביותר עבור <span class="childRef">הילד/ה</span>?</div>
+          <div class="choice-grid" data-multi="best_part_reasons">
+            <button type="button" class="choice" data-value="longer_duration">הילד/ה שהה/תה בחלק הזה זמן רב יותר בהשוואה לחלקים אחרים.</button>
+            <button type="button" class="choice" data-value="returned_repeatedly">הילד/ה חזר/ה שוב ושוב לאותו חלק.</button>
+            <button type="button" class="choice" data-value="positive_affect">הילד/ה הפגין/ה תגובה חיובית, כגון חיוך, צחוק או התלהבות.</button>
+            <button type="button" class="choice" data-value="calm_relaxed">הילד/ה נראה/תה רגוע/ה ונינוח/ה בזמן השימוש בחלק הזה.</button>
+            <button type="button" class="choice" data-value="interest_curiosity">הילד/ה הפגין/ה עניין וסקרנות, למשל באמצעות חקירה, התבוננות או מגע חוזר.</button>
+            <button type="button" class="choice" data-value="self_initiated">הילד/ה יזם/ה באופן עצמאי את השימוש בחלק הזה.</button>
+            <button type="button" class="choice" data-value="active_engagement">הילד/ה הפגין/ה מעורבות פעילה, כגון לחיצה, משיכה, סיבוב או ניסוי בדרכי שימוש שונות.</button>
+            <button type="button" class="choice" data-value="requested_continue">הילד/ה ביקש/ה להמשיך לשחק או הביע/ה רצון לחזור לחלק הזה.</button>
+            <button type="button" class="choice" data-value="sensory_regulation">החלק הזה סייע לילד/ה להירגע או להתארגן מבחינה תחושתית.</button>
+            <button type="button" class="choice" data-value="other">סיבה אחרת.</button>
+            <button type="button" class="choice" data-value="no_clear_preference" data-exclusive="true">לא ניתן היה לזהות תגובה או העדפה ברורה.</button>
           </div>
         </section>
 
@@ -786,26 +806,17 @@
         </section>
 
         <section class="step" data-step="8">
-          <div class="eyebrow">יוזמה ושיתוף פעולה</div>
-          <h2>איך KIKO השתלב באינטראקציה?</h2>
-          <p class="lead">שני מדדים קצרים שיעזרו לנו להבין אם המוצר עודד השתתפות והובלה.</p>
+          <div class="eyebrow">המשך החקירה</div>
+          <h2>איך נמשכה האינטראקציה עם KIKO?</h2>
+          <p class="lead">כאן אנחנו בודקים עד כמה העניין במוצר המשיך גם לאחר ההיכרות הראשונית.</p>
 
-          <div class="subhead">כמה <span class="childRef">הילד/ה</span> הוביל/ה את הפעילות?</div>
-          <div class="scale" data-single="initiative_score">
-            <button type="button" class="choice" data-value="1"><span class="emo">🌱</span><span>בעיקר עקב/ה</span></button>
-            <button type="button" class="choice" data-value="2"><span class="emo">👀</span><span>בחר/ה קצת</span></button>
-            <button type="button" class="choice" data-value="3"><span class="emo">👉</span><span>בחר/ה בעצמו/ה</span></button>
-            <button type="button" class="choice" data-value="4"><span class="emo">💡</span><span>הציע/ה רעיונות</span></button>
-            <button type="button" class="choice" data-value="5"><span class="emo">🚀</span><span>הוביל/ה</span></button>
-          </div>
-
-          <div class="subhead">עד כמה נוצר משחק או שיתוף פעולה?</div>
-          <div class="scale" data-single="cooperation_score">
-            <button type="button" class="choice" data-value="1"><span class="emo">😶</span><span>מעט</span></button>
-            <button type="button" class="choice" data-value="2"><span class="emo">👀</span><span>צפה</span></button>
-            <button type="button" class="choice" data-value="3"><span class="emo">🤝</span><span>הצטרף/ה</span></button>
-            <button type="button" class="choice" data-value="4"><span class="emo">🙂</span><span>פעיל/ה</span></button>
-            <button type="button" class="choice" data-value="5"><span class="emo">🌟</span><span>חיפש/ה להמשיך יחד</span></button>
+          <div class="subhead">לאחר ההיכרות הראשונית, עד כמה <span class="childRef">הילד/ה</span> המשיך/ה לחקור את KIKO באופן עצמאי?</div>
+          <div class="scale" data-single="independent_exploration_score">
+            <button type="button" class="choice" data-value="1"><span class="emo">1</span><span>נזקק/ה להכוונה רציפה של המבוגר</span></button>
+            <button type="button" class="choice" data-value="2"><span class="emo">2</span><span>המשיך/ה בעיקר לאחר עידוד או הכוונה</span></button>
+            <button type="button" class="choice" data-value="3"><span class="emo">3</span><span>שילב/ה בין חקירה עצמאית לבין עזרה מהמבוגר</span></button>
+            <button type="button" class="choice" data-value="4"><span class="emo">4</span><span>חקר/ה ברוב הזמן באופן עצמאי</span></button>
+            <button type="button" class="choice" data-value="5"><span class="emo">5</span><span>המשיך/ה לחקור, לבחור ולנסות דרכי שימוש באופן עצמאי</span></button>
           </div>
         </section>
 
@@ -947,7 +958,7 @@
     fabric_soft: 'data:image/webp;base64,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'
   };
   let current = 0;
-  const mascotCaptions = ["KIKO מלווה אתכם לאורך השאלון.", "מתחילים בהיכרות קצרה.", "רק תמונת מצב קטנה של העדפות מגע.", "עכשיו עוברים למפגש עצמו.", "בואו נראה אילו חלקים היו במשחק.", "מה ממש עבד היום?", "ומה היה פחות מתאים היום?", "מה ראינו שקורה בפועל?", "יוזמה ושיתוף פעולה הם חלק מהחוויה.", "לפעמים שינוי קטן עוזר להמשיך.", "עוד רגע מסיימים.", "תודה!"];
+  const mascotCaptions = ["KIKO מלווה אתכם לאורך השאלון.", "מתחילים בהיכרות קצרה.", "רק תמונת מצב קטנה של העדפות מגע.", "עכשיו עוברים למפגש עצמו.", "בואו נראה אילו חלקים היו במשחק.", "מה ממש עבד היום?", "ומה היה פחות מתאים היום?", "מה ראינו שקורה בפועל?", "עכשיו בודקים עד כמה החקירה נמשכה באופן עצמאי.", "לפעמים שינוי קטן עוזר להמשיך.", "עוד רגע מסיימים.", "תודה!"];
 
   const progress = root.querySelector('#progressBar');
   const stepCount = root.querySelector('#stepCount');
@@ -977,13 +988,33 @@
         const value = btn.dataset.value;
         if(multi){
           const arr = Array.isArray(data[key]) ? data[key] : [];
-          const idx = arr.indexOf(value);
-          if(idx >= 0){
-            arr.splice(idx,1);
-            btn.setAttribute('aria-pressed','false');
+          const exclusive = btn.dataset.exclusive === 'true';
+
+          if(exclusive){
+            const alreadySelected = arr.includes(value);
+            arr.splice(0, arr.length);
+            group.querySelectorAll('button.choice').forEach(b => b.setAttribute('aria-pressed','false'));
+            if(!alreadySelected){
+              arr.push(value);
+              btn.setAttribute('aria-pressed','true');
+            }
           }else{
-            arr.push(value);
-            btn.setAttribute('aria-pressed','true');
+            const exclusiveBtn = group.querySelector('button.choice[data-exclusive="true"]');
+            if(exclusiveBtn){
+              const exValue = exclusiveBtn.dataset.value;
+              const exIndex = arr.indexOf(exValue);
+              if(exIndex >= 0) arr.splice(exIndex,1);
+              exclusiveBtn.setAttribute('aria-pressed','false');
+            }
+
+            const idx = arr.indexOf(value);
+            if(idx >= 0){
+              arr.splice(idx,1);
+              btn.setAttribute('aria-pressed','false');
+            }else{
+              arr.push(value);
+              btn.setAttribute('aria-pressed','true');
+            }
           }
           data[key] = arr;
         }else{
@@ -1057,12 +1088,12 @@
         return false;
       }
     }
-    if(current===2 && !data.new_texture_response){
-      validation.textContent='בחרו את האפשרות שהכי מתאימה.';
+    if(current===2 && !data.new_place_response){
+      validation.textContent='בחרו את האפשרות שהכי מתאימה לתגובה של הילד/ה למקום חדש.';
       return false;
     }
-    if(current===3 && (!data.context || !data.initiation)){
-      validation.textContent='בחרו איפה השתמשתם ב-KIKO ומי התחיל.';
+    if(current===3 && (!data.usage_location || !data.activity_type || !data.initiation)){
+      validation.textContent='בחרו מיקום, סוג פעילות ואופן תחילת האינטראקציה.';
       return false;
     }
     if(current===4 && data.parts_tested.length===0){
@@ -1077,8 +1108,8 @@
       validation.textContent='בחרו חלק שעבד פחות, או “לא היה חלק שעבד פחות”.';
       return false;
     }
-    if(current===8 && (!data.initiative_score || !data.cooperation_score)){
-      validation.textContent='בחרו תשובה לשני המדדים.';
+    if(current===8 && !data.independent_exploration_score){
+      validation.textContent='בחרו את האפשרות שמתארת בצורה הטובה ביותר את המשך החקירה.';
       return false;
     }
     if(current===10 && (!data.engagement_score || !data.use_again)){
@@ -1091,8 +1122,14 @@
   async function submitSurveyData(){
     const payload = {
       ...data,
-      survey_version: 'v1',
-      source: 'github-pages'
+      survey_version: 'v2',
+      source: 'github-pages',
+
+      // Compatibility mapping for the currently deployed Google Apps Script:
+      new_texture_response: data.new_place_response || '',
+      context: [data.usage_location, data.activity_type].filter(Boolean).join(' | '),
+      initiative_score: data.independent_exploration_score || '',
+      cooperation_score: data.outcome || ''
     };
 
     const body = new URLSearchParams();
