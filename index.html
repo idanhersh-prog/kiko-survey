@@ -695,7 +695,7 @@
           <p class="lead">ההפרדה בין מיקום, סוג הפעילות ואופן תחילת האינטראקציה תעזור לנו להבין טוב יותר את ההקשר שבו KIKO פגש את הילד/ה.</p>
 
           <div class="field-label">היכן השתמשתם ב-KIKO?</div>
-          <div class="choice-grid cols-4" data-single="usage_location">
+          <div class="choice-grid cols-4" data-multi="usage_location">
             <button type="button" class="choice center" data-value="home"><span class="emo">🏠</span>בבית</button>
             <button type="button" class="choice center" data-value="clinic"><span class="emo">🪑</span>בקליניקה / חדר טיפול</button>
             <button type="button" class="choice center" data-value="educational"><span class="emo">🏫</span>במסגרת חינוכית<br>(גן / בית ספר)</button>
@@ -703,7 +703,7 @@
           </div>
 
           <div class="field-label">באיזה סוג פעילות השתמשתם ב-KIKO?</div>
-          <div class="choice-grid cols-5" data-single="activity_type">
+          <div class="choice-grid cols-5" data-multi="activity_type">
             <button type="button" class="choice center" data-value="free_play"><span class="emo">🧸</span>משחק חופשי</button>
             <button type="button" class="choice center" data-value="structured_play"><span class="emo">🎯</span>משחק מובנה</button>
             <button type="button" class="choice center" data-value="therapeutic_activity"><span class="emo">🌱</span>פעילות טיפולית</button>
@@ -927,6 +927,8 @@
   const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwn93zgMeYSAE_lDQz3pwGWq2TntzFecGqSDjl0RdBVcZwbK6HE6cXk2xCmv4eUyivjMw/exec';
   const data = {
     sensory_preferences: [],
+    usage_location: [],
+    activity_type: [],
     parts_tested: [],
     best_part_reasons: [],
     less_part_reasons: [],
@@ -934,6 +936,21 @@
     adult_response: [],
     future_part_preferences: []
   };
+  const usageLocationLabels = {
+    home:'בבית',
+    clinic:'בקליניקה / חדר טיפול',
+    educational:'במסגרת חינוכית',
+    other:'במקום אחר'
+  };
+
+  const activityTypeLabels = {
+    free_play:'משחק חופשי',
+    structured_play:'משחק מובנה',
+    therapeutic_activity:'פעילות טיפולית',
+    adult_guided:'פעילות בהנחיית מבוגר',
+    other:'אחר'
+  };
+
   const futurePartLabels = {
     softer:'רך יותר',
     rougher:'מחוספס יותר',
@@ -1122,8 +1139,8 @@
       validation.textContent='בחרו את האפשרות שהכי מתאימה לתגובה של הילד/ה למקום חדש.';
       return false;
     }
-    if(current===3 && (!data.usage_location || !data.activity_type || !data.initiation)){
-      validation.textContent='בחרו מיקום, סוג פעילות ואופן תחילת האינטראקציה.';
+    if(current===3 && ((!Array.isArray(data.usage_location) || data.usage_location.length===0) || (!Array.isArray(data.activity_type) || data.activity_type.length===0) || !data.initiation)){
+      validation.textContent='בחרו לפחות מיקום אחד, לפחות סוג פעילות אחד ואופן תחילת האינטראקציה.';
       return false;
     }
     if(current===4 && data.parts_tested.length===0){
@@ -1152,12 +1169,15 @@
   async function submitSurveyData(){
     const payload = {
       ...data,
-      survey_version: 'v3',
+      survey_version: 'v4',
       source: 'github-pages',
 
       // Compatibility mapping for the currently deployed Google Apps Script:
       new_texture_response: data.new_place_response || '',
-      context: [data.usage_location, data.activity_type].filter(Boolean).join(' | '),
+      context: [
+        'מיקום: ' + (data.usage_location || []).map(v => usageLocationLabels[v] || v).join(', '),
+        'פעילות: ' + (data.activity_type || []).map(v => activityTypeLabels[v] || v).join(', ')
+      ].join(' | '),
       initiative_score: data.independent_exploration_score || '',
       cooperation_score: data.outcome || '',
       feedback_text: [
