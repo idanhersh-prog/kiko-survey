@@ -847,7 +847,7 @@
         <section class="step" data-step="10">
           <div class="eyebrow">מסכמים</div>
           <h2>איך הייתה החוויה הכוללת עם KIKO? 🌱</h2>
-          <p class="lead">עוד שתי שאלות קצרות ומקום לספר לנו משהו במילים שלכם.</p>
+          <p class="lead">עוד כמה שאלות קצרות שיעזרו לנו להבין מה עבד ומה כדאי לפתח בהמשך.</p>
 
           <div class="subhead">כמה KIKO עורר סקרנות ורצון להמשיך?</div>
           <div class="scale" data-single="engagement_score">
@@ -864,6 +864,23 @@
             <button type="button" class="choice center" data-value="maybe"><span class="emo">🤔</span>אולי</button>
             <button type="button" class="choice center" data-value="not_now"><span class="emo">🌱</span>לא כרגע</button>
           </div>
+
+          <div class="subhead">איזה חלק הייתם רוצים לראות ב-KIKO בעתיד?</div>
+          <p class="hint">אפשר לבחור כמה כיוונים. חשבו על מרקם, תחושה, תנועה או סוג אינטראקציה שחסר לכם היום.</p>
+          <div class="choice-grid cols-3" data-multi="future_part_preferences">
+            <button type="button" class="choice" data-value="softer"><span class="emo">🧸</span>רך יותר</button>
+            <button type="button" class="choice" data-value="rougher"><span class="emo">〰️</span>מחוספס יותר</button>
+            <button type="button" class="choice" data-value="stretchy"><span class="emo">↔️</span>גמיש / נמתח</button>
+            <button type="button" class="choice" data-value="moving"><span class="emo">🔄</span>מסתובב / זז</button>
+            <button type="button" class="choice" data-value="temperature"><span class="emo">❄️</span>קר / חם</button>
+            <button type="button" class="choice" data-value="vibration"><span class="emo">〽️</span>רוטט</button>
+            <button type="button" class="choice" data-value="sound"><span class="emo">🔊</span>משמיע צליל</button>
+            <button type="button" class="choice" data-value="press_pull"><span class="emo">🤲</span>מופעל בלחיצה / משיכה</button>
+            <button type="button" class="choice" data-value="other"><span class="emo">💡</span>אחר</button>
+          </div>
+
+          <label class="field-label" for="futurePartText">יש לכם רעיון לחלק מסוים שהייתם רוצים שנפתח?</label>
+          <textarea id="futurePartText" placeholder="ספרו לנו בקצרה... לא חובה"></textarea>
 
           <label class="field-label" for="feedbackText">משהו שהפתיע, עבד טוב במיוחד או שכדאי לשנות?</label>
           <textarea id="feedbackText" placeholder="אפשר לכתוב כאן... לא חובה"></textarea>
@@ -914,7 +931,8 @@
     best_part_reasons: [],
     less_part_reasons: [],
     observed_behaviors: [],
-    adult_response: []
+    adult_response: [],
+    future_part_preferences: []
   };
   const partLabels = {
     smooth_green:'חלק חלק',
@@ -1122,14 +1140,19 @@
   async function submitSurveyData(){
     const payload = {
       ...data,
-      survey_version: 'v2',
+      survey_version: 'v3',
       source: 'github-pages',
 
       // Compatibility mapping for the currently deployed Google Apps Script:
       new_texture_response: data.new_place_response || '',
       context: [data.usage_location, data.activity_type].filter(Boolean).join(' | '),
       initiative_score: data.independent_exploration_score || '',
-      cooperation_score: data.outcome || ''
+      cooperation_score: data.outcome || '',
+      feedback_text: [
+        data.feedback_text ? 'משוב כללי: ' + data.feedback_text : '',
+        data.future_part_preferences?.length ? 'כיוונים לחלק עתידי: ' + data.future_part_preferences.join(' | ') : '',
+        data.future_part_text ? 'רעיון לחלק עתידי: ' + data.future_part_text : ''
+      ].filter(Boolean).join(' || ')
     };
 
     const body = new URLSearchParams();
@@ -1175,6 +1198,7 @@
     if(!validate()) return;
 
     if(current===10){
+      data.future_part_text = root.querySelector('#futurePartText').value.trim();
       data.feedback_text = root.querySelector('#feedbackText').value.trim();
       data.completed_at = new Date().toISOString();
 
