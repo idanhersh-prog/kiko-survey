@@ -756,8 +756,8 @@
 
           <div id="bestPartChoices" class="part-grid"></div>
 
-          <div class="subhead">מה גרם לכם לזהות את החלק הזה כמוצלח ביותר עבור <span class="childRef">הילד/ה</span>?</div>
-          <div class="choice-grid" data-multi="best_part_reasons">
+          <div class="subhead" id="bestReasonsTitle">מה גרם לכם לזהות את החלק הזה כמוצלח ביותר עבור <span class="childRef">הילד/ה</span>?</div>
+          <div class="choice-grid" id="bestReasonsGroup" data-multi="best_part_reasons">
             <button type="button" class="choice" data-value="longer_duration">הילד/ה שהה/תה בחלק הזה זמן רב יותר בהשוואה לחלקים אחרים.</button>
             <button type="button" class="choice" data-value="returned_repeatedly">הילד/ה חזר/ה שוב ושוב לאותו חלק.</button>
             <button type="button" class="choice" data-value="positive_affect">הילד/ה הפגין/ה תגובה חיובית, כגון חיוך, צחוק או התלהבות.</button>
@@ -982,6 +982,7 @@
     fabric_rough:'שכבות מחוספסות',
     fabric_smooth:'שכבות חלקות',
     fabric_soft:'שכבות רכות',
+    none_best:'לא ניתן היה לזהות חלק שעבד טוב יותר מהאחרים',
     none:'לא היה חלק שעבד פחות'
   };
   const partImages = {
@@ -1016,6 +1017,18 @@
   const childName = root.querySelector('#childName');
   const bestWrap = root.querySelector('#bestPartChoices');
   const lessWrap = root.querySelector('#lessPartChoices');
+  const bestReasonsTitle = root.querySelector('#bestReasonsTitle');
+  const bestReasonsGroup = root.querySelector('#bestReasonsGroup');
+
+  function updateBestReasonsVisibility(){
+    const hide = data.best_part === 'none_best';
+    if(bestReasonsTitle) bestReasonsTitle.style.display = hide ? 'none' : '';
+    if(bestReasonsGroup) bestReasonsGroup.style.display = hide ? 'none' : '';
+    if(hide){
+      data.best_part_reasons = [];
+      bestReasonsGroup?.querySelectorAll('button.choice').forEach(b => b.setAttribute('aria-pressed','false'));
+    }
+  }
 
 
   function childRef(){
@@ -1103,6 +1116,7 @@
       b.addEventListener('click', () => {
         data.best_part=value;
         bestWrap.querySelectorAll('.part').forEach(x => x.setAttribute('aria-pressed', String(x===b)));
+        updateBestReasonsVisibility();
       });
       bestWrap.appendChild(b);
 
@@ -1115,6 +1129,21 @@
       });
       lessWrap.appendChild(l);
     });
+
+    const noneBest = document.createElement('button');
+    noneBest.type='button';
+    noneBest.className='part';
+    noneBest.dataset.value='none_best';
+    noneBest.setAttribute('aria-pressed', String(data.best_part==='none_best'));
+    noneBest.innerHTML = `<span class="part-thumb" style="display:grid;place-items:center;background:#fffaf6;font-size:30px;color:var(--orange)">—</span><span class="part-name">לא ניתן היה לזהות חלק שעבד טוב יותר מהאחרים</span>`;
+    noneBest.addEventListener('click', () => {
+      data.best_part='none_best';
+      bestWrap.querySelectorAll('.part').forEach(x => x.setAttribute('aria-pressed', String(x===noneBest)));
+      updateBestReasonsVisibility();
+    });
+    bestWrap.appendChild(noneBest);
+
+    updateBestReasonsVisibility();
 
     const none = document.createElement('button');
     none.type='button'; none.className='part'; none.dataset.value='none'; none.setAttribute('aria-pressed', String(data.less_part==='none'));
@@ -1169,7 +1198,7 @@
   async function submitSurveyData(){
     const payload = {
       ...data,
-      survey_version: 'v4',
+      survey_version: 'v5',
       source: 'github-pages',
 
       // Compatibility mapping for the currently deployed Google Apps Script:
@@ -1224,6 +1253,7 @@
     document.body.classList.toggle('survey-done', current===11);
 
     if(current===5 || current===6) buildDynamicParts();
+    if(current===5) updateBestReasonsVisibility();
   }
 
   nextBtn.addEventListener('click', async () => {
