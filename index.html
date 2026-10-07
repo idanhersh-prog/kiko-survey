@@ -934,6 +934,18 @@
     adult_response: [],
     future_part_preferences: []
   };
+  const futurePartLabels = {
+    softer:'רך יותר',
+    rougher:'מחוספס יותר',
+    stretchy:'גמיש / נמתח',
+    moving:'מסתובב / זז',
+    temperature:'קר / חם',
+    vibration:'רוטט',
+    sound:'משמיע צליל',
+    press_pull:'מופעל בלחיצה / משיכה',
+    other:'אחר'
+  };
+
   const partLabels = {
     smooth_green:'חלק חלק',
     hole_round:'חור עגול',
@@ -1150,7 +1162,7 @@
       cooperation_score: data.outcome || '',
       feedback_text: [
         data.feedback_text ? 'משוב כללי: ' + data.feedback_text : '',
-        data.future_part_preferences?.length ? 'כיוונים לחלק עתידי: ' + data.future_part_preferences.join(' | ') : '',
+        data.future_part_preferences?.length ? 'כיוונים לחלק עתידי: ' + data.future_part_preferences.map(v => futurePartLabels[v] || v).join(' | ') : '',
         data.future_part_text ? 'רעיון לחלק עתידי: ' + data.future_part_text : ''
       ].filter(Boolean).join(' || ')
     };
