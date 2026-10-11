@@ -44,7 +44,7 @@ function doPost(e) {
     sh.appendRow([
       Utilities.getUuid(),                              // A  submission_id
       new Date(),                                       // B  submitted_at
-      'pre-v1',                                         // C  survey_version
+      'pre-v2',                                         // C  survey_version
       d.order_code || '',                               // D  order_code
       d.child_alias || '',                              // E  child_alias
       d.age_range || '',                                // F  age_range
@@ -72,7 +72,7 @@ function doPost(e) {
       d.confirmed_at
         ? new Date(d.confirmed_at)
         : new Date(),                                   // X  confirmed_at
-      '',                                               // Y  notes
+      d.kiko_name || '',                                // Y  kiko_name
       d.character_color || ''                           // Z  character_color
     ]);
 
@@ -80,7 +80,8 @@ function doPost(e) {
       JSON.stringify({
         ok: true,
         order_code: d.order_code || '',
-        character_color: d.character_color || ''
+        character_color: d.character_color || '',
+        kiko_name: d.kiko_name || ''
       })
     ).setMimeType(ContentService.MimeType.JSON);
 
