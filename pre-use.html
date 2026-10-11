@@ -146,7 +146,7 @@ function renderResult(){
   ins.push('אפשר למשש, ללחוץ, לעקוב עם האצבע, לאחוז, לסובב או לחקור פתחים — לפי סוגי החלקים שנבחרו.');
   ins.push('אם '+childLabel+' חוזר/ת לחלק מסוים, הישארו איתו ואל תמהרו להחליף.');
   ins.push('אם מופיעה אי-נוחות, הורידו את עוצמת הגירוי, עברו לחלק עדין יותר או עצרו.');
-  document.getElementById('instructionsList').innerHTML=ins.map(x=>`<li>${x}</li>`).join('');
+  const instructionsList=document.getElementById('instructionsList');if(instructionsList)instructionsList.innerHTML=ins.map(x=>`<li>${x}</li>`).join('');
 }
 
 const characterGrid=document.getElementById('characterGrid'),characterError=document.getElementById('characterError'),characterPartsSummary=document.getElementById('characterPartsSummary');
