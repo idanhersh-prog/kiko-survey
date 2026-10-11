@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" role="img" aria-label="KIKO">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="72%">
+      <stop offset="0%" stop-color="#fffdf8"/>
+      <stop offset="100%" stop-color="#f8efdf"/>
+    </radialGradient>
+    <linearGradient id="toy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6398c7"/>
+      <stop offset="58%" stop-color="#4f84b4"/>
+      <stop offset="100%" stop-color="#3f709d"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#6b5848" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="560" height="420" rx="30" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <rect x="175" y="55" width="210" height="145" rx="53" fill="url(#toy)"/>
+    <rect x="180" y="208" width="200" height="150" rx="42" fill="url(#toy)"/>
+  </g>
+  <g fill="none" stroke="#2c2927" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M224 121 L250 136 L224 151"/>
+    <path d="M336 121 L310 136 L336 151"/>
+  </g>
+  <path d="M266 159 Q280 178 294 159 Z" fill="#2c2927"/>
+</svg>
