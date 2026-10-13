@@ -194,7 +194,7 @@ document.getElementById('continueToGuide').onclick=()=>{
 document.getElementById('backToCharacter').onclick=()=>{current=9;render()};
 const kikoNameInput=document.getElementById('kikoName');
 const saveAndMeetBtn=document.getElementById('saveAndMeet');
-let orderSaved=false,saveInFlight=false;
+let orderSaved=false,hasSavedOnce=false,saveInFlight=false;
 function markConfigurationDirty(){
   if(orderSaved)orderSaved=false;
   if(saveAndMeetBtn)saveAndMeetBtn.disabled=false;
@@ -279,11 +279,12 @@ saveAndMeetBtn.onclick=async()=>{
   data.kiko_name=(kikoNameInput?.value||'').trim();
   const s=document.getElementById('saveStatus');
   if(orderSaved){renderMeetScreen();current=11;render();return}
-  saveInFlight=true;saveAndMeetBtn.disabled=true;s.textContent='שומרים את ה-KIKO שלכם...';
+  saveInFlight=true;saveAndMeetBtn.disabled=true;s.textContent=hasSavedOnce?'מעדכנים את ה-KIKO שלכם...':'שומרים את ה-KIKO שלכם...';
   try{
     await saveOrder();
     orderSaved=true;
-    s.textContent='✓ ההתאמה נשמרה בהצלחה';
+    s.textContent=hasSavedOnce?'✓ השינויים נשמרו בהצלחה':'✓ ההתאמה נשמרה בהצלחה';
+    hasSavedOnce=true;
     renderMeetScreen();
     setTimeout(()=>{current=11;render()},550);
   }catch(e){
