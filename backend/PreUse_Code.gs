@@ -41,11 +41,32 @@ function doPost(e) {
         ? v.join(' | ')
         : (v ?? '');
 
-    sh.appendRow([
-      Utilities.getUuid(),                              // A  submission_id
-      new Date(),                                       // B  submitted_at
-      'pre-v2',                                         // C  survey_version
-      d.order_code || '',                               // D  order_code
+    const orderCode = d.order_code || '';
+    let targetRow = 0;
+
+    if (orderCode && sh.getLastRow() > 1) {
+      const codes = sh.getRange(2, 4, sh.getLastRow() - 1, 1).getValues();
+      for (let i = codes.length - 1; i >= 0; i--) {
+        if (String(codes[i][0] || '') === String(orderCode)) {
+          targetRow = i + 2;
+          break;
+        }
+      }
+    }
+
+    const submissionId = targetRow
+      ? (sh.getRange(targetRow, 1).getValue() || Utilities.getUuid())
+      : Utilities.getUuid();
+
+    const submittedAt = targetRow
+      ? (sh.getRange(targetRow, 2).getValue() || new Date())
+      : new Date();
+
+    const row = [
+      submissionId,                                     // A  submission_id
+      submittedAt,                                      // B  submitted_at
+      'pre-v3',                                         // C  survey_version
+      orderCode,                                        // D  order_code
       d.child_alias || '',                              // E  child_alias
       d.age_range || '',                                // F  age_range
       d.respondent_role || '',                          // G  respondent_role
@@ -74,14 +95,21 @@ function doPost(e) {
         : new Date(),                                   // X  confirmed_at
       d.kiko_name || '',                                // Y  kiko_name
       d.character_color || ''                           // Z  character_color
-    ]);
+    ];
+
+    if (targetRow) {
+      sh.getRange(targetRow, 1, 1, row.length).setValues([row]);
+    } else {
+      sh.appendRow(row);
+    }
 
     return ContentService.createTextOutput(
       JSON.stringify({
         ok: true,
         order_code: d.order_code || '',
         character_color: d.character_color || '',
-        kiko_name: d.kiko_name || ''
+        kiko_name: d.kiko_name || '',
+        updated_existing: !!targetRow
       })
     ).setMimeType(ContentService.MimeType.JSON);
 
