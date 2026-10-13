@@ -185,6 +185,9 @@ function renderBuildPreview(){
 document.getElementById('continueToGuide').onclick=()=>{
   if(!data.character_color){characterError.textContent='בחרו דמות לפני שממשיכים.';return}
   renderBuildPreview();
+  if(saveAndMeetBtn)saveAndMeetBtn.disabled=false;
+  const savedStatus=document.getElementById('saveStatus');
+  if(savedStatus)savedStatus.textContent=orderSaved?'✓ ההתאמה כבר נשמרה — אפשר להמשיך':'';
   current=10;
   render();
 };
