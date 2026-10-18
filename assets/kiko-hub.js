@@ -1,7 +1,7 @@
 /* KIKO Hub – shared client for index.html (hub), pre-use.html and post-use.html */
 (function () {
   // Web App URL of backend/Hub_Code.gs (Deploy → Web app). Empty = hub not connected yet.
-  const HUB_URL = '';
+  const HUB_URL = 'https://script.google.com/macros/s/AKfycbwmBzT-LOuDlIAgQqwqoS0o22gk1y1Eo5BQWddsDwEYS5DFkJZFOfn6Ei38Fqz9-SieBA/exec';
 
   const AUTH_KEY = 'kiko_auth';
   const CTX_KEY = 'kiko_ctx';
