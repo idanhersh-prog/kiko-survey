@@ -48,7 +48,7 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 .mobile-family-select-wrap{display:none;padding:10px 12px;background:var(--paper);border-bottom:1px solid var(--line)}
 .mobile-family-select-label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin-bottom:6px}
 .mobile-family-select{width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:14px;padding:11px 12px;font-weight:800;outline:none}
-.catalog-context{padding:12px 16px;background:var(--paper);border-bottom:1px solid var(--line);flex:0 0 auto}.catalog-context strong{display:block;font-size:15px;margin-bottom:3px}.catalog-context span{color:var(--muted);font-size:13px;line-height:1.45}
+.catalog-context{padding:12px 16px;background:var(--paper);border-bottom:1px solid var(--line);flex:0 0 auto}.catalog-context strong{display:block;font-size:15px;margin-bottom:3px}.catalog-context span{color:var(--muted);font-size:13px;line-height:1.45}.catalog-context>span{display:block}.upcoming-toggle{display:flex;width:max-content;max-width:100%;align-items:center;gap:6px;margin-top:9px;border:1px solid #c9d8e8;background:#f2f7fc;color:#2f5f8f;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}.upcoming-toggle::before{content:'';width:8px;height:8px;border-radius:50%;background:#3b6fa8;opacity:.35}.upcoming-toggle.on{background:#3b6fa8;border-color:#3b6fa8;color:#fff}.upcoming-toggle.on::before{background:#fff;opacity:1}.cat-section{grid-column:1/-1;border-top:2px dashed #d9cbbd;margin-top:6px;padding-top:14px}.cat-section b{display:block;font-size:15px;color:#2f5f8f}.cat-section span{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}.cat-card.upcoming{background:#fbfaf8;border-style:dashed}.cat-card.upcoming img{filter:saturate(.55) opacity(.82)}.soon-tag{align-self:flex-start;margin-top:6px;background:#eaf1f8;color:#2f5f8f;border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:900}.soon-note{background:#eaf1f8;color:#2f5f8f;border-radius:12px;padding:9px 12px;font-weight:800;font-size:13.5px;margin:10px 0}
 .catalog-grid{padding:16px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px;align-content:start}
 .cat-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px;cursor:pointer;text-align:right;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;transition:.15s;box-shadow:0 4px 14px rgba(75,53,37,.04)}
 .cat-card:hover{border-color:#ed9f80;transform:translateY(-2px);box-shadow:0 8px 22px rgba(75,53,37,.09)}.cat-card.is-original{border-color:#efad91;box-shadow:0 0 0 2px rgba(237,91,45,.08)}.cat-card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:13px;background:#f4eee8}.cat-card b{display:block;font-size:13px;margin-top:8px;line-height:1.4}.cat-card small{display:block;color:var(--muted);margin-top:3px}.cat-card .view-hint{margin-top:7px;color:var(--orange);font-size:11px;font-weight:800}.recommended-tag{display:inline-block;margin-top:7px;background:var(--orange2);color:#b6401b;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900}
@@ -97,10 +97,12 @@ function loadCatalog(){
   if(catalogPromise)return catalogPromise;
   catalogPromise=fetch(CATALOG_BASE+'catalog.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(c=>{
     const v=c.version?'?v='+encodeURIComponent(c.version):'';
-    const families=(c.families||[]).filter(f=>!f.hidden);
-    const keys=new Set(families.map(f=>f.key));
-    const parts=(c.parts||[]).filter(x=>!x.hidden&&keys.has(x.family)).map(x=>({match:[],avoid:[],actions:[],sensory:'',intensity:1,badge:'',...x,img:/^(https?:|data:)/.test(x.img||'')?x.img:CATALOG_BASE+(x.img||'')+v}));
-    CATALOG={families,parts,familyLabels:Object.fromEntries(families.map(f=>[f.key,f.label]))};
+    const allFamilies=(c.families||[]).filter(f=>!f.hidden);
+    const keys=new Set(allFamilies.map(f=>f.key));
+    const all=(c.parts||[]).filter(x=>!x.hidden&&keys.has(x.family)).map(x=>({match:[],avoid:[],actions:[],sensory:'',intensity:1,badge:'',...x,upcoming:x.status==='upcoming',img:/^(https?:|data:)/.test(x.img||'')?x.img:CATALOG_BASE+(x.img||'')+v}));
+    const parts=all.filter(x=>!x.upcoming),upcoming=all.filter(x=>x.upcoming);
+    const inStock=new Set(parts.map(x=>x.family)),anyPart=new Set(all.map(x=>x.family));
+    CATALOG={families:allFamilies.filter(f=>inStock.has(f.key)),allFamilies:allFamilies.filter(f=>anyPart.has(f.key)),parts,upcoming,familyLabels:Object.fromEntries(allFamilies.map(f=>[f.key,f.label]))};
     return CATALOG;
   }).catch(e=>{console.error('KIKO catalog failed to load',e);catalogPromise=null;throw e});
   return catalogPromise;
@@ -229,12 +231,16 @@ function renderMeetScreen(){
 
 const overlay=document.getElementById('catalogOverlay'),tabs=document.getElementById('catalogTabs'),catGrid=document.getElementById('catalogGrid'),catalogContext=document.getElementById('catalogContext'),mobileFamilySelect=document.getElementById('mobileFamilySelect');
 const partOverlay=document.getElementById('partOverlay'),partDetailImg=document.getElementById('partDetailImg'),partDetailName=document.getElementById('partDetailName'),partDetailFamily=document.getElementById('partDetailFamily'),partDetailDesc=document.getElementById('partDetailDesc'),partDetailSensory=document.getElementById('partDetailSensory'),partDetailIntensity=document.getElementById('partDetailIntensity'),partDetailActions=document.getElementById('partDetailActions'),choosePartBtn=document.getElementById('choosePartBtn');
-let familyFilter='all',selectedCatalogPart=null;
+let familyFilter='all',selectedCatalogPart=null,showUpcoming=false;
 const actionLabels={touch:'מישוש וליטוף',trace:'מעקב באצבע',press:'לחיצה',stroke:'שפשוף',grip:'אחיזה',explore_openings:'חקירת חורים ופתחים',rotate_hand:'סיבוב ביד',visual_explore:'חקירה חזותית',explore_edges:'חקירת קצוות'};
-function getFamily(key){return CATALOG.families.find(f=>f.key===key)}
-function familyCount(key){return key==='all'?CATALOG.parts.length:CATALOG.parts.filter(p=>p.family===key).length}
+function getFamily(key){return (CATALOG.allFamilies||CATALOG.families).find(f=>f.key===key)}
+function shownFamilies(){return showUpcoming?(CATALOG.allFamilies||CATALOG.families):CATALOG.families}
+function inFamily(list,key){return key==='all'?list:list.filter(p=>p.family===key)}
+function upcomingList(key){return showUpcoming?inFamily(CATALOG.upcoming||[],key):[]}
+function familyCount(key){return inFamily(CATALOG.parts,key).length+upcomingList(key).length}
 function buildTabs(){
-  const items=[['all','כל החלקים'],...CATALOG.families.map(f=>[f.key,f.label])];
+  if(familyFilter!=='all'&&!shownFamilies().some(f=>f.key===familyFilter))familyFilter='all';
+  const items=[['all','כל החלקים'],...shownFamilies().map(f=>[f.key,f.label])];
   tabs.innerHTML='';
   items.forEach(([k,l])=>{
     const b=document.createElement('button');
@@ -248,27 +254,40 @@ function buildTabs(){
     mobileFamilySelect.value=familyFilter;
   }
 }
+function catCard(p,originalId){
+  const isOriginal=!!originalId&&p.id===originalId;
+  const c=document.createElement('button');
+  c.className='cat-card'+(isOriginal?' is-original':'')+(p.upcoming?' upcoming':'');
+  c.innerHTML=`<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async"><b>${p.name}</b><small>${CATALOG.familyLabels[p.family]||p.family}${p.badge?' · '+p.badge:''}</small>${p.upcoming?'<div class="soon-tag">בקרוב · עוד לא במלאי</div>':''}${isOriginal?'<div class="recommended-tag">החלק שהומלץ עבורך</div>':''}<div class="view-hint">לחצו לתמונה ופרטים</div>`;
+  c.onclick=()=>openPartDetail(p);
+  return c;
+}
 function buildCatalog(){
-  const list=familyFilter==='all'?CATALOG.parts:CATALOG.parts.filter(p=>p.family===familyFilter);
+  const list=inFamily(CATALOG.parts,familyFilter),soon=upcomingList(familyFilter);
   const fam=familyFilter==='all'?null:getFamily(familyFilter);
-  catalogContext.innerHTML=fam?`<strong>${fam.label}</strong><span>${fam.desc} · ${list.length} חלקים</span>`:`<strong>כל הקטלוג</strong><span>${CATALOG.parts.length} חלקים ב-${CATALOG.families.length} קטגוריות. בחרו קטגוריה בצד כדי להתמקד.</span>`;
+  const totalSoon=(CATALOG.upcoming||[]).length;
+  const countTxt=`${list.length} במלאי${soon.length?` · ${soon.length} עתידים להגיע`:''}`;
+  catalogContext.innerHTML=(fam?`<strong>${fam.label}</strong><span>${fam.desc} · ${countTxt}</span>`:`<strong>כל הקטלוג</strong><span>${CATALOG.parts.length} חלקים במלאי ב-${CATALOG.families.length} קטגוריות${showUpcoming&&totalSoon?` · ${totalSoon} חלקים עתידים להגיע`:''}. בחרו קטגוריה כדי להתמקד.</span>`)
+    +(totalSoon?`<button type="button" class="upcoming-toggle${showUpcoming?' on':''}" aria-pressed="${showUpcoming}">${showUpcoming?'הצגת חלקים במלאי בלבד':`הצגת חלקים עתידיים (${totalSoon})`}</button>`:'');
+  const t=catalogContext.querySelector('.upcoming-toggle');
+  if(t)t.onclick=()=>{showUpcoming=!showUpcoming;buildTabs();buildCatalog()};
   const originalId=replaceIndex!==null?recommendations[replaceIndex]?.p?.id:null;
   catGrid.innerHTML='';
-  list.forEach(p=>{
-    const isOriginal=!!originalId&&p.id===originalId;
-    const c=document.createElement('button');
-    c.className='cat-card'+(isOriginal?' is-original':'');
-    c.innerHTML=`<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async"><b>${p.name}</b><small>${CATALOG.familyLabels[p.family]||p.family}${p.badge?' · '+p.badge:''}</small>${isOriginal?'<div class="recommended-tag">החלק שהומלץ עבורך</div>':''}<div class="view-hint">לחצו לתמונה ופרטים</div>`;
-    c.onclick=()=>openPartDetail(p);
-    catGrid.appendChild(c);
-  });
+  list.forEach(p=>catGrid.appendChild(catCard(p,originalId)));
+  if(soon.length){
+    const h=document.createElement('div');
+    h.className='cat-section';
+    h.innerHTML=`<b>עתידים להגיע</b><span>${soon.length} חלקים שעדיין לא במלאי. אפשר לצפות בהם, אבל עוד לא לבחור אותם.</span>`;
+    catGrid.appendChild(h);
+    soon.forEach(p=>catGrid.appendChild(catCard(p,originalId)));
+  }
   catGrid.scrollTop=0;
 }
 function readableIntensity(p){if(p.intensity===1)return 'עדינה';if(p.intensity===2)return 'בינונית';if(p.intensity===3)return 'חזקה';return 'משתנה לפי הדגם'}
 function readableActions(p){const items=(p.actions||[]).map(a=>actionLabels[a]||a).filter(Boolean);return items.length?items.join(' · '):'מישוש וחקירה חופשית'}
-function openPartDetail(p){selectedCatalogPart=p;const fam=getFamily(p.family);partDetailImg.src=p.img;partDetailImg.alt=p.name;partDetailName.textContent=p.name;partDetailFamily.textContent=fam?fam.label:(CATALOG.familyLabels[p.family]||p.family);const sensory=p.sensory||'טקסטורה מישושית';partDetailDesc.textContent=(fam?fam.desc+'. ':'')+'החלק מאפשר היכרות וחקירה דרך מגע, בקצב שמתאים לילד/ה.';partDetailSensory.innerHTML=`<b>מה מרגישים:</b> ${sensory}`;partDetailIntensity.innerHTML=`<b>עוצמת תחושה:</b> ${readableIntensity(p)}${p.badge?' · '+p.badge:''}`;partDetailActions.innerHTML=`<b>איך אפשר לחקור:</b> ${readableActions(p)}`;choosePartBtn.style.display=replaceIndex!==null?'inline-block':'none';partOverlay.classList.add('open')}
+function openPartDetail(p){selectedCatalogPart=p;const fam=getFamily(p.family);partDetailImg.src=p.img;partDetailImg.alt=p.name;partDetailName.textContent=p.name;partDetailFamily.textContent=fam?fam.label:(CATALOG.familyLabels[p.family]||p.family);const sensory=p.sensory||'טקסטורה מישושית';partDetailDesc.textContent=(fam?fam.desc+'. ':'')+'החלק מאפשר היכרות וחקירה דרך מגע, בקצב שמתאים לילד/ה.';partDetailSensory.innerHTML=`<b>מה מרגישים:</b> ${sensory}`;partDetailIntensity.innerHTML=`<b>עוצמת תחושה:</b> ${readableIntensity(p)}${p.badge?' · '+p.badge:''}`;partDetailActions.innerHTML=`<b>איך אפשר לחקור:</b> ${readableActions(p)}`;choosePartBtn.style.display=(replaceIndex!==null&&!p.upcoming)?'inline-block':'none';let st=document.getElementById('partDetailStatus');if(!st){st=document.createElement('div');st.id='partDetailStatus';st.className='soon-note';partDetailSensory.parentNode.insertBefore(st,partDetailSensory)}st.textContent=p.upcoming?'החלק הזה עוד לא במלאי – הוא יגיע בקרוב.':'';st.style.display=p.upcoming?'block':'none';partOverlay.classList.add('open')}
 function closePartDetail(){partOverlay.classList.remove('open');selectedCatalogPart=null}
-function chooseSelectedPart(){if(replaceIndex===null||!selectedCatalogPart)return;const idx=replaceIndex;finalParts[idx]=selectedCatalogPart;markConfigurationDirty();closePartDetail();overlay.classList.remove('open');replaceIndex=null;document.body.style.overflow='';renderResult()}
+function chooseSelectedPart(){if(replaceIndex===null||!selectedCatalogPart||selectedCatalogPart.upcoming)return;const idx=replaceIndex;finalParts[idx]=selectedCatalogPart;markConfigurationDirty();closePartDetail();overlay.classList.remove('open');replaceIndex=null;document.body.style.overflow='';renderResult()}
 function openCatalog(i=null){
   if(!CATALOG.parts.length){loadCatalog().then(()=>openCatalog(i)).catch(()=>alert('לא הצלחנו לטעון את הקטלוג. נסו שוב בעוד רגע.'));return}
   replaceIndex=i;

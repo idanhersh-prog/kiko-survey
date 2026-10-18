@@ -1,24 +1,24 @@
 {
-  "version": "2026-10-18-9",
+  "version": "2026-10-18-10",
   "families": [
-    {"key": "ribs", "label": "צלעות", "desc": "משפחת צלעות – 3 רמות קושי", "color": "#5f8a6f", "hidden": true},
-    {"key": "animals", "label": "חיות", "desc": "משפחת חיות – טקסטורות מגע", "color": "#e0654f", "hidden": true},
+    {"key": "ribs", "label": "צלעות", "desc": "משפחת צלעות – 3 רמות קושי", "color": "#5f8a6f"},
+    {"key": "animals", "label": "חיות", "desc": "משפחת חיות – טקסטורות מגע", "color": "#e0654f"},
     {"key": "almond", "label": "שקד", "desc": "משפחת שקד – חורים וצורות", "color": "#3f7d5a"},
-    {"key": "bumps", "label": "בליטות", "desc": "בליטות עגולות – 3 רמות קושי", "color": "#3b7fb8", "hidden": true},
+    {"key": "bumps", "label": "בליטות", "desc": "בליטות עגולות – 3 רמות קושי", "color": "#3b7fb8"},
     {"key": "rect", "hidden": true, "label": "בליטות מלבניות", "desc": "בליטות מלבניות – 3 רמות קושי", "color": "#2b5f99"},
-    {"key": "chevron", "label": "שברון", "desc": "שברון – 3 רמות קושי", "color": "#4d7fae", "hidden": true},
-    {"key": "dimples", "label": "גומות", "desc": "גומות – 3 רמות קושי", "color": "#d4573f", "hidden": true},
+    {"key": "chevron", "label": "שברון", "desc": "שברון – 3 רמות קושי", "color": "#4d7fae"},
+    {"key": "dimples", "label": "גומות", "desc": "גומות – 3 רמות קושי", "color": "#d4573f"},
     {"key": "fingerprint", "hidden": true, "label": "טביעת אצבע", "desc": "טביעת אצבע – 3 רמות קושי", "color": "#4f8a72"},
-    {"key": "hgrooves", "label": "חריצים אופקיים", "desc": "חריצים אופקיים – 3 רמות קושי", "color": "#3a86c8", "hidden": true},
-    {"key": "wavy", "label": "חריצים גליים", "desc": "חריצים גליים – 3 רמות קושי", "color": "#2f9bb5", "hidden": true},
+    {"key": "hgrooves", "label": "חריצים אופקיים", "desc": "חריצים אופקיים – 3 רמות קושי", "color": "#3a86c8"},
+    {"key": "wavy", "label": "חריצים גליים", "desc": "חריצים גליים – 3 רמות קושי", "color": "#2f9bb5"},
     {"key": "lines", "label": "קווים", "desc": "משפחת קווים – כיווני קווים שונים", "color": "#c8503a"},
-    {"key": "vribs", "label": "צלעות אנכיות", "desc": "צלעות אנכיות – 3 רמות קושי", "color": "#c2553f", "hidden": true},
+    {"key": "vribs", "label": "צלעות אנכיות", "desc": "צלעות אנכיות – 3 רמות קושי", "color": "#c2553f"},
     {"key": "twist", "label": "קווים מסובבים", "desc": "קווים מסובבים – 14, 21 ומשולב", "color": "#5a8f6a"},
     {"key": "sandpaper", "hidden": true, "label": "נייר זכוכית", "desc": "נייר זכוכית – 3 רמות קושי", "color": "#d9743f"},
     {"key": "spikes", "label": "קוצים", "desc": "קוצים – 3 רמות קושי", "color": "#b8392b"},
-    {"key": "rspikes", "label": "קוצים מעוגלים", "desc": "קוצים מעוגלים – 3 רמות קושי", "color": "#3b6fa8", "hidden": true},
-    {"key": "stone", "label": "אבן", "desc": "משפחת מרקמי אבן – אבן טבעית, קיר לבנים ו-Low Poly", "color": "#c95749", "hidden": true},
-    {"key": "trypophobia", "label": "טריפופוביה", "desc": "משפחת חורים ושקעים – דופן חיצונית, חורים עוברים וטקסטורה אקראית", "color": "#5f8a6f", "hidden": true},
+    {"key": "rspikes", "label": "קוצים מעוגלים", "desc": "קוצים מעוגלים – 3 רמות קושי", "color": "#3b6fa8"},
+    {"key": "stone", "label": "אבן", "desc": "משפחת מרקמי אבן – אבן טבעית, קיר לבנים ו-Low Poly", "color": "#c95749"},
+    {"key": "trypophobia", "label": "טריפופוביה", "desc": "משפחת חורים ושקעים – דופן חיצונית, חורים עוברים וטקסטורה אקראית", "color": "#5f8a6f"},
     {"key": "waves", "label": "גלים", "desc": "משפחת טקסטורות גליות – שתי ספירלות ובועות", "color": "#3f82b6"},
     {"key": "ropes", "label": "חוטים", "desc": "משפחת חוטים – עטיפות חבל, יוטה וצמר סביב הגוף", "color": "#c49a6c"},
     {"key": "layers", "label": "שכבות בד", "desc": "משפחת שכבות בד – חלק, רך ומחוספס", "color": "#8a6a52"}
@@ -35,7 +35,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות בולטות",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "ribs_medium",
@@ -48,7 +48,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות בולטות",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "ribs_high",
@@ -61,7 +61,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות בולטות",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "animals_snake",
@@ -74,7 +74,7 @@
       "actions": ["touch", "stroke", "visual_explore"],
       "sensory": "דפוסים מישושיים-חזותיים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "animals_feather",
@@ -87,7 +87,7 @@
       "actions": ["touch", "stroke", "visual_explore"],
       "sensory": "דפוסים מישושיים-חזותיים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "animals_honeycomb",
@@ -100,7 +100,7 @@
       "actions": ["touch", "stroke", "visual_explore"],
       "sensory": "דפוסים מישושיים-חזותיים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "almond_almond",
@@ -112,7 +112,8 @@
       "avoid": ["avoid_openings"],
       "actions": ["grip", "explore_openings", "touch"],
       "sensory": "פתחים וצורה",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "almond_half_5r",
@@ -124,7 +125,8 @@
       "avoid": ["avoid_openings"],
       "actions": ["grip", "explore_openings", "touch"],
       "sensory": "פתחים וצורה",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "almond_no_hole",
@@ -136,7 +138,8 @@
       "avoid": ["avoid_openings"],
       "actions": ["grip", "explore_openings", "touch"],
       "sensory": "פתחים וצורה",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "bumps_low",
@@ -149,7 +152,7 @@
       "actions": ["touch", "press", "stroke"],
       "sensory": "בליטות עגולות",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "bumps_medium",
@@ -162,7 +165,7 @@
       "actions": ["touch", "press", "stroke"],
       "sensory": "בליטות עגולות",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "bumps_high",
@@ -175,7 +178,7 @@
       "actions": ["touch", "press", "stroke"],
       "sensory": "בליטות עגולות",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "rect_low",
@@ -227,7 +230,7 @@
       "actions": ["trace", "stroke", "press"],
       "sensory": "זיגזג / דפוס כיווני",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "chevron_medium",
@@ -240,7 +243,7 @@
       "actions": ["trace", "stroke", "press"],
       "sensory": "זיגזג / דפוס כיווני",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "chevron_high",
@@ -253,7 +256,7 @@
       "actions": ["trace", "stroke", "press"],
       "sensory": "זיגזג / דפוס כיווני",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "dimples_low",
@@ -266,7 +269,7 @@
       "actions": ["touch", "press", "trace"],
       "sensory": "שקעים / גומות",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "dimples_medium",
@@ -279,7 +282,7 @@
       "actions": ["touch", "press", "trace"],
       "sensory": "שקעים / גומות",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "dimples_high",
@@ -292,7 +295,7 @@
       "actions": ["touch", "press", "trace"],
       "sensory": "שקעים / גומות",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "fingerprint_low",
@@ -344,7 +347,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים אופקיים",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "hgrooves_medium",
@@ -357,7 +360,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים אופקיים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "hgrooves_high",
@@ -370,7 +373,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים אופקיים",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "wavy_low",
@@ -383,7 +386,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים גליים",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "wavy_medium",
@@ -396,7 +399,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים גליים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "wavy_high",
@@ -409,7 +412,7 @@
       "actions": ["trace", "stroke"],
       "sensory": "חריצים גליים",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "lines_horizontal",
@@ -421,7 +424,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "stroke"],
       "sensory": "קווים כיווניים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "lines_vertical",
@@ -433,7 +437,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "stroke"],
       "sensory": "קווים כיווניים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "lines_vertical2",
@@ -445,7 +450,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "stroke"],
       "sensory": "קווים כיווניים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "vribs_low",
@@ -458,7 +464,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות אנכיות",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "vribs_medium",
@@ -471,7 +477,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות אנכיות",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "vribs_high",
@@ -484,7 +490,7 @@
       "actions": ["touch", "trace", "press"],
       "sensory": "צלעות אנכיות",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "twist_14",
@@ -496,7 +502,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "rotate_hand", "stroke"],
       "sensory": "קווים מסובבים / ספירליים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "twist_21",
@@ -508,7 +515,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "rotate_hand", "stroke"],
       "sensory": "קווים מסובבים / ספירליים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "twist_combine",
@@ -520,7 +528,8 @@
       "avoid": ["avoid_grooves"],
       "actions": ["trace", "rotate_hand", "stroke"],
       "sensory": "קווים מסובבים / ספירליים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "sandpaper_low",
@@ -584,7 +593,8 @@
       "avoid": ["avoid_pointed"],
       "actions": ["touch", "press"],
       "sensory": "קוצים מחודדים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "spikes_high",
@@ -597,7 +607,7 @@
       "actions": ["touch", "press"],
       "sensory": "קוצים מחודדים",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "rspikes_low",
@@ -610,7 +620,7 @@
       "actions": ["touch", "press"],
       "sensory": "קוצים מעוגלים",
       "intensity": 1,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "rspikes_medium",
@@ -623,7 +633,7 @@
       "actions": ["touch", "press"],
       "sensory": "קוצים מעוגלים",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "rspikes_high",
@@ -636,7 +646,7 @@
       "actions": ["touch", "press"],
       "sensory": "קוצים מעוגלים",
       "intensity": 3,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "stone_natural",
@@ -649,7 +659,7 @@
       "actions": ["touch", "stroke", "explore_edges"],
       "sensory": "מחוספס / לא סדיר",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "stone_brick_wall",
@@ -662,7 +672,7 @@
       "actions": ["touch", "stroke", "explore_edges"],
       "sensory": "מחוספס / לא סדיר",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "stone_low_poly",
@@ -675,7 +685,7 @@
       "actions": ["touch", "stroke", "explore_edges"],
       "sensory": "מחוספס / לא סדיר",
       "intensity": 2,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "trypophobia_outer_wall",
@@ -688,7 +698,7 @@
       "actions": ["touch", "explore_openings", "visual_explore"],
       "sensory": "חורים / שקעים / אקראי",
       "intensity": 2.5,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "trypophobia_random_bumps",
@@ -701,7 +711,7 @@
       "actions": ["touch", "explore_openings", "visual_explore"],
       "sensory": "חורים / שקעים / אקראי",
       "intensity": 2.5,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "trypophobia_through_holes",
@@ -714,7 +724,7 @@
       "actions": ["touch", "explore_openings", "visual_explore"],
       "sensory": "חורים / שקעים / אקראי",
       "intensity": 2.5,
-      "hidden": true
+      "status": "upcoming"
     },
     {
       "id": "waves_spiral_1",
@@ -726,7 +736,8 @@
       "avoid": ["avoid_raised"],
       "actions": ["trace", "press", "stroke"],
       "sensory": "זורם / בועות",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "waves_spiral_2",
@@ -738,7 +749,8 @@
       "avoid": ["avoid_raised"],
       "actions": ["trace", "press", "stroke"],
       "sensory": "זורם / בועות",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "waves_bubbles",
@@ -750,7 +762,8 @@
       "avoid": ["avoid_raised"],
       "actions": ["trace", "press", "stroke"],
       "sensory": "זורם / בועות",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "ropes_chunky_cream",
@@ -775,7 +788,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "חומר סיבי / חוטים",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     },
     {
       "id": "ropes_light_melange",
@@ -787,7 +801,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "חומר סיבי / חוטים",
-      "intensity": 1.5
+      "intensity": 1.5,
+      "status": "available"
     },
     {
       "id": "layers_smooth",
@@ -799,7 +814,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "שכבות בד",
-      "intensity": 1
+      "intensity": 1,
+      "status": "available"
     },
     {
       "id": "layers_soft",
@@ -811,7 +827,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "שכבות בד",
-      "intensity": 1
+      "intensity": 1,
+      "status": "available"
     },
     {
       "id": "layers_rough",
@@ -823,7 +840,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "שכבות בד",
-      "intensity": 2
+      "intensity": 2,
+      "status": "available"
     }
   ]
 }
