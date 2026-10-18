@@ -66,7 +66,7 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 </head>
 <body>
 <div class="app" id="app">
-  <div class="top"><div class="brand"><img class="brand-logo" src="assets/Logo.png?v=20261011-1" alt="KIKO"><div><span>KIKO</span> · התאמה לפני שימוש</div></div><button class="catalog-btn" id="openCatalog">כל הקטלוג</button></div>
+  <div class="top"><div class="brand"><img class="brand-logo" src="assets/Logo.png?v=20261011-1" alt="KIKO"><div><span>KIKO</span> · התאמה לפני שימוש</div></div><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><a class="catalog-btn" id="hubBack" href="index.html" hidden style="text-decoration:none">← לאזור האישי</a><button class="catalog-btn" id="openCatalog">כל הקטלוג</button></span></div>
   <div class="progress-shell"><div class="progress" id="progress"></div></div>
   <div class="layout">
     <main class="card">
@@ -89,6 +89,7 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 </div>
 <div class="overlay" id="catalogOverlay"><div class="catalog"><div class="catalog-head"><h2 id="catalogTitle">הקטלוג המלא</h2><span class="catalog-head-note" id="catalogHeadNote">בחרו קטגוריה כדי לצמצם את התצוגה</span><div class="space"></div><button class="close" id="closeCatalog" aria-label="סגירת הקטלוג">✕</button></div><div class="catalog-body"><div class="tabs" id="catalogTabs"></div><div class="catalog-main"><div class="mobile-family-select-wrap"><label class="mobile-family-select-label" for="mobileFamilySelect">קטגוריה</label><select class="mobile-family-select" id="mobileFamilySelect"></select></div><div class="catalog-context" id="catalogContext"></div><div class="catalog-grid" id="catalogGrid"></div></div></div></div></div>
 <div class="part-overlay" id="partOverlay"><div class="part-detail" role="dialog" aria-modal="true" aria-labelledby="partDetailName"><div class="part-detail-top"><span class="part-detail-family" id="partDetailFamily"></span><div class="space"></div><button class="close" id="closePartDetail" aria-label="סגירת פרטי החלק">✕</button></div><div class="part-detail-content"><img id="partDetailImg" src="" alt=""><div><h3 id="partDetailName"></h3><p id="partDetailDesc"></p><div class="part-meta"><div id="partDetailSensory"></div><div id="partDetailIntensity"></div><div id="partDetailActions"></div></div><div class="part-detail-actions"><button class="detail-primary" id="choosePartBtn">בחירת החלק הזה</button><button class="detail-secondary" id="backToCatalog">חזרה לקטלוג</button></div></div></div></div></div>
+<script src="assets/kiko-hub.js"></script>
 <script>
 let CATALOG={families:[],parts:[],familyLabels:{}};
 const CATALOG_BASE='catalog/';
@@ -108,6 +109,7 @@ function loadCatalog(){
   return catalogPromise;
 }
 loadCatalog().catch(()=>{});
+const HUB_CTX=(window.KikoHub&&KikoHub.getContext())||null;
 const SUBMIT_URL='https://script.google.com/macros/s/AKfycbxD-weHFTPJ_H2J65DgLpsI8fxbBnMl6R5z9w0VaK2RNH-tuuCNup0NlbGhGmfxLMZ2/exec';
 const data={primary_goal:[],preferred_sensations:[],avoid_sensations:[],preferred_actions:[],character_color:'',kiko_name:''};
 let current=0,recommendations=[],finalParts=[],replaceIndex=null;
@@ -308,7 +310,7 @@ document.getElementById('doneCatalog').onclick=()=>openCatalog();
 function returnToChosenParts(){renderResult();current=8;render()}
 document.getElementById('backToChosenParts').onclick=returnToChosenParts;
 document.getElementById('backToChosenPartsBottom').onclick=returnToChosenParts;
-async function saveOrder(){data.recommended_parts=recommendations.map(x=>x.p.name);data.recommendation_reasons=recommendations.map(reasonFor);data.final_parts=finalParts.map(x=>x.name);data.user_changes=finalParts.map(x=>x.id).join('|')!==recommendations.map(x=>x.p.id).join('|');data.confirmed_at=new Date().toISOString();data.order_status='confirmed';localStorage.setItem('kiko_preuse_'+data.order_code,JSON.stringify(data));if(!SUBMIT_URL)return{remote:false};const body=new URLSearchParams();body.set('payload',JSON.stringify(data));await fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',body});return{remote:true}}
+async function saveOrder(){data.recommended_parts=recommendations.map(x=>x.p.name);data.recommendation_reasons=recommendations.map(reasonFor);data.final_parts=finalParts.map(x=>x.name);data.user_changes=finalParts.map(x=>x.id).join('|')!==recommendations.map(x=>x.p.id).join('|');data.confirmed_at=new Date().toISOString();data.order_status='confirmed';data.recommended_part_ids=recommendations.map(x=>x.p.id);data.final_part_ids=finalParts.map(x=>x.id);localStorage.setItem('kiko_preuse_'+data.order_code,JSON.stringify(data));if(HUB_CTX){await KikoHub.api('saveRecommendation',{child_id:HUB_CTX.child_id,data});KikoHub.setContext(Object.assign({},HUB_CTX,{auth:undefined,current_part_ids:data.final_part_ids,order_code:data.order_code}));return{remote:true,hub:true}}if(!SUBMIT_URL)return{remote:false};const body=new URLSearchParams();body.set('payload',JSON.stringify(data));await fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',body});return{remote:true}}
 saveAndMeetBtn.onclick=async()=>{
   if(saveInFlight)return;
   data.kiko_name=(kikoNameInput?.value||'').trim();
@@ -327,6 +329,13 @@ saveAndMeetBtn.onclick=async()=>{
     saveAndMeetBtn.disabled=false;
   }finally{saveInFlight=false}
 };
-bindGroups();render();
+bindGroups();
+if(HUB_CTX){
+  const back=document.getElementById('hubBack');back.hidden=false;back.href='index.html?child='+encodeURIComponent(HUB_CTX.child_id);
+  if(childNameInput&&HUB_CTX.child_alias){childNameInput.value=HUB_CTX.child_alias;data.child_alias=HUB_CTX.child_alias}
+  [['age_range',HUB_CTX.age_range],['respondent_role',HUB_CTX.respondent_role]].forEach(([k,v])=>{const b=v&&document.querySelector('[data-single="'+k+'"] .choice[data-value="'+v+'"]');if(b)b.click()});
+  updateChildRefs();
+}
+render();
 </script>
 </body></html>
