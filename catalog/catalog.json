@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-18-7",
+  "version": "2026-10-18-8",
   "families": [
     {"key": "ribs", "label": "צלעות", "desc": "משפחת צלעות – 3 רמות קושי", "color": "#5f8a6f", "hidden": true},
     {"key": "animals", "label": "חיות", "desc": "משפחת חיות – טקסטורות מגע", "color": "#e0654f", "hidden": true},
@@ -105,7 +105,7 @@
     {
       "id": "almond_almond",
       "family": "almond",
-      "name": "שקד – חור פתוח",
+      "name": "חור אלכסוני",
       "badge": "חור פתוח",
       "img": "images/almond_almond.webp",
       "match": ["openings", "shape", "grip"],
@@ -117,7 +117,7 @@
     {
       "id": "almond_half_5r",
       "family": "almond",
-      "name": "שקד – חצי חור (5R)",
+      "name": "חור עגול",
       "badge": "חצי חור",
       "img": "images/almond_half_5r.webp",
       "match": ["openings", "shape", "grip"],
@@ -129,7 +129,7 @@
     {
       "id": "almond_no_hole",
       "family": "almond",
-      "name": "שקד – ללא חור",
+      "name": "חלק חלק",
       "badge": "ללא חור",
       "img": "images/almond_no_hole.webp",
       "match": ["openings", "shape", "grip"],
@@ -414,7 +414,7 @@
     {
       "id": "lines_horizontal",
       "family": "lines",
-      "name": "קווים – אופקי",
+      "name": "טבעות רחבות",
       "badge": "אופקי",
       "img": "images/lines_horizontal.webp",
       "match": ["lines", "directional", "trace"],
@@ -426,7 +426,7 @@
     {
       "id": "lines_vertical",
       "family": "lines",
-      "name": "קווים – אנכי",
+      "name": "צלעות צפופות",
       "badge": "אנכי",
       "img": "images/lines_vertical.webp",
       "match": ["lines", "directional", "trace"],
@@ -438,7 +438,7 @@
     {
       "id": "lines_vertical2",
       "family": "lines",
-      "name": "קווים – אנכי 2 (זיגזג)",
+      "name": "צלעות זיגזג",
       "badge": "אנכי 2",
       "img": "images/lines_vertical2.webp",
       "match": ["lines", "directional", "trace"],
@@ -489,7 +489,7 @@
     {
       "id": "twist_14",
       "family": "twist",
-      "name": "קווים מסובבים – 14",
+      "name": "ספירלה רכה",
       "badge": "14",
       "img": "images/twist_14.webp",
       "match": ["spiral", "flowing", "directional"],
@@ -501,7 +501,7 @@
     {
       "id": "twist_21",
       "family": "twist",
-      "name": "קווים מסובבים – 21",
+      "name": "ספירלה",
       "badge": "21",
       "img": "images/twist_21.webp",
       "match": ["spiral", "flowing", "directional"],
@@ -513,7 +513,7 @@
     {
       "id": "twist_combine",
       "family": "twist",
-      "name": "קווים מסובבים – משולב (14+21)",
+      "name": "קלוע",
       "badge": "משולב",
       "img": "images/twist_combine.webp",
       "match": ["spiral", "flowing", "directional"],
@@ -577,7 +577,7 @@
     {
       "id": "spikes_medium",
       "family": "spikes",
-      "name": "קוצים – קושי בינוני",
+      "name": "קוצים",
       "badge": "בינוני",
       "img": "images/spikes_medium.webp",
       "match": ["pointed", "strong_tactile", "press"],
@@ -719,7 +719,7 @@
     {
       "id": "waves_spiral_1",
       "family": "waves",
-      "name": "גלים – ספירלה 1",
+      "name": "טבעות כחולות עדינות",
       "badge": "גלים",
       "img": "images/waves_spiral_1.webp",
       "match": ["flowing", "rounded_raised", "trace"],
@@ -731,7 +731,7 @@
     {
       "id": "waves_spiral_2",
       "family": "waves",
-      "name": "גלים – ספירלה 2",
+      "name": "טבעות כחולות",
       "badge": "גלים",
       "img": "images/waves_spiral_2.webp",
       "match": ["flowing", "rounded_raised", "trace"],
@@ -762,7 +762,8 @@
       "avoid": ["avoid_fibrous"],
       "actions": ["touch", "grip", "stroke", "press"],
       "sensory": "חומר סיבי / חוטים",
-      "intensity": 1.5
+      "intensity": 1.5,
+      "hidden": true
     },
     {
       "id": "ropes_natural_jute",
@@ -779,7 +780,7 @@
     {
       "id": "ropes_light_melange",
       "family": "ropes",
-      "name": "חוט צמר מלאנז׳ בהיר",
+      "name": "חוט צמר מלאנז׳ בהיר – כחול",
       "badge": "מעורב",
       "img": "images/ropes_light_melange.webp",
       "match": ["fibrous", "material_contrast", "grip", "gentle"],
