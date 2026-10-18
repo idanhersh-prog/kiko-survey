@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-18-2",
+  "version": "2026-10-18-3",
   "families": [
     {"key": "ribs", "label": "צלעות", "desc": "משפחת צלעות – 3 רמות קושי", "color": "#5f8a6f"},
     {"key": "animals", "label": "חיות", "desc": "משפחת חיות – טקסטורות מגע", "color": "#e0654f"},
