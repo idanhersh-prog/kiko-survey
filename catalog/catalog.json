@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-18-13",
+  "version": "2026-10-18-14",
   "families": [
     {"key": "ribs", "label": "צלעות", "desc": "משפחת צלעות – 3 רמות קושי", "color": "#5f8a6f"},
     {"key": "animals", "label": "חיות", "desc": "משפחת חיות – טקסטורות מגע", "color": "#e0654f"},
@@ -586,7 +586,7 @@
     {
       "id": "spikes_medium",
       "family": "spikes",
-      "name": "קוצים",
+      "name": "קוצים – קושי בינוני",
       "badge": "בינוני",
       "img": "images/spikes_medium.webp",
       "match": ["pointed", "rough", "strong_tactile", "press"],
@@ -594,20 +594,20 @@
       "actions": ["touch", "press"],
       "sensory": "קוצים מחודדים – גירוי מגע חזק וממוקד",
       "intensity": 2.5,
-      "status": "available"
+      "status": "upcoming"
     },
     {
       "id": "spikes_high",
       "family": "spikes",
-      "name": "קוצים – קושי גבוה",
+      "name": "קוצים",
       "badge": "גבוה",
       "img": "images/spikes_high.webp",
-      "match": ["pointed", "strong_tactile", "press"],
-      "avoid": ["avoid_pointed"],
+      "match": ["pointed", "rough", "strong_tactile", "press"],
+      "avoid": ["avoid_pointed", "avoid_rough"],
       "actions": ["touch", "press"],
-      "sensory": "קוצים מחודדים",
+      "sensory": "קוצים גדולים ומחודדים – גירוי מגע חזק וממוקד",
       "intensity": 3,
-      "status": "upcoming"
+      "status": "available"
     },
     {
       "id": "rspikes_low",
