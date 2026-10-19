@@ -2,13 +2,14 @@
  * KIKO Hub – backend (Google Apps Script)
  *
  * One spreadsheet, five tabs (created automatically on first run):
- *   Users            – user_code, PIN, role (parent / ot), name, contact
+ *   Users            – user_code, phone (login), PIN, role (parent / ot), name
  *   Children         – child profiles + share code
  *   Access           – which user can see which child
  *   Recommendations  – pre-use sessions (one row per order_code, updated in place)
  *   Feedback         – post-use sessions (one row per session)
  *
- * Every request is a POST with a JSON body: { action, code, pin, ... }
+ * Every request is a POST with a JSON body: { action, code|phone, pin, ... }
+ * Users log in with phone + PIN; user_code stays as the internal id.
  * Deploy: Deploy → New deployment → Web app → Execute as: Me, Who has access: Anyone.
  */
 
@@ -20,7 +21,7 @@ const LOCK_MINUTES = 15;
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I
 
 const SHEETS = {
-  Users: ['user_code', 'pin', 'role', 'display_name', 'contact', 'created_at', 'last_login_at', 'status'],
+  Users: ['user_code', 'pin', 'role', 'display_name', 'contact', 'created_at', 'last_login_at', 'status', 'phone'],
   Children: ['child_id', 'share_code', 'child_alias', 'age_range', 'created_by', 'created_at', 'notes'],
   Access: ['user_code', 'child_id', 'role', 'linked_at'],
   Recommendations: [
@@ -64,7 +65,7 @@ function doPost(e) {
     return json_(Object.assign({ ok: true }, handler(req)));
   } catch (err) {
     const msg = String(err && err.message || err);
-    const known = ['auth_failed', 'locked', 'no_access', 'not_found', 'invalid_input'];
+    const known = ['auth_failed', 'locked', 'no_access', 'not_found', 'invalid_input', 'invalid_phone', 'phone_taken'];
     return json_({ ok: false, error: known.indexOf(msg) >= 0 ? msg : 'server_error', detail: known.indexOf(msg) >= 0 ? '' : msg });
   } finally {
     lock.releaseLock();
@@ -84,12 +85,15 @@ const ACTIONS = {
     const pin = String(r.pin || '');
     const name = clean_(r.name, 60);
     if (!role || !/^\d{4}$/.test(pin) || !name) throw new Error('invalid_input');
+    const phone = normPhone_(r.phone);
+    if (!phone) throw new Error('invalid_phone');
     const users = table_('Users');
+    if (users.find('phone', phone)) throw new Error('phone_taken');
     let code;
     do { code = 'KIKO-' + randomCode_(5); } while (users.find('user_code', code));
     const now = new Date();
-    users.append({ user_code: code, pin: pin, role: role, display_name: name, contact: clean_(r.contact, 120), created_at: now, last_login_at: now, status: 'active' });
-    return { user: publicUser_({ user_code: code, role: role, display_name: name }), children: [] };
+    users.append({ user_code: code, phone: phone, pin: pin, role: role, display_name: name, contact: phone, created_at: now, last_login_at: now, status: 'active' });
+    return { user: publicUser_({ user_code: code, role: role, display_name: name, phone: phone }), children: [] };
   },
 
   login: (r) => {
@@ -225,20 +229,21 @@ const ACTIONS = {
 
 function auth_(r, isLogin) {
   const code = String(r.code || '').trim().toUpperCase();
+  const phone = normPhone_(r.phone);
   const pin = String(r.pin || '').trim();
-  if (!code || !pin) throw new Error('auth_failed');
+  if ((!code && !phone) || !pin) throw new Error('auth_failed');
   const cache = CacheService.getScriptCache();
-  const key = 'fail_' + code;
+  const key = 'fail_' + (phone || code);
   const fails = Number(cache.get(key) || 0);
   if (fails >= MAX_FAILED_LOGINS) throw new Error('locked');
   const users = table_('Users');
-  const u = users.find('user_code', code);
+  const u = phone ? users.find('phone', phone) : users.find('user_code', code);
   if (!u || String(u.pin) !== pin || u.status === 'disabled') {
     cache.put(key, String(fails + 1), LOCK_MINUTES * 60);
     throw new Error('auth_failed');
   }
   if (fails) cache.remove(key);
-  if (isLogin) users.update('user_code', code, { last_login_at: new Date() });
+  if (isLogin) users.update('user_code', u.user_code, { last_login_at: new Date() });
   return u;
 }
 
@@ -266,7 +271,7 @@ function childrenFor_(u) {
 
 /* ---------------- shaping responses ---------------- */
 
-function publicUser_(u) { return { code: u.user_code, role: u.role, name: u.display_name }; }
+function publicUser_(u) { return { code: u.user_code, role: u.role, name: u.display_name, phone: u.phone || '' }; }
 
 function publicChild_(c, u) {
   return { child_id: c.child_id, share_code: c.share_code, child_alias: c.child_alias, age_range: c.age_range, created_at: iso_(c.created_at), mine: c.created_by === u.user_code };
@@ -340,7 +345,7 @@ function table_(name) {
     const vals = sh.getRange(2, 1, n, header.length).getValues();
     cache = vals.map((v, i) => {
       const o = { _row: i + 2 };
-      header.forEach((h, j) => { o[h] = (h === 'pin' || h.indexOf('code') >= 0 || h.indexOf('_id') >= 0) ? String(v[j]) : v[j]; });
+      header.forEach((h, j) => { o[h] = (h === 'pin' || h === 'phone' || h.indexOf('code') >= 0 || h.indexOf('_id') >= 0) ? String(v[j]) : v[j]; });
       return o;
     });
     return cache;
@@ -378,6 +383,13 @@ function table_(name) {
 
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function randomCode_(n) { let s = ''; for (let i = 0; i < n; i++) s += CODE_ALPHABET.charAt(Math.floor(Math.random() * CODE_ALPHABET.length)); return s; }
+/** Israeli-style phone → digits starting with 0 (e.g. 0501234567); '' if not a plausible number. */
+function normPhone_(v) {
+  let d = String(v == null ? '' : v).replace(/\D/g, '');
+  if (d.indexOf('972') === 0) d = '0' + d.slice(3);
+  if (d.length === 9 && d.charAt(0) !== '0') d = '0' + d;
+  return /^0\d{8,9}$/.test(d) ? d : '';
+}
 function clean_(v, max) { return String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max || 200); }
 function join_(v) { return Array.isArray(v) ? v.map(x => clean_(x, 80)).join(' | ') : clean_(v, 500); }
 function split_(v) { return String(v || '').split(' | ').map(s => s.trim()).filter(Boolean); }

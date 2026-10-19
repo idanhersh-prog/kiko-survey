@@ -273,13 +273,16 @@ function drawSpeedLines(sp){
 }
 
 /* ---------- register ---------- */
+const normPhone = v => { let d = String(v||'').replace(/\D/g,''); if(d.startsWith('972')) d = '0' + d.slice(3); if(d.length === 9 && d[0] !== '0') d = '0' + d; return /^0\d{8,9}$/.test(d) ? d : ''; };
+const pinOnly = el => el.addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,4));
+
 function showRegister(){
-  const f = {role:'', name:'', contact:'', pin:'', pin2:''};
+  const f = {role:''};
   view(`
   <button class="link back" id="back">→ חזרה</button>
   <div class="card">
     <h1>הרשמה</h1>
-    <p class="lead">לוקח פחות מדקה. בסוף תקבלו קוד אישי – איתו ועם הסיסמה נכנסים בכל פעם.</p>
+    <p class="lead">לוקח פחות מדקה. בפעם הבאה נכנסים עם מספר הטלפון והסיסמה.</p>
     <div class="field"><span>מי נרשם?</span>
       <div class="choices" id="role">
         <button class="choice" data-value="parent" aria-pressed="false"><span class="ico">🏠</span><b>הורה / בן משפחה</b><small>מלווים ילד/ה בבית</small></button>
@@ -287,7 +290,7 @@ function showRegister(){
       </div>
     </div>
     <label class="field"><span>איך לקרוא לך?</span><input class="input" id="name" maxlength="60" autocomplete="name" placeholder="שם פרטי"></label>
-    <label class="field"><span>טלפון או מייל <span class="muted small">(לא חובה)</span></span><input class="input" id="contact" maxlength="120" placeholder="כדי שנוכל לעזור אם הקוד ישכח"><small>משמש רק לשחזור גישה. לא נשלח אליו דבר.</small></label>
+    <label class="field"><span>מספר טלפון</span><input class="input" id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="050-1234567" style="text-align:right"><small>משמש לכניסה ולשחזור סיסמה. לא נשלח אליו דבר.</small></label>
     <div class="grid2">
       <label class="field"><span>סיסמה – 4 ספרות</span><input class="input pin" id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password"></label>
       <label class="field"><span>שוב, לאימות</span><input class="input pin" id="pin2" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password"></label>
@@ -298,71 +301,58 @@ function showRegister(){
   </div>`);
   $('#back').onclick = showWelcome;
   bindChoice($('#role'), v => f.role = v);
-  ['pin','pin2'].forEach(id => $('#'+id).addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,4)));
+  pinOnly($('#pin')); pinOnly($('#pin2'));
   $('#submit').onclick = async () => {
     const err = $('#err'); err.textContent = '';
-    f.name = $('#name').value.trim(); f.contact = $('#contact').value.trim(); f.pin = $('#pin').value; f.pin2 = $('#pin2').value;
+    const name = $('#name').value.trim(), phone = normPhone($('#phone').value), pin = $('#pin').value, pin2 = $('#pin2').value;
     if(!f.role) return err.textContent = 'בחרו מי נרשם.';
-    if(!f.name) return err.textContent = 'כתבו איך לקרוא לך.';
-    if(!/^\d{4}$/.test(f.pin)) return err.textContent = 'הסיסמה צריכה להיות 4 ספרות.';
-    if(f.pin !== f.pin2) return err.textContent = 'שתי הסיסמאות לא זהות.';
+    if(!name) return err.textContent = 'כתבו איך לקרוא לך.';
+    if(!phone) return err.textContent = 'בדקו את מספר הטלפון – למשל 050-1234567.';
+    if(!/^\d{4}$/.test(pin)) return err.textContent = 'הסיסמה צריכה להיות 4 ספרות.';
+    if(pin !== pin2) return err.textContent = 'שתי הסיסמאות לא זהות.';
     const btn = $('#submit'); busy(btn, true, 'יוצרים חשבון...');
     try{
-      const r = await H.api('register', {role:f.role, name:f.name, contact:f.contact, pin:f.pin}, {noAuth:true});
-      H.setAuth({code:r.user.code, pin:f.pin, role:r.user.role, name:r.user.name}, $('#remember').checked);
+      const r = await H.api('register', {role:f.role, name, phone, pin}, {noAuth:true});
+      H.setAuth({code:r.user.code, pin, role:r.user.role, name:r.user.name}, $('#remember').checked);
       state.user = r.user; state.children = r.children || [];
-      showNewCode(r.user.code, f.pin);
-    }catch(e){ err.textContent = H.errorText(e); busy(btn, false); }
+      if(state.user.role === 'ot') showDashboard(); else showAddChild(true);
+    }catch(e){
+      if(e.code === 'phone_taken'){ err.innerHTML = 'המספר הזה כבר רשום. <button class="link" id="toLogin">לכניסה</button>'; $('#toLogin').onclick = () => showLogin(phone); }
+      else err.textContent = H.errorText(e);
+      busy(btn, false);
+    }
   };
 }
 
-function showNewCode(code, pin){
-  setWho();
-  view(`
-  <div class="card">
-    <h1>נרשמתם! 🎉</h1>
-    <p class="lead">זה הקוד האישי שלכם. שמרו אותו – עם הקוד והסיסמה נכנסים בכל פעם.</p>
-    <div class="codebox"><div class="muted small">הקוד האישי</div><div class="big" id="theCode">${esc(code)}</div><div class="muted small" style="margin-top:6px">סיסמה: ${'•'.repeat(pin.length)}</div></div>
-    <div class="row" style="justify-content:center">
-      <button class="btn secondary" id="copy">📋 העתקת הקוד</button>
-    </div>
-    <p class="muted small" style="text-align:center;margin-top:12px">טיפ: צלמו מסך או שמרו את הקוד בפתקים. אם תשכחו – פנו אלינו ונעזור לשחזר.</p>
-    <button class="btn block" id="cont" style="margin-top:8px">המשך</button>
-  </div>`);
-  $('#copy').onclick = async () => { try{ await navigator.clipboard.writeText(code); $('#copy').textContent = '✓ הועתק'; }catch(e){} };
-  $('#cont').onclick = () => state.user.role==='ot' ? showDashboard() : showAddChild(true);
-}
-
 /* ---------- login ---------- */
-function showLogin(){
+function showLogin(prefill){
   view(`
   <button class="link back" id="back">→ חזרה</button>
   <div class="card" style="max-width:460px;margin:0 auto">
     <h1>כניסה</h1>
-    <p class="lead">הקלידו את הקוד האישי והסיסמה.</p>
-    <label class="field"><span>קוד אישי</span><input class="input code" id="code" placeholder="KIKO-XXXXX" autocomplete="username"></label>
+    <p class="lead">מספר הטלפון והסיסמה שבחרתם בהרשמה.</p>
+    <label class="field"><span>מספר טלפון</span><input class="input" id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="050-1234567" style="text-align:right"></label>
     <label class="field"><span>סיסמה</span><input class="input pin" id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"></label>
     <label class="check"><input type="checkbox" id="remember" checked> לזכור אותי במכשיר הזה</label>
     <div class="error" id="err"></div>
     <button class="btn block" id="submit">כניסה</button>
-    <p class="muted small" style="margin-top:14px">שכחתם את הקוד או הסיסמה? פנו אלינו ונעזור לשחזר.</p>
+    <p class="muted small" style="margin-top:14px">שכחתם את הסיסמה? פנו אלינו עם מספר הטלפון ונעזור לשחזר.</p>
   </div>`);
   $('#back').onclick = showWelcome;
-  $('#pin').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,4));
+  if(typeof prefill === 'string') $('#phone').value = prefill;
+  pinOnly($('#pin'));
   const go = async () => {
     const err = $('#err'); err.textContent = '';
-    let code = $('#code').value.trim().toUpperCase().replace(/\s/g,'');
-    if(code && !code.startsWith('KIKO-')) code = 'KIKO-' + code.replace(/^KIKO/,'');
-    const pin = $('#pin').value;
-    if(!code || pin.length !== 4) return err.textContent = 'הקלידו קוד וסיסמה של 4 ספרות.';
+    const phone = normPhone($('#phone').value), pin = $('#pin').value;
+    if(!phone) return err.textContent = 'בדקו את מספר הטלפון – למשל 050-1234567.';
+    if(pin.length !== 4) return err.textContent = 'הסיסמה היא 4 ספרות.';
     const btn = $('#submit'); busy(btn, true, 'נכנסים...');
     try{
-      H.setAuth({code, pin}, false);
-      const r = await H.api('login', {});
+      const r = await H.api('login', {phone, pin}, {noAuth:true});
       H.setAuth({code:r.user.code, pin, role:r.user.role, name:r.user.name}, $('#remember').checked);
       state.user = r.user; state.children = r.children || [];
       showDashboard();
-    }catch(e){ H.logout(); err.textContent = H.errorText(e); busy(btn, false); }
+    }catch(e){ err.textContent = e.code === 'auth_failed' ? 'מספר הטלפון או הסיסמה לא נכונים.' : H.errorText(e); busy(btn, false); }
   };
   $('#submit').onclick = go;
   $('#pin').addEventListener('keydown', e => { if(e.key==='Enter') go(); });
