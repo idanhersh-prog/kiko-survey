@@ -100,6 +100,62 @@ details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:13p
 .spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--orange);animation:spin .8s linear infinite;margin:30px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 [hidden]{display:none!important}
+/* ---------- child story (parent view) ---------- */
+.story{position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 70% at 85% 0%,#fdf1e2 0%,var(--paper) 60%);padding:26px 24px 24px}
+.story-top{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.kiko-fig{position:relative;width:150px;display:flex;flex-direction:column;align-items:center}
+.kiko-fig img{width:150px;display:block;filter:drop-shadow(0 12px 14px rgba(120,60,20,.18));animation:kiko-bob 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.kiko-fig .shadow{width:96px;height:12px;border-radius:50%;background:rgba(120,70,30,.13);margin-top:-6px;animation:kiko-shadow 3.2s ease-in-out infinite}
+.kiko-fig .tagname{margin-top:8px;font-family:Fredoka,Arial,sans-serif;font-weight:600;font-size:17px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 14px;color:var(--ink)}
+@keyframes kiko-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+@keyframes kiko-shadow{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(.82);opacity:.7}}
+.bubble{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px 18px;font-size:18px;font-weight:800;line-height:1.45;box-shadow:0 6px 18px rgba(80,40,10,.06);justify-self:start;max-width:420px}
+.bubble::before{content:"";position:absolute;inset-inline-start:-9px;top:50%;width:16px;height:16px;background:#fff;border:1px solid var(--line);border-top:0;border-inline-end:0;transform:translateY(-50%) rotate(45deg)}
+html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
+.eyebrow{display:inline-block;font-size:13px;font-weight:800;color:#b6401b;background:var(--orange2);border-radius:999px;padding:4px 12px;margin:20px 0 8px}
+.story h1{font-size:26px;margin:0 0 6px}
+.story h1.feel{font-size:22px;line-height:1.4}
+.story .lead{margin-bottom:12px}
+.heads{display:flex;justify-content:center;align-items:flex-end;gap:4px;margin:0 auto 16px}
+@media (min-width:621px){.story .parts{max-width:720px}}
+.heads img{width:110px;filter:drop-shadow(0 10px 12px rgba(120,60,20,.16));animation:kiko-bob 3.2s ease-in-out infinite}
+.heads img:nth-child(2){width:128px;animation-delay:-1s}
+.heads img:nth-child(3){animation-delay:-2s}
+.moments{list-style:none;padding:0;margin:6px 0 4px;display:flex;flex-direction:column;gap:8px}
+.moments li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;line-height:1.5;font-size:15px}
+.moments li .e{font-size:20px;line-height:1.2}
+.moments li img{width:46px;height:46px;border-radius:10px;object-fit:cover;background:#f4eee8;flex:none}
+.try h2{margin-top:2px}
+.story .parts{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.story .part{position:relative;text-align:right;padding:10px;display:flex;flex-direction:column;gap:3px}
+.story .part img{margin-bottom:4px}
+.story .part b{font-size:15px}
+.story .part small{color:var(--muted);font-weight:600;font-size:12.5px;line-height:1.45}
+.story .part .step{position:absolute;top:14px;inset-inline-start:14px;background:#fff;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:900;color:#b6401b;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.story .part.star{border-color:#f0b48f;box-shadow:0 0 0 3px rgba(237,91,45,.10)}
+.story .part.rest{opacity:.62}
+.tip{margin:14px 0 0;background:#fff7e6;border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.55;color:#6d4c12}
+.cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.cta .btn{font-size:17px;padding:15px 22px}
+.cta .link{font-size:15px}
+.share-soft{background:transparent;border:0;box-shadow:none;padding:6px 4px}
+.share-soft .share{background:#fff;border:1px solid var(--line)}
+.kid .who-kiko{display:flex;align-items:center;gap:10px}
+.kid .who-kiko img{width:54px;flex:none;filter:drop-shadow(0 4px 6px rgba(120,60,20,.15))}
+@media (max-width:620px){
+  .story{padding:20px 16px}
+  .story-top{grid-template-columns:1fr;justify-items:center;text-align:center;gap:10px}
+  .bubble{justify-self:center;font-size:17px}
+  .bubble::before{inset-inline-start:50%;top:-9px;transform:translateX(50%) rotate(135deg)!important}
+  .story .parts{grid-template-columns:1fr;gap:10px}
+  .story .part{flex-direction:row;align-items:center;gap:12px}
+  .story .part img{width:84px;flex:none;margin:0}
+  .story .part .step{top:6px;inset-inline-start:6px}
+  .heads img{width:84px}.heads img:nth-child(2){width:98px}
+  .cta .btn{width:100%}
+  .cta{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){.kiko-fig img,.kiko-fig .shadow,.heads img{animation:none}}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -370,9 +426,10 @@ function showDashboard(){
     <div class="kids">
       ${kids.map(k => `
         <button class="kid" data-id="${esc(k.child_id)}">
-          <span class="name">${esc(k.child_alias)}</span>
-          <span class="meta">${ageTxt(k.age_range)}</span>
-          <span class="meta">${k.recommendations||k.feedback ? `${plural(k.recommendations,'התאמה אחת','התאמות')} · ${plural(k.feedback,'מפגש אחד','מפגשים')}` : 'עוד לא התחלנו'}</span>
+          <span class="who-kiko">${k.character_color ? `<img src="${headSrc(k.character_color)}" alt="">` : ''}<span>
+            <span class="name">${esc(k.child_alias)}</span><br>
+            <span class="meta">${ageTxt(k.age_range)}${!isOT && k.kiko_name ? ' · עם ' + esc(k.kiko_name) : ''}</span></span></span>
+          <span class="meta">${!(k.recommendations||k.feedback) ? 'עוד לא התחלנו' : isOT ? `${plural(k.recommendations,'התאמה אחת','התאמות')} · ${plural(k.feedback,'מפגש אחד','מפגשים')}` : (k.feedback ? 'מוכנים למפגש הבא ✨' : 'ה־KIKO מחכה למפגש ✨')}</span>
           ${k.last_activity ? `<span class="meta">פעילות אחרונה: ${fmtDate(k.last_activity)}</span>` : ''}
         </button>`).join('')}
       <button class="kid add" id="addKid">＋ הוספת ילד/ה</button>
@@ -443,6 +500,7 @@ async function showChild(childId){
   const c = ov.child, cur = ov.current, last = ov.last_feedback, isOT = ov.role === 'ot';
   const partCard = id => { const p = state.catalog[id]; return p ? `<div class="part"><img src="${esc(p.img)}" alt="">${esc(p.name)}</div>` : `<div class="part">${esc(id)}</div>`; };
   const hasRec = !!cur;
+  if(!isOT){ showChildStory(c, cur, last); return; }
   view(`
   <button class="link back" id="back">→ ${isOT ? 'כל הילדים' : 'לאזור האישי'}</button>
   <div class="card">
@@ -459,8 +517,12 @@ async function showChild(childId){
   </div>
 
   <div class="card">
-    <h2>ה־KIKO הנוכחי${cur && cur.kiko_name ? ' · '+esc(cur.kiko_name) : ''}</h2>
-    ${cur ? `<p class="muted small" style="margin:0">ההתאמה מ־${fmtDate(cur.date)}${cur.by ? ' · '+esc(cur.by) : ''}</p>
+    <div style="display:flex;align-items:center;gap:14px">
+      ${cur ? `<img src="${headSrc(cur.character_color)}" alt="" style="width:72px;filter:drop-shadow(0 6px 8px rgba(120,60,20,.15))">` : ''}
+      <div><h2 style="margin:0">ה־KIKO הנוכחי${cur && cur.kiko_name ? ' · '+esc(cur.kiko_name) : ''}</h2>
+      ${cur ? `<p class="muted small" style="margin:2px 0 0">ההתאמה מ־${fmtDate(cur.date)}${cur.by ? ' · '+esc(cur.by) : ''}</p>` : ''}</div>
+    </div>
+    ${cur ? `
       <div class="parts">${(cur.final_part_ids||[]).map(partCard).join('')}</div>`
       : '<div class="empty">עוד אין התאמה. התחילו ב"קבלת המלצה ראשונה".</div>'}
     ${last ? `<p style="margin:14px 0 0">🕒 מפגש אחרון: <b>${fmtDate(last.date)}</b>${last.best_part ? ` · עבד הכי טוב: <b>${esc((state.catalog[last.best_part_id]||{}).name || last.best_part)}</b>` : ''}</p>` : ''}
@@ -477,6 +539,10 @@ async function showChild(childId){
     <div class="share"><span>קוד הילד/ה לשיתוף ${isOT ? 'עם ההורים' : 'עם המטפל/ת'}:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
     <p class="muted small" style="margin:10px 0 0">מי שמקבל את הקוד יכול להוסיף את הילד/ה לאזור האישי שלו ולראות את התהליך.</p>
   </div>`);
+  bindChildPage(c, cur);
+}
+
+function bindChildPage(c, cur){
   $('#back').onclick = async () => { try{ const r = await H.api('children', {}); state.children = r.children; }catch(e){} showDashboard(); };
   $('#copyShare').onclick = async () => { try{ await navigator.clipboard.writeText(c.share_code); $('#copyShare').textContent = '✓ הועתק'; }catch(e){} };
   app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => {
@@ -487,6 +553,113 @@ async function showChild(childId){
     });
     location.href = (b.dataset.go === 'pre' ? 'pre-use.html' : 'post-use.html') + '?child=' + encodeURIComponent(c.child_id);
   });
+}
+
+/* ---------- parent: the story view ---------- */
+const HEAD_COLORS = ['red','blue','green'];
+const headSrc = color => 'assets/characters/kiko-head-' + (HEAD_COLORS.indexOf(color) >= 0 ? color : 'red') + '.webp';
+const timeOf = iso => { const t = new Date(iso||'').getTime(); return isNaN(t) ? 0 : t; };
+function relDate(iso){
+  const t = timeOf(iso); if(!t) return '';
+  const day = 864e5, start = d => { const x = new Date(d); x.setHours(0,0,0,0); return x.getTime(); };
+  const days = Math.round((start(Date.now()) - start(t)) / day);
+  if(days <= 0) return 'היום';
+  if(days === 1) return 'אתמול';
+  if(days === 2) return 'שלשום';
+  if(days < 7) return 'לפני ' + days + ' ימים';
+  if(days < 14) return 'לפני שבוע';
+  if(days < 31) return 'לפני ' + Math.round(days/7) + ' שבועות';
+  return fmtDate(iso);
+}
+const ENGAGEMENT_LINE = {
+  '1': 'זה היה מפגש שקט – וזה בסדר גמור. לפעמים צריך זמן להכיר 🌱',
+  '2': 'היה קצת עניין – התחלה טובה 🙂',
+  '3': 'הייתה סקרנות אמיתית 👀',
+  '4': 'הייתה התלהבות גדולה 🤩',
+  '5': 'היה קשה להפסיק – ביקשו עוד! 🧲'
+};
+const REASON_TXT = {
+  longer_duration:'הכי הרבה זמן משחק', returned_repeatedly:'חזרה אליו שוב ושוב', positive_affect:'חיוכים וצחוק',
+  calm_relaxed:'רוגע ונינוחות', interest_curiosity:'סקרנות וחקירה', self_initiated:'יוזמה עצמאית',
+  active_engagement:'לחיצות, משיכות וסיבובים', requested_continue:'בקשה להמשיך', sensory_regulation:'עזר להירגע ולהתארגן'
+};
+const joinHe = arr => arr.length <= 1 ? (arr[0]||'') : arr.slice(0,-1).join(', ') + ' ו' + arr[arr.length-1];
+
+function showChildStory(c, cur, last){
+  const name = esc(c.child_alias);
+  const P = id => state.catalog[id];
+  const pName = (id, fb) => esc((P(id)||{}).name || fb || '');
+  const kiko = cur ? esc(cur.kiko_name || 'KIKO') : 'KIKO';
+  const curIds = cur ? (cur.final_part_ids||[]).filter(id => P(id)) : [];
+  // Which moment are we in?
+  const fbAfterRec = last && (!cur || timeOf(last.date) >= timeOf(cur.date) || (cur.order_code && last.linked_order_code === cur.order_code));
+  const mode = !cur && !last ? 'hello' : (fbAfterRec ? 'recap' : 'ready');
+
+  const tile = (id, step, cls) => { const p = P(id); return `<div class="part ${cls||''}"><img src="${esc(p.img)}" alt="">${step ? `<span class="step">${step}</span>` : ''}<div><b>${esc(p.name)}</b>${p.sensory ? `<br><small>${esc(p.sensory)}</small>` : ''}</div></div>`; };
+  const figure = `<div class="kiko-fig"><img src="${headSrc(cur && cur.character_color)}" alt="${kiko}"><span class="shadow"></span><span class="tagname">${kiko}</span></div>`;
+  let body = '';
+
+  if(mode === 'hello'){
+    body = `
+      <div class="heads"><img src="${headSrc('green')}" alt=""><img src="${headSrc('red')}" alt=""><img src="${headSrc('blue')}" alt=""></div>
+      <div style="text-align:center">
+        <h1>נעים להכיר, ${name}! 👋</h1>
+        <p class="lead" style="max-width:460px;margin-inline:auto">כמה שאלות קצרות על מה ש${name} אוהב/ת להרגיש – ונמצא יחד את ה־KIKO והחלקים שהכי יתאימו.</p>
+        <div class="cta" style="justify-content:center"><button class="btn" data-go="pre">בואו נתחיל ✨</button></div>
+        <button class="link" data-go="post" style="margin-top:6px">כבר שיחקנו – רוצים לספר איך היה</button>
+      </div>`;
+  }else if(mode === 'ready'){
+    const ordered = curIds.slice().sort((a,b) => (P(a).intensity||0) - (P(b).intensity||0));
+    const steps = ['מתחילים כאן','אחר כך','ולבסוף'];
+    const prev = last && last.best_part_id && P(last.best_part_id) ? `<ul class="moments"><li><span class="e">💡</span><span>בפעם הקודמת <b>${pName(last.best_part_id)}</b> עבד הכי טוב – לקחנו את זה בחשבון.</span></li></ul>` : '';
+    body = `
+      <div class="story-top">${figure}<div class="bubble">היי ${name}! אני ${kiko}, ובאתי לשחק 👋</div></div>
+      <span class="eyebrow">✨ עשינו התאמה${cur.date ? ' · ' + relDate(cur.date) : ''}</span>
+      <div class="try">
+        <h1>זה ה־KIKO שננסה</h1>
+        <p class="lead">${curIds.length ? `בחרנו ${curIds.length === 3 ? 'שלושה חלקים' : 'חלקים'} ל${name}. כל אחד מרגיש קצת אחרת:` : `ה־KIKO מוכן!`}</p>
+        ${prev}
+        ${ordered.length ? `<div class="parts">${ordered.map((id,i) => tile(id, steps[i] || '', i===0 ? 'star' : '')).join('')}</div>` : ''}
+        <p class="tip">💡 מתחילים מהחלק העדין ונותנים ל${name} להוביל. אין דרך לא נכונה לשחק – גם הסתכלות ונגיעה קטנה הן התחלה.</p>
+      </div>
+      <div class="cta"><button class="btn" data-go="post">שיחקנו! איך היה? 💬</button><button class="link" data-go="pre">רוצים התאמה אחרת?</button></div>`;
+  }else{
+    const best = last.best_part_id && P(last.best_part_id) ? last.best_part_id : '';
+    const less = last.less_part_id && P(last.less_part_id) && last.less_part_id !== best ? last.less_part_id : '';
+    const reasons = (last.best_part_reasons||[]).map(r => REASON_TXT[r]).filter(Boolean).slice(0,3);
+    const moments = [];
+    if(best || last.best_part) moments.push(`<li>${best ? `<img src="${esc(P(best).img)}" alt="">` : '<span class="e">✨</span>'}<span><b>${pName(best, last.best_part)}</b> היה הלהיט של המפגש${reasons.length ? ` – ראינו ${esc(joinHe(reasons))}` : ''}.</span></li>`);
+    if(less) moments.push(`<li><img src="${esc(P(less).img)}" alt=""><span><b>${pName(less)}</b> פחות התחבר הפעם. זה בסדר – אפשר לשים אותו בצד לבינתיים, או לחזור אליו לאט ובעדינות.</span></li>`);
+    if(last.use_again === 'not_now') moments.push(`<li><span class="e">🌱</span><span>אמרתם שכרגע לא ממשיכים עם החלקים האלה – אז בואו נחפש יחד כיוון חדש.</span></li>`);
+    // What we'll try now: best first, then the rest of the current KIKO, the less-liked one last and dimmed
+    let tryIds = curIds.slice();
+    if(best && tryIds.indexOf(best) < 0) tryIds.unshift(best);
+    tryIds = tryIds.sort((a,b) => (a===best?-1:b===best?1:0) || (a===less?1:b===less?-1:0) || ((P(a).intensity||0) - (P(b).intensity||0)));
+    const wantNew = last.use_again === 'not_now' || !tryIds.length;
+    const label = id => id === best ? 'שוב – כי זה עבד' : id === less ? 'אפשר לחכות' : 'לנסות בעדינות';
+    body = `
+      <div class="story-top">${figure}<div class="bubble">היי ${name}! איזה כיף להיפגש שוב 😊</div></div>
+      <span class="eyebrow">🕒 במפגש האחרון · ${relDate(last.date)}</span>
+      <h1 class="feel">${ENGAGEMENT_LINE[String(last.engagement_score)] || 'תודה ששיתפתם איך היה!'}</h1>
+      ${moments.length ? `<ul class="moments">${moments.join('')}</ul>` : ''}
+      ${wantNew ? '' : `
+      <div class="try" style="margin-top:22px">
+        <h2>בואו ננסה עכשיו 🚀</h2>
+        <p class="lead" style="margin:0">${best ? `נתחיל שוב מ<b>${pName(best)}</b> כדי להיכנס בנוח, ומשם נמשיך הלאה:` : 'הנה מה שמחכה במפגש הבא:'}</p>
+        <div class="parts">${tryIds.map(id => tile(id, label(id), id===best ? 'star' : id===less ? 'rest' : '')).join('')}</div>
+      </div>`}
+      <div class="cta">${wantNew
+        ? `<button class="btn" data-go="pre">התאמה חדשה עם מה שלמדנו ✨</button><button class="link" data-go="post">שיחקנו שוב – לספר איך היה</button>`
+        : `<button class="btn" data-go="post">שיחקנו שוב – איך היה? 💬</button><button class="link" data-go="pre">התאמה חדשה עם מה שלמדנו</button>`}</div>`;
+  }
+
+  view(`
+  <button class="link back" id="back">→ לאזור האישי</button>
+  <div class="card story">${body}</div>
+  <div class="card share-soft">
+    <div class="share"><span>מטפל/ת מלווה את ${name}? שלחו לה/לו את הקוד:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
+  </div>`);
+  bindChildPage(c, cur);
 }
 
 function entryHtml(h){

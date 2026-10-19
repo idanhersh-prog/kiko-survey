@@ -265,6 +265,9 @@ function childrenFor_(u) {
     out.feedback = cf.length;
     const dates = cr.map(x => time_(x.updated_at || x.created_at)).concat(cf.map(x => time_(x.created_at)));
     out.last_activity = dates.length ? new Date(Math.max.apply(null, dates)).toISOString() : '';
+    const latest = cr.slice().sort((a, b) => time_(b.updated_at || b.created_at) - time_(a.updated_at || a.created_at))[0];
+    out.character_color = latest ? latest.character_color || '' : '';
+    out.kiko_name = latest ? latest.kiko_name || '' : '';
     return out;
   });
 }
@@ -289,7 +292,12 @@ function recDetail_(x, names) {
   });
 }
 function fbSummary_(x, names) {
-  return { date: iso_(x.created_at), best_part: x.best_part, best_part_id: x.best_part_id, use_again: x.use_again, engagement_score: x.engagement_score, by: names[x.user_code] || '', by_role: x.user_role };
+  return {
+    date: iso_(x.created_at), linked_order_code: x.linked_order_code,
+    best_part: x.best_part, best_part_id: x.best_part_id, best_part_reasons: split_(x.best_part_reasons),
+    less_part: x.less_part, less_part_id: x.less_part_id, parts_tested_ids: split_(x.parts_tested_ids),
+    use_again: x.use_again, engagement_score: x.engagement_score, by: names[x.user_code] || '', by_role: x.user_role
+  };
 }
 function fbDetail_(x, names) {
   return Object.assign(fbSummary_(x, names), {
