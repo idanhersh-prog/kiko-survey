@@ -66,7 +66,7 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 </head>
 <body>
 <div class="app" id="app">
-  <div class="top"><div class="brand"><img class="brand-logo" src="assets/Logo.png?v=20261011-1" alt="KIKO"><div><span>KIKO</span> · התאמה לפני שימוש</div></div><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><a class="catalog-btn" id="hubBack" href="index.html" hidden style="text-decoration:none">← לאזור האישי</a><button class="catalog-btn" id="openCatalog">כל הקטלוג</button></span></div>
+  <div class="top"><div class="brand"><img class="brand-logo" src="assets/Logo.png?v=20261011-1" alt="KIKO"><div><span>KIKO</span> · התאמה לפני שימוש</div></div><span style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><a class="catalog-btn" id="hubBack" href="index.html" style="text-decoration:none">→ למסך הכניסה</a><button class="catalog-btn" id="openCatalog">כל הקטלוג</button></span></div>
   <div class="progress-shell"><div class="progress" id="progress"></div></div>
   <div class="layout">
     <main class="card">
@@ -331,7 +331,7 @@ saveAndMeetBtn.onclick=async()=>{
 };
 bindGroups();
 if(HUB_CTX){
-  const back=document.getElementById('hubBack');back.hidden=false;back.href='index.html?child='+encodeURIComponent(HUB_CTX.child_id);
+  const back=document.getElementById('hubBack');back.textContent='→ לאזור האישי';back.href='index.html?child='+encodeURIComponent(HUB_CTX.child_id);
   if(childNameInput&&HUB_CTX.child_alias){childNameInput.value=HUB_CTX.child_alias;data.child_alias=HUB_CTX.child_alias}
   [['age_range',HUB_CTX.age_range],['respondent_role',HUB_CTX.respondent_role]].forEach(([k,v])=>{const b=v&&document.querySelector('[data-single="'+k+'"] .choice[data-value="'+v+'"]');if(b)b.click()});
   updateChildRefs();
