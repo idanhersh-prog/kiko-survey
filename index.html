@@ -103,10 +103,12 @@ details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:13p
 /* ---------- child story (parent view) ---------- */
 .story{position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 70% at 85% 0%,#fdf1e2 0%,var(--paper) 60%);padding:26px 24px 24px}
 .story-top{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
-.kiko-fig{position:relative;width:150px;display:flex;flex-direction:column;align-items:center}
-.kiko-fig img{width:150px;display:block;filter:drop-shadow(0 12px 14px rgba(120,60,20,.18));animation:kiko-bob 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.story .team{display:block;width:100%;max-width:520px;margin:0 auto 8px}
+.kiko-fig{position:relative;width:240px;display:flex;flex-direction:column;align-items:center}
+.kiko-fig img{width:240px;display:block;animation:kiko-sway 4s ease-in-out infinite;transform-origin:60% 80%}
+@keyframes kiko-sway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
 .kiko-fig .shadow{width:96px;height:12px;border-radius:50%;background:rgba(120,70,30,.13);margin-top:-6px;animation:kiko-shadow 3.2s ease-in-out infinite}
-.kiko-fig .tagname{margin-top:8px;font-family:Fredoka,Arial,sans-serif;font-weight:600;font-size:17px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 14px;color:var(--ink)}
+.kiko-fig .tagname{margin-top:-4px;font-family:Fredoka,Arial,sans-serif;font-weight:600;font-size:17px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 14px;color:var(--ink)}
 @keyframes kiko-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
 @keyframes kiko-shadow{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(.82);opacity:.7}}
 .bubble{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px 18px;font-size:18px;font-weight:800;line-height:1.45;box-shadow:0 6px 18px rgba(80,40,10,.06);justify-self:start;max-width:420px}
@@ -155,7 +157,7 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
   .cta .btn{width:100%}
   .cta{justify-content:center}
 }
-@media (prefers-reduced-motion:reduce){.kiko-fig img,.kiko-fig .shadow,.heads img{animation:none}}
+@media (prefers-reduced-motion:reduce){.story .team,.kiko-fig img,.kiko-fig .shadow,.heads img{animation:none}}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -557,6 +559,7 @@ function bindChildPage(c, cur){
 
 /* ---------- parent: the story view ---------- */
 const HEAD_COLORS = ['red','blue','green'];
+const sitSrc = color => 'assets/characters/kiko-card-' + (HEAD_COLORS.indexOf(color) >= 0 ? color : 'red') + '.webp';
 const headSrc = color => 'assets/characters/kiko-head-' + (HEAD_COLORS.indexOf(color) >= 0 ? color : 'red') + '.webp';
 const timeOf = iso => { const t = new Date(iso||'').getTime(); return isNaN(t) ? 0 : t; };
 function relDate(iso){
@@ -596,12 +599,12 @@ function showChildStory(c, cur, last){
   const mode = !cur && !last ? 'hello' : (fbAfterRec ? 'recap' : 'ready');
 
   const tile = (id, step, cls) => { const p = P(id); return `<div class="part ${cls||''}"><img src="${esc(p.img)}" alt="">${step ? `<span class="step">${step}</span>` : ''}<div><b>${esc(p.name)}</b>${p.sensory ? `<br><small>${esc(p.sensory)}</small>` : ''}</div></div>`; };
-  const figure = `<div class="kiko-fig"><img src="${headSrc(cur && cur.character_color)}" alt="${kiko}"><span class="shadow"></span><span class="tagname">${kiko}</span></div>`;
+  const figure = `<div class="kiko-fig"><img src="${sitSrc(cur && cur.character_color)}" alt="${kiko}"><span class="tagname">${kiko}</span></div>`;
   let body = '';
 
   if(mode === 'hello'){
     body = `
-      <div class="heads"><img src="${headSrc('green')}" alt=""><img src="${headSrc('red')}" alt=""><img src="${headSrc('blue')}" alt=""></div>
+      <img class="team" src="assets/characters/kiko-team-shelf.webp" srcset="assets/characters/kiko-team-shelf-760.webp 760w, assets/characters/kiko-team-shelf.webp 1400w" sizes="(max-width:620px) 90vw, 520px" alt="">
       <div style="text-align:center">
         <h1>נעים להכיר, ${name}! 👋</h1>
         <p class="lead" style="max-width:460px;margin-inline:auto">כמה שאלות קצרות על מה ש${name} אוהב/ת להרגיש – ונמצא יחד את ה־KIKO והחלקים שהכי יתאימו.</p>
