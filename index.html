@@ -103,51 +103,38 @@ details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:13p
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
-body.splash-on{padding:0;overflow:hidden}
+body.splash-on{padding:0}
 body.splash-on .wrap{display:none}
-body.splash-on #splash{display:block;position:fixed;inset:0;overflow:hidden;font-family:Fredoka,Arial,sans-serif;background:#241b4f;color:#fff}
-.kt-scene{position:absolute;inset:0;z-index:0}
-.kt-sky{position:absolute;inset:0;background:radial-gradient(ellipse 75% 65% at 50% 42%,#fff8dc 0%,#ffe48f 12%,#ffbb63 25%,#f37a5c 40%,#b8487a 56%,#5b2a78 72%,#2c1f5c 86%,#241b4f 100%)}
-.kt-rays{position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg at 50% 46%,rgba(255,255,255,.13) 0deg 5deg,rgba(255,255,255,0) 5deg 13deg);-webkit-mask:radial-gradient(ellipse 55% 50% at 50% 46%,transparent 6%,#000 30%,transparent 72%);mask:radial-gradient(ellipse 55% 50% at 50% 46%,transparent 6%,#000 30%,transparent 72%)}
-.kt-lines{position:absolute;inset:0;width:100%;height:100%}
-.kt-sparks{position:absolute;inset:0}
-.kt-spark{position:absolute;border-radius:50%;opacity:.75}
-.kt-spark.star{background:none;line-height:1;opacity:.85}
-.kt-team{position:absolute;inset:0;--u:min(1vw,1.22vh)}
-.kt-k{position:absolute;width:calc(var(--w) * var(--u));transform:translate(-50%,-50%)}
-.kt-k svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 calc(var(--w) * var(--u) * .06) calc(var(--w) * var(--u) * .08) rgba(30,10,50,.35))}
-.kt-fly{transform:rotate(var(--r));animation:kt-fly 1.15s cubic-bezier(.18,.88,.28,1.12) var(--delay) both}
-.kt-bob{animation:kt-bob var(--bob) ease-in-out calc(var(--delay) + 1.15s) infinite alternate}
-@keyframes kt-fly{0%{transform:translate(var(--fx),var(--fy)) scale(.05) rotate(0deg);opacity:0}18%{opacity:1}100%{transform:translate(0,0) scale(1) rotate(var(--r));opacity:1}}
-@keyframes kt-bob{to{transform:translateY(-3%) rotate(1.5deg)}}
-.kt-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,rgba(36,27,79,.92) 0%,rgba(36,27,79,.55) 16%,rgba(36,27,79,0) 34%),linear-gradient(to bottom,rgba(36,27,79,.45) 0%,rgba(36,27,79,0) 22%)}
-.kt-ui{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:max(26px,env(safe-area-inset-top)) 16px max(22px,env(safe-area-inset-bottom));pointer-events:none;text-align:center}
-.kt-ui>*{pointer-events:auto}
-.kt-word{margin:0;font-weight:700;font-size:clamp(76px,15vw,176px);line-height:.9;letter-spacing:.03em;color:#fff7e0;transform:rotate(-4deg);text-shadow:0 .035em 0 #ffd23f,0 .07em 0 #ed5b2d,0 .105em 0 #b8362f,0 .14em 0 #6d2448,0 .2em .28em rgba(20,8,40,.5);animation:kt-pop .7s cubic-bezier(.2,1.4,.4,1) 1.05s both}
-@keyframes kt-pop{0%{transform:scale(.4) rotate(-4deg);opacity:0}100%{transform:scale(1) rotate(-4deg);opacity:1}}
-.kt-tag{margin:.5em 0 0;font-weight:500;font-size:clamp(17px,2.1vw,22px);color:#fff;text-shadow:0 2px 10px rgba(30,10,50,.5);animation:kt-in .6s ease 1.5s both}
-.kt-actions{width:min(420px,100%);display:flex;flex-direction:column;gap:12px;animation:kt-in .6s ease 1.6s both}
-@keyframes kt-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.kt-btn{font-family:inherit;font-size:20px;font-weight:600;border-radius:20px;padding:15px 22px;cursor:pointer;border:0;transition:transform .1s,box-shadow .1s}
-.kt-btn.main{background:#ffd23f;color:#2a2433;box-shadow:0 6px 0 #c99600,0 14px 28px rgba(20,8,40,.4)}
-.kt-btn.main:active{transform:translateY(4px);box-shadow:0 2px 0 #c99600,0 8px 18px rgba(20,8,40,.4)}
-.kt-btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:2px solid rgba(255,255,255,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.kt-btn.ghost:active{transform:translateY(2px)}
-.kt-btn:focus-visible,.kt-guest a:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.kt-guest{font-size:14.5px;color:rgba(255,255,255,.78);margin-top:4px}
-.kt-guest a{color:#fff;font-weight:600;text-underline-offset:3px;margin:0 6px}
-@media (max-aspect-ratio:4/5){.kt-team{--u:min(2.15vw,1.05vh)}}
-@media (prefers-reduced-motion:reduce){.kt-fly,.kt-bob,.kt-word,.kt-tag,.kt-actions{animation:none}}
-
-@media(max-width:700px){
-  .hero{grid-template-columns:1fr}.hero img{max-width:190px;order:-1}
-  .paths{grid-template-columns:1fr}
-  .grid2,.choices,.actions{grid-template-columns:1fr}
-  .parts{grid-template-columns:repeat(3,1fr)}
-  h1{font-size:24px}.card{padding:18px;border-radius:20px}
-  .who .name{display:none}
-  body.authed .brand .sub{display:none}
+body.splash-on #splash{display:block;min-height:100vh;min-height:100dvh;font-family:Fredoka,Arial,sans-serif;background:radial-gradient(ellipse 70% 60% at 30% 50%,#fdf6ea 0%,#f7ead8 70%)}
+.sp{min-height:100vh;min-height:100dvh;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:24px;padding:24px 32px}
+.sp-text{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.sp-logo{width:46px;height:46px;border-radius:12px;animation:sp-in .5s ease .55s both}
+.sp-word{margin:0;font-weight:700;font-size:clamp(86px,11vw,170px);line-height:.92;letter-spacing:.02em;color:#ed5b2d;text-shadow:0 .045em 0 #c8401c,0 .1em .18em rgba(120,50,20,.18);animation:sp-in .6s cubic-bezier(.2,1.3,.4,1) .6s both}
+.sp-tag{margin:0 0 18px;font-weight:500;font-size:clamp(19px,1.8vw,24px);color:var(--ink);animation:sp-in .5s ease .75s both}
+.sp-actions{width:min(380px,100%);display:flex;flex-direction:column;gap:12px;animation:sp-in .5s ease .85s both}
+.sp-btn{font-family:inherit;font-size:19px;font-weight:600;border-radius:18px;padding:15px 22px;cursor:pointer;transition:transform .1s,box-shadow .1s}
+.sp-btn.main{border:0;background:#ed5b2d;color:#fff;box-shadow:0 5px 0 #c4441c,0 12px 26px rgba(237,91,45,.28)}
+.sp-btn.main:active{transform:translateY(3px);box-shadow:0 2px 0 #c4441c,0 6px 16px rgba(237,91,45,.25)}
+.sp-btn.ghost{border:1.5px solid var(--line);background:#fffdf9;color:var(--ink)}
+.sp-btn.ghost:hover{border-color:#ed9f80}
+.sp-btn:focus-visible,.sp-guest a:focus-visible{outline:3px solid #ed5b2d;outline-offset:3px}
+.sp-guest{font-size:14.5px;color:var(--muted);margin-top:6px;font-family:Arial,"Segoe UI",sans-serif}
+.sp-guest a{color:#c8401c;font-weight:700;text-underline-offset:3px;margin-inline-start:8px}
+.sp-hero{display:flex;justify-content:center;align-items:center}
+.sp-hero img{display:block;width:100%;max-width:680px;max-height:94vh;object-fit:contain;mix-blend-mode:multiply;-webkit-mask:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 7%,#000 93%,transparent);mask-composite:intersect;animation:sp-burst .9s cubic-bezier(.16,1.18,.36,1) .05s both}
+@keyframes sp-burst{0%{opacity:0;transform:scale(.72) translateY(4%) rotate(-3deg)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes sp-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (max-width:760px){
+  .sp{grid-template-columns:1fr;gap:4px;padding:10px 18px max(22px,env(safe-area-inset-bottom));align-content:start}
+  .sp-hero{order:-1}
+  .sp-hero img{max-width:430px;max-height:50vh;max-height:50dvh}
+  .sp-text{align-items:center;text-align:center;gap:6px}
+  .sp-logo{display:none}
+  .sp-word{font-size:clamp(66px,19vw,96px)}
+  .sp-tag{margin-bottom:12px}
+  .sp-actions{width:100%}
 }
+@media (prefers-reduced-motion:reduce){.sp-hero img,.sp-word,.sp-tag,.sp-actions,.sp-logo{animation:none}}
 </style>
 </head>
 <body>
@@ -160,10 +147,9 @@ body.splash-on #splash{display:block;position:fixed;inset:0;overflow:hidden;font
 
   <main id="app"><div class="spinner"></div></main>
 </div>
-<div id="splash" aria-label="KIKO"></div>
+<div id="splash"></div>
 
 <script src="assets/kiko-hub.js"></script>
-<script src="assets/kiko-team.js"></script>
 <script>
 (function(){
 const H = window.KikoHub;
@@ -237,16 +223,19 @@ const labList = (key, arr) => (arr||[]).map(v => lab(key, v)).join(' · ');
 function showWelcome(){
   setWho();
   const sp = document.getElementById('splash');
-  sp.innerHTML = `<div class="kt-scene" id="ktScene"></div><div class="kt-shade"></div>
-    <div class="kt-ui">
-      <div><h1 class="kt-word">KIKO</h1><p class="kt-tag">בונים, משחקים, מרגישים – יחד.</p></div>
-      <div class="kt-actions">
-        <button class="kt-btn main" id="goRegister">פעם ראשונה? הרשמה</button>
-        <button class="kt-btn ghost" id="goLogin">יש לי קוד – כניסה</button>
-        <div class="kt-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a></div>
+  sp.innerHTML = `<div class="sp">
+      <div class="sp-text">
+        <img class="sp-logo" src="assets/Logo.png" alt="">
+        <h1 class="sp-word">KIKO</h1>
+        <p class="sp-tag">בונים, משחקים, מרגישים – יחד.</p>
+        <div class="sp-actions">
+          <button class="sp-btn main" id="goRegister">פעם ראשונה? הרשמה</button>
+          <button class="sp-btn ghost" id="goLogin">יש לי קוד – כניסה</button>
+          <div class="sp-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a></div>
+        </div>
       </div>
+      <div class="sp-hero"><img src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
     </div>`;
-  window.KikoTeam.render(sp.querySelector('#ktScene'));
   document.body.classList.add('splash-on');
   sp.querySelector('#goRegister').onclick = showRegister;
   sp.querySelector('#goLogin').onclick = showLogin;
