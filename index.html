@@ -105,8 +105,11 @@ details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:13p
 #splash{display:none}
 body.splash-on{padding:0}
 body.splash-on .wrap{display:none}
-body.splash-on #splash{display:block;min-height:100vh;min-height:100dvh;font-family:Fredoka,Arial,sans-serif;background:radial-gradient(ellipse 70% 60% at 30% 50%,#fdf6ea 0%,#f7ead8 70%)}
-.sp{min-height:100vh;min-height:100dvh;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:24px;padding:24px 32px}
+body.splash-on #splash{display:block;position:relative;overflow-x:hidden;min-height:100vh;min-height:100dvh;font-family:Fredoka,Arial,sans-serif;background:radial-gradient(ellipse 70% 60% at 30% 50%,#fdf6ea 0%,#f7ead8 70%)}
+.sp-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.sp-lines g{transform-origin:var(--cx) var(--cy);animation:sp-lines 1s cubic-bezier(.16,1,.3,1) .05s both}
+@keyframes sp-lines{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}
+.sp{position:relative;z-index:1;min-height:100vh;min-height:100dvh;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:24px;padding:24px 32px}
 .sp-text{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .sp-logo{width:46px;height:46px;border-radius:12px;animation:sp-in .5s ease .55s both}
 .sp-word{margin:0;font-weight:700;font-size:clamp(86px,11vw,170px);line-height:.92;letter-spacing:.02em;color:#ed5b2d;text-shadow:0 .045em 0 #c8401c,0 .1em .18em rgba(120,50,20,.18);animation:sp-in .6s cubic-bezier(.2,1.3,.4,1) .6s both}
@@ -121,7 +124,7 @@ body.splash-on #splash{display:block;min-height:100vh;min-height:100dvh;font-fam
 .sp-guest{font-size:14.5px;color:var(--muted);margin-top:6px;font-family:Arial,"Segoe UI",sans-serif}
 .sp-guest a{color:#c8401c;font-weight:700;text-underline-offset:3px;margin-inline-start:8px}
 .sp-hero{display:flex;justify-content:center;align-items:center}
-.sp-hero img{display:block;width:100%;max-width:680px;max-height:94vh;object-fit:contain;mix-blend-mode:multiply;-webkit-mask:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 7%,#000 93%,transparent);mask-composite:intersect;animation:sp-burst .9s cubic-bezier(.16,1.18,.36,1) .05s both}
+.sp-hero img{display:block;width:100%;max-width:680px;max-height:94vh;object-fit:contain;animation:sp-burst .9s cubic-bezier(.16,1.18,.36,1) .05s both}
 @keyframes sp-burst{0%{opacity:0;transform:scale(.72) translateY(4%) rotate(-3deg)}60%{opacity:1}100%{opacity:1;transform:none}}
 @keyframes sp-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (max-width:760px){
@@ -134,7 +137,7 @@ body.splash-on #splash{display:block;min-height:100vh;min-height:100dvh;font-fam
   .sp-tag{margin-bottom:12px}
   .sp-actions{width:100%}
 }
-@media (prefers-reduced-motion:reduce){.sp-hero img,.sp-word,.sp-tag,.sp-actions,.sp-logo{animation:none}}
+@media (prefers-reduced-motion:reduce){.sp-lines g,.sp-hero img,.sp-word,.sp-tag,.sp-actions,.sp-logo{animation:none}}
 </style>
 </head>
 <body>
@@ -237,8 +240,36 @@ function showWelcome(){
       <div class="sp-hero"><img src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
     </div>`;
   document.body.classList.add('splash-on');
+  drawSpeedLines(sp);
   sp.querySelector('#goRegister').onclick = showRegister;
   sp.querySelector('#goLogin').onclick = showLogin;
+}
+
+const LINE_COLORS = ['#f19a92','#9cc0f0','#f6cf62','#c3a6ee','#a9cf98','#f7b27a','#f3a6c8'];
+function drawSpeedLines(sp){
+  const old = sp.querySelector('.sp-lines'); if(old) old.remove();
+  const img = sp.querySelector('.sp-hero img'); if(!img) return;
+  const place = () => {
+    const box = sp.getBoundingClientRect(), r = img.getBoundingClientRect();
+    if(!r.width) return;
+    const cx = r.left - box.left + r.width/2, cy = r.top - box.top + r.height*.47;
+    const W = box.width, H = Math.max(box.height, window.innerHeight), R = Math.hypot(W, H);
+    const inner = Math.min(r.width, r.height) * .42;
+    let lines = '';
+    for(let i = 0; i < 46; i++){
+      const a = (i / 46) * Math.PI * 2 + Math.sin(i * 12.9) * .05;
+      const r1 = inner * (0.95 + ((i * 37) % 11) / 20), r2 = r1 + R * (0.18 + ((i * 53) % 17) / 40);
+      const w = 3 + ((i * 29) % 9);
+      lines += `<line x1="${(cx + Math.cos(a)*r1).toFixed(1)}" y1="${(cy + Math.sin(a)*r1).toFixed(1)}" x2="${(cx + Math.cos(a)*r2).toFixed(1)}" y2="${(cy + Math.sin(a)*r2).toFixed(1)}" stroke="${LINE_COLORS[i % LINE_COLORS.length]}" stroke-width="${w}" stroke-linecap="round" opacity="${(.32 + ((i * 7) % 5) * .07).toFixed(2)}"/>`;
+    }
+    const fade = Math.max(r.width, r.height) * 0.95;
+    const svg = `<svg class="sp-lines" style="--cx:${cx}px;--cy:${cy}px" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><defs><radialGradient id="spFade" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${fade}"><stop offset=".25" stop-color="#fff"/><stop offset=".62" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><mask id="spMask"><rect width="${W}" height="${H}" fill="url(#spFade)"/></mask><filter id="spBlur"><feGaussianBlur stdDeviation="1.6"/></filter></defs><g mask="url(#spMask)" filter="url(#spBlur)">${lines}</g></svg>`;
+    const prev = sp.querySelector('.sp-lines'); if(prev) prev.remove();
+    sp.insertAdjacentHTML('afterbegin', svg);
+  };
+  if(img.complete) place(); else img.addEventListener('load', place, {once:true});
+  clearTimeout(drawSpeedLines.t);
+  window.onresize = () => { clearTimeout(drawSpeedLines.t); drawSpeedLines.t = setTimeout(() => { if(document.body.classList.contains('splash-on')) place(); }, 150); };
 }
 
 /* ---------- register ---------- */
