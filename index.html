@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>KIKO – האזור האישי</title>
 <link rel="icon" href="assets/Logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/fredoka-he-latin.woff" as="font" type="font/woff" crossorigin>
 <style>
 :root{--bg:#f7ead8;--paper:#fffdf9;--orange:#ed5b2d;--orange2:#fff0e9;--ink:#342d2a;--muted:#756b65;--line:#ead9ca;--green:#6f8a70;--blue:#3b6fa8;--blue2:#eaf1f8;--shadow:0 16px 42px rgba(75,53,37,.10)}
 *{box-sizing:border-box}
@@ -102,6 +100,7 @@ details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:13p
 .spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--orange);animation:spin .8s linear infinite;margin:30px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 [hidden]{display:none!important}
+@font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
 body.splash-on{padding:0;overflow:hidden}
