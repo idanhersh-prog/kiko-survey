@@ -696,8 +696,8 @@ function showChildStory(c, cur, last){
     body = `
       <img class="team" src="assets/characters/kiko-3d-team.webp" srcset="assets/characters/kiko-3d-team-640.webp 640w, assets/characters/kiko-3d-team.webp 1100w" sizes="(max-width:620px) 90vw, 520px" alt="">
       <div style="text-align:center">
-        <h1>נעים להכיר, ${name}! 👋</h1>
-        <p class="lead" style="max-width:460px;margin-inline:auto">כמה שאלות קצרות על מה ש${name} אוהב/ת להרגיש – ונמצא יחד את ה־KIKO והחלקים שהכי יתאימו.</p>
+        <h1>הפרופיל של ${name} מוכן ✨</h1>
+        <p class="lead" style="max-width:460px;margin-inline:auto">עכשיו כמה שאלות קצרות על מה ש${name} אוהב/ת להרגיש – ונמצא יחד את ה־KIKO והחלקים שהכי יתאימו.</p>
         <div class="cta" style="justify-content:center"><button class="btn" data-go="pre">בואו נתחיל ✨</button></div>
         <button class="link" data-go="post" style="margin-top:6px">כבר שיחקנו – רוצים לספר איך היה</button>
       </div>`;
@@ -706,7 +706,7 @@ function showChildStory(c, cur, last){
     const steps = ['מתחילים כאן','אחר כך','ולבסוף'];
     const prev = last && last.best_part_id && P(last.best_part_id) ? `<ul class="moments"><li><span class="e">💡</span><span>בפעם הקודמת <b>${pName(last.best_part_id)}</b> עבד הכי טוב – לקחנו את זה בחשבון.</span></li></ul>` : '';
     body = `
-      <div class="story-top">${figure}<div class="bubble">היי ${name}! אני ${kiko}, ובאתי לשחק 👋</div></div>
+      <div class="story-top">${figure}<div class="bubble">היי! אני ${kiko}, ומחכה לשחק עם ${name} 👋</div></div>
       <span class="eyebrow">✨ עשינו התאמה${cur.date ? ' · ' + relDate(cur.date) : ''}</span>
       <div class="try">
         <h1>זה ה־KIKO שננסה</h1>
@@ -731,7 +731,7 @@ function showChildStory(c, cur, last){
     const wantNew = last.use_again === 'not_now' || !tryIds.length;
     const label = id => id === best ? 'שוב – כי זה עבד' : id === less ? 'אפשר לחכות' : 'לנסות בעדינות';
     body = `
-      <div class="story-top">${figure}<div class="bubble">היי ${name}! איזה כיף להיפגש שוב 😊</div></div>
+      <div class="story-top">${figure}<div class="bubble">היה כיף עם ${name}! מוכנים לסיבוב נוסף? 😊</div></div>
       <span class="eyebrow">🕒 במפגש האחרון · ${relDate(last.date)}</span>
       <h1 class="feel">${ENGAGEMENT_LINE[String(last.engagement_score)] || 'תודה ששיתפתם איך היה!'}</h1>
       ${moments.length ? `<ul class="moments">${moments.join('')}</ul>` : ''}
