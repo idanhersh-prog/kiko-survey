@@ -1339,6 +1339,9 @@
       if (b && b.getAttribute('aria-pressed') !== 'true') b.click();
     });
     validation.textContent = '';
+    // the child is already known from the personal area – skip the intro and the details step
+    data.child_name = childName.value.trim();
+    if (data.age_range && data.respondent_role) current = 2;
   }
 
   render();

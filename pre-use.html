@@ -342,6 +342,8 @@ if(HUB_CTX){
   if(childNameInput&&HUB_CTX.child_alias){childNameInput.value=HUB_CTX.child_alias;data.child_alias=HUB_CTX.child_alias}
   [['age_range',HUB_CTX.age_range],['respondent_role',HUB_CTX.respondent_role]].forEach(([k,v])=>{const b=v&&document.querySelector('[data-single="'+k+'"] .choice[data-value="'+v+'"]');if(b)b.click()});
   updateChildRefs();
+  // the child is already known from the personal area – skip the intro and the details step
+  if(data.age_range&&data.respondent_role)current=2;
 }
 render();
 </script>
