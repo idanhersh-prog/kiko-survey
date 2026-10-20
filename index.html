@@ -158,6 +158,55 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
   .cta{justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){.story .team,.kiko-fig img,.kiko-fig .shadow,.heads img{animation:none}}
+
+/* ---------- registration: who's joining ---------- */
+.steps-dots{display:flex;gap:6px;justify-content:center;margin:0 0 14px}
+.steps-dots i{width:8px;height:8px;border-radius:99px;background:var(--line);transition:.3s}
+.steps-dots i.on{width:26px;background:var(--orange)}
+.steps-dots i.done{background:#f3b79f}
+.who-pick{text-align:center;padding:30px 24px 32px;max-width:640px;margin:0 auto;font-family:Fredoka,Arial,sans-serif}
+.who-title{font-size:clamp(30px,6vw,40px);font-weight:700;margin:0 0 6px;animation:sp-in .45s ease both}
+.who-lead{font-family:Arial,"Segoe UI",sans-serif;margin:0 0 22px;animation:sp-in .45s ease .08s both}
+.who-tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.who-tile{position:relative;font-family:inherit;border:2px solid var(--line);background:#fff;border-radius:28px;padding:20px 14px 22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .18s cubic-bezier(.2,1.3,.4,1),box-shadow .18s,border-color .18s,opacity .3s;animation:sp-in .5s cubic-bezier(.2,1.2,.4,1) both}
+.who-tile.parent{background:linear-gradient(180deg,#fff4ec 0%,#fff 70%);animation-delay:.12s}
+.who-tile.ot{background:linear-gradient(180deg,#eef5fc 0%,#fff 70%);animation-delay:.2s}
+.who-tile:hover{transform:translateY(-4px);border-color:#ed9f80;box-shadow:0 14px 28px rgba(120,60,20,.12)}
+.who-tile.ot:hover{border-color:#8fb5dc}
+.who-tile:active{transform:scale(.97)}
+.who-tile:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.who-tile.was{border-color:#ed9f80}
+.who-tile b{font-size:21px;font-weight:600;color:var(--ink)}
+.who-tile small{font-family:Arial,"Segoe UI",sans-serif;color:var(--muted);font-size:14px}
+.who-art{position:relative;height:120px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}
+.who-art img{height:112px;width:auto;transition:transform .35s cubic-bezier(.2,1.4,.4,1)}
+.who-art.team img{height:96px}
+.who-badge{position:absolute;top:-4px;inset-inline-end:-34px;font-size:26px;background:#fff;border-radius:99px;width:44px;height:44px;display:grid;place-items:center;box-shadow:0 4px 12px rgba(30,60,100,.15)}
+.who-tile:hover .who-art img{transform:translateY(-6px) rotate(-3deg)}
+.who-pick.picked .who-tile:not(.chosen){opacity:.35;transform:scale(.96)}
+.who-tile.chosen{border-color:var(--orange);box-shadow:0 0 0 4px rgba(237,91,45,.14),0 16px 30px rgba(120,60,20,.14);transform:scale(1.03)}
+.who-tile.ot.chosen{border-color:#3f7cc0;box-shadow:0 0 0 4px rgba(63,124,192,.16),0 16px 30px rgba(30,60,100,.14)}
+.who-tile.chosen .who-art img{animation:who-jump .55s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes who-jump{0%{transform:none}40%{transform:translateY(-22px) rotate(-6deg)}100%{transform:translateY(-4px)}}
+.confetti{position:absolute;left:50%;top:38%;width:0;height:0;pointer-events:none}
+.confetti i{position:absolute;width:9px;height:9px;border-radius:3px;animation:conf .7s cubic-bezier(.15,.8,.3,1) both}
+@keyframes conf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+.reg-form{max-width:560px;margin:0 auto;animation:sp-in .4s ease both}
+.role-pill{display:inline-flex;align-items:center;gap:6px;background:var(--orange2);color:#b6401b;border-radius:999px;padding:5px 8px 5px 14px;font-weight:800;font-size:13.5px;margin-bottom:12px}
+.role-pill.ot{background:var(--blue2);color:#2f5f8f}
+.role-pill .link{font-size:12.5px;padding:2px 6px;color:inherit}
+@media (max-width:560px){
+  .who-pick{padding:24px 14px 26px}
+  .who-tiles{grid-template-columns:1fr;gap:12px}
+  .who-tile{flex-direction:row;flex-wrap:wrap;text-align:right;align-items:center;padding:14px 16px;column-gap:14px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .who-art{grid-row:1/3;height:92px;width:104px;margin:0}
+  .who-art img{height:84px}
+  .who-art{width:120px}.who-art.team img{height:auto;width:118px}
+  .who-badge{width:36px;height:36px;font-size:20px;inset-inline-end:-6px}
+  .who-tile b{align-self:end;font-size:20px}
+  .who-tile small{align-self:start}
+}
+@media (prefers-reduced-motion:reduce){.who-title,.who-lead,.who-tile,.reg-form,.who-tile.chosen .who-art img{animation:none}}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -299,7 +348,7 @@ function showWelcome(){
     </div>`;
   document.body.classList.add('splash-on');
   drawSpeedLines(sp);
-  sp.querySelector('#goRegister').onclick = showRegister;
+  sp.querySelector('#goRegister').onclick = () => showRegister();
   sp.querySelector('#goLogin').onclick = showLogin;
 }
 
@@ -334,19 +383,17 @@ function drawSpeedLines(sp){
 const normPhone = v => { let d = String(v||'').replace(/\D/g,''); if(d.startsWith('972')) d = '0' + d.slice(3); if(d.length === 9 && d[0] !== '0') d = '0' + d; return /^0\d{8,9}$/.test(d) ? d : ''; };
 const pinOnly = el => el.addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,4));
 
-function showRegister(){
-  const f = {role:''};
+function showRegister(role){
+  if(!role) return showRolePick();
+  const f = {role};
+  const isOT = role === 'ot';
   view(`
   <button class="link back" id="back">→ חזרה</button>
-  <div class="card">
-    <h1>הרשמה</h1>
-    <p class="lead">לוקח פחות מדקה. בפעם הבאה נכנסים עם מספר הטלפון והסיסמה.</p>
-    <div class="field"><span>מי נרשם?</span>
-      <div class="choices" id="role">
-        <button class="choice" data-value="parent" aria-pressed="false"><span class="ico">🏠</span><b>הורה / בן משפחה</b><small>מלווים ילד/ה בבית</small></button>
-        <button class="choice" data-value="ot" aria-pressed="false"><span class="ico">🧑‍⚕️</span><b>מרפא/ה בעיסוק</b><small>עובדים עם ילד/ה אחד או כמה ילדים</small></button>
-      </div>
-    </div>
+  <div class="card reg-form">
+    <div class="steps-dots" aria-hidden="true"><i class="done"></i><i class="on"></i></div>
+    <span class="role-pill ${isOT ? 'ot' : ''}">${isOT ? '🩺 מרפא/ה בעיסוק' : '🏡 הורה / בן משפחה'} <button class="link" id="changeRole">שינוי</button></span>
+    <h1>${isOT ? 'כיף שהצטרפת לצוות! 👋' : 'נעים להכיר! 👋'}</h1>
+    <p class="lead">${isOT ? 'עוד רגע תוכלו לעקוב אחרי כל הילדים שאתם מלווים במקום אחד.' : 'עוד רגע נמצא יחד את ה־KIKO שמתאים לילד/ה שלכם.'} בפעם הבאה נכנסים עם הטלפון והסיסמה.</p>
     <label class="field"><span>איך לקרוא לך?</span><input class="input" id="name" maxlength="60" autocomplete="name" placeholder="שם פרטי"></label>
     <label class="field"><span>מספר טלפון</span><input class="input" id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="050-1234567" style="text-align:right"><small>משמש לכניסה ולשחזור סיסמה. לא נשלח אליו דבר.</small></label>
     <div class="grid2">
@@ -357,13 +404,13 @@ function showRegister(){
     <div class="error" id="err"></div>
     <button class="btn block" id="submit">יצירת חשבון</button>
   </div>`);
-  $('#back').onclick = showWelcome;
-  bindChoice($('#role'), v => f.role = v);
+  $('#back').onclick = () => showRolePick(role);
+  $('#changeRole').onclick = () => showRolePick(role);
+  setTimeout(() => { const n = $('#name'); if(n && window.matchMedia('(min-width:700px)').matches) n.focus(); }, 350);
   pinOnly($('#pin')); pinOnly($('#pin2'));
   $('#submit').onclick = async () => {
     const err = $('#err'); err.textContent = '';
     const name = $('#name').value.trim(), phone = normPhone($('#phone').value), pin = $('#pin').value, pin2 = $('#pin2').value;
-    if(!f.role) return err.textContent = 'בחרו מי נרשם.';
     if(!name) return err.textContent = 'כתבו איך לקרוא לך.';
     if(!phone) return err.textContent = 'בדקו את מספר הטלפון – למשל 050-1234567.';
     if(!/^\d{4}$/.test(pin)) return err.textContent = 'הסיסמה צריכה להיות 4 ספרות.';
@@ -380,6 +427,49 @@ function showRegister(){
       busy(btn, false);
     }
   };
+}
+
+
+/* ---------- registration: step 1 – who's joining ---------- */
+function showRolePick(prev){
+  view(`
+  <button class="link back" id="back">→ חזרה</button>
+  <div class="card who-pick">
+    <div class="steps-dots" aria-hidden="true"><i class="on"></i><i></i></div>
+    <h1 class="who-title">מי מצטרף אלינו?</h1>
+    <p class="lead who-lead">נתאים את החוויה בדיוק בשבילכם.</p>
+    <div class="who-tiles">
+      <button class="who-tile parent${prev==='parent'?' was':''}" data-value="parent">
+        <span class="who-art"><img src="assets/characters/kiko-3d-red.webp" alt=""><span class="who-badge">💛</span></span>
+        <b>הורה / בן משפחה</b><small>מלווים את הילד/ה שלנו</small>
+      </button>
+      <button class="who-tile ot${prev==='ot'?' was':''}" data-value="ot">
+        <span class="who-art team"><img src="assets/characters/kiko-3d-team-640.webp" alt=""><span class="who-badge">🩺</span></span>
+        <b>מרפא/ה בעיסוק</b><small>מלווים כמה ילדים בטיפול</small>
+      </button>
+    </div>
+  </div>`);
+  $('#back').onclick = showWelcome;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  app.querySelectorAll('.who-tile').forEach(t => t.onclick = () => {
+    if(app.querySelector('.who-pick.picked')) return;
+    const role = t.dataset.value;
+    app.querySelector('.who-pick').classList.add('picked');
+    t.classList.add('chosen');
+    if(!reduce) confetti(t);
+    setTimeout(() => showRegister(role), reduce ? 0 : 650);
+  });
+}
+function confetti(el){
+  const colors = ['#ed5b2d','#f4a259','#5b8e7d','#3f7cc0','#f2c94c'];
+  const box = document.createElement('span'); box.className = 'confetti';
+  for(let i = 0; i < 16; i++){
+    const d = document.createElement('i');
+    const a = (i / 16) * Math.PI * 2, r = 70 + Math.random() * 50;
+    d.style.cssText = `--x:${Math.cos(a)*r}px;--y:${Math.sin(a)*r - 20}px;--r:${Math.random()*360}deg;background:${colors[i % colors.length]};animation-delay:${Math.random()*60}ms`;
+    box.appendChild(d);
+  }
+  el.appendChild(box);
 }
 
 /* ---------- login ---------- */
