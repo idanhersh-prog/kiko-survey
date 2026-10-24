@@ -1325,7 +1325,7 @@
   }
 
   if (HUB_CTX) {
-    const backHref = 'index.html?child=' + encodeURIComponent(HUB_CTX.child_id);
+    const backHref = 'index.html?child=' + encodeURIComponent(HUB_CTX.child_id) + (HUB_CTX.kiko_id ? '&kiko=' + encodeURIComponent(HUB_CTX.kiko_id) : '');
     [['hubBack','→ לאזור האישי'],['doneHubBack','חזרה לאזור האישי']].forEach(([id, t]) => { const a = root.querySelector('#' + id); if (a) { a.textContent = t; a.href = backHref; } });
     if (HUB_CTX.child_alias) { childName.value = HUB_CTX.child_alias; }
     [['age_range', HUB_CTX.age_range], ['respondent_role', HUB_CTX.respondent_role]].forEach(([k, v]) => {

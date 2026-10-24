@@ -29,7 +29,7 @@ const SHEETS = {
     'child_alias', 'age_range', 'respondent_role', 'primary_goal', 'new_place_response',
     'preferred_sensations', 'avoid_sensations', 'preferred_actions', 'intensity',
     'recommended_parts', 'recommended_part_ids', 'final_parts', 'final_part_ids', 'user_changes',
-    'kiko_name', 'character_color', 'payload_json'
+    'kiko_name', 'character_color', 'payload_json', 'kiko_id'
   ],
   Feedback: [
     'feedback_id', 'created_at', 'child_id', 'user_code', 'user_role', 'linked_order_code',
@@ -160,7 +160,8 @@ const ACTIONS = {
       role: u.role,
       counts: { recommendations: recs.length, feedback: fbs.length },
       current: recs[0] ? recSummary_(recs[0], names) : null,
-      last_feedback: fbs[0] ? fbSummary_(fbs[0], names) : null
+      last_feedback: fbs[0] ? fbSummary_(fbs[0], names) : null,
+      kikos: kikosOf_(recs, fbs, names)
     };
     if (u.role === 'ot') {
       out.history = recs.map(x => Object.assign({ type: 'recommendation' }, recDetail_(x, names)))
@@ -189,15 +190,21 @@ const ACTIONS = {
       user_changes: d.user_changes ? 'yes' : 'no', kiko_name: clean_(d.kiko_name, 40),
       character_color: clean_(d.character_color, 20), payload_json: JSON.stringify(d).slice(0, 45000)
     };
+    // which KIKO this matching belongs to: an existing one ("more parts") or a new character
+    row.kiko_id = clean_(d.kiko_id, 40) || (existing && existing.kiko_id) || ('K-' + (orderCode || Utilities.getUuid().slice(0, 8)));
+    if (d.kiko_id) {   // more parts for an existing KIKO keep its character and name
+      const prev = recs.rows().filter(x => x.child_id === r.child_id && kikoIdOf_(x) === row.kiko_id)[0];
+      if (prev) { row.character_color = row.character_color || prev.character_color; row.kiko_name = row.kiko_name || prev.kiko_name; }
+    }
     if (existing) {
       recs.update('rec_id', existing.rec_id, row);
-      return { rec_id: existing.rec_id, updated_existing: true };
+      return { rec_id: existing.rec_id, kiko_id: row.kiko_id, updated_existing: true };
     }
     row.rec_id = Utilities.getUuid();
     row.created_at = now;
     recs.append(row);
     syncChildFromSurvey_(r.child_id, d);
-    return { rec_id: row.rec_id, updated_existing: false };
+    return { rec_id: row.rec_id, kiko_id: row.kiko_id, updated_existing: false };
   },
 
   saveFeedback: (r) => {
@@ -268,7 +275,40 @@ function childrenFor_(u) {
     const latest = cr.slice().sort((a, b) => time_(b.updated_at || b.created_at) - time_(a.updated_at || a.created_at))[0];
     out.character_color = latest ? latest.character_color || '' : '';
     out.kiko_name = latest ? latest.kiko_name || '' : '';
+    const seen = {};
+    out.kikos = cr.slice().sort((a, b) => time_(a.created_at) - time_(b.created_at))
+      .filter(x => { const k = kikoIdOf_(x); if (seen[k]) return false; seen[k] = 1; return true; })
+      .map(x => ({ kiko_id: kikoIdOf_(x), character_color: x.character_color || '', kiko_name: x.kiko_name || '' }));
     return out;
+  });
+}
+
+
+/* ---------------- KIKOs: matchings grouped by character ---------------- */
+function kikoIdOf_(x) { return x.kiko_id || ('K-' + (x.order_code || x.rec_id)); }
+/** recs and fbs are sorted newest first. Each KIKO: its character, the latest matching, every part it has, its last feedback. */
+function kikosOf_(recs, fbs, names) {
+  const groups = {}, order = [];
+  recs.forEach(x => { const k = kikoIdOf_(x); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(x); });
+  const codeToKiko = {};
+  order.forEach(k => groups[k].forEach(x => { if (x.order_code) codeToKiko[x.order_code] = k; }));
+  const fbOf = {};
+  fbs.forEach(f => {
+    const k = codeToKiko[f.linked_order_code] || order[0];   // unlinked feedback belongs to the newest KIKO
+    if (k && !fbOf[k]) fbOf[k] = f;
+  });
+  const born = k => time_(groups[k][groups[k].length - 1].created_at);
+  return order.slice().sort((a, b) => born(a) - born(b)).map(k => {   // oldest KIKO first, so the list stays put
+    const g = groups[k], latest = g[0], first = g[g.length - 1];
+    const parts = [], newIds = split_(latest.final_part_ids);
+    g.forEach(x => split_(x.final_part_ids).forEach(id => { if (parts.indexOf(id) < 0) parts.push(id); }));
+    const named = g.filter(x => x.character_color || x.kiko_name)[0] || latest;
+    return {
+      kiko_id: k, kiko_name: named.kiko_name || '', character_color: named.character_color || '',
+      created: iso_(first.created_at), updated: iso_(latest.updated_at || latest.created_at), rounds: g.length,
+      current: recSummary_(latest, names), all_part_ids: parts, new_part_ids: g.length > 1 ? newIds : [],
+      last_feedback: fbOf[k] ? fbSummary_(fbOf[k], names) : null
+    };
   });
 }
 
@@ -281,7 +321,7 @@ function publicChild_(c, u) {
 }
 
 function recSummary_(x, names) {
-  return { date: iso_(x.updated_at || x.created_at), order_code: x.order_code, final_part_ids: split_(x.final_part_ids), final_parts: split_(x.final_parts), kiko_name: x.kiko_name, character_color: x.character_color, by: names[x.user_code] || '', by_role: x.user_role };
+  return { date: iso_(x.updated_at || x.created_at), order_code: x.order_code, kiko_id: kikoIdOf_(x), final_part_ids: split_(x.final_part_ids), final_parts: split_(x.final_parts), kiko_name: x.kiko_name, character_color: x.character_color, by: names[x.user_code] || '', by_role: x.user_role };
 }
 function recDetail_(x, names) {
   return Object.assign(recSummary_(x, names), {

@@ -227,6 +227,44 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
   .who-tile small{align-self:start}
 }
 @media (prefers-reduced-motion:reduce){.who-title,.who-lead,.who-tile,.reg-form,.who-tile.chosen .who-art img{animation:none}}
+
+/* ---------- KIKOs ---------- */
+.more-card h2{margin-bottom:12px}
+.more-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.more-tile{border:1.5px solid var(--line);background:#fff;border-radius:22px;padding:16px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}
+.more-tile:hover{transform:translateY(-3px);border-color:#ed9f80;box-shadow:0 10px 22px rgba(120,60,20,.10)}
+.more-tile img{height:70px;margin-bottom:4px}
+.more-tile b{font-size:16.5px}
+.more-tile small{color:var(--muted);font-size:13px;line-height:1.4}
+.more-tile.new,.kiko-card.new{border-style:dashed;background:#fffaf5}
+.plus{display:grid;place-items:center;width:62px;height:62px;border-radius:99px;background:var(--orange2);color:var(--orange);font-size:30px;font-weight:900;margin:4px 0 8px}
+.owned h3{margin-bottom:10px}
+.owned-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.owned-part{position:relative;flex:0 0 86px;text-align:center}
+.owned-part img{width:86px;height:86px;object-fit:cover;border-radius:14px;background:#f4eee8;display:block}
+.owned-part small{display:block;font-size:12px;font-weight:700;margin-top:4px;line-height:1.3}
+.owned-part i{position:absolute;top:6px;inset-inline-start:6px;font-style:normal;background:var(--orange);color:#fff;font-size:11px;font-weight:900;border-radius:99px;padding:1px 8px}
+.kiko-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:6px}
+.kiko-card{border:1.5px solid var(--line);background:#fff;border-radius:24px;padding:16px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}
+.kiko-card:hover{transform:translateY(-3px);border-color:#ed9f80;box-shadow:0 12px 24px rgba(120,60,20,.10)}
+.kiko-card .k-fig{height:110px;margin-bottom:4px}
+.kiko-card b{font-size:19px}
+.kiko-card small{color:var(--muted);font-size:13px}
+.k-status{font-size:12.5px;font-weight:800;border-radius:99px;padding:3px 10px}
+.k-status.ready{background:var(--orange2);color:#b6401b}
+.k-status.played{background:#edf6ee;color:#4f7256}
+.k-parts{display:flex;gap:6px;margin-top:6px}
+.k-parts img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:#f4eee8}
+.k-heads{display:flex}
+.k-heads img{width:40px!important}
+.k-heads img+img{margin-inline-start:-14px}
+.ot-kiko{border:1px solid var(--line);border-radius:20px;padding:14px;margin-top:12px;background:#fff}
+.ot-kiko .parts{max-width:440px}
+.ot-kiko-head{display:flex;align-items:center;gap:12px}
+.ot-kiko-head img{width:56px}
+.ot-kiko-head b{display:block;font-size:17px}
+.ot-kiko .btn.secondary{padding:10px 14px;font-size:14px}
+@media (max-width:620px){.more-tiles{grid-template-columns:1fr 1fr;gap:10px}.kiko-grid{grid-template-columns:1fr 1fr;gap:10px}.kiko-card .k-fig{height:84px}.kiko-card b{font-size:16px}.k-parts img{width:34px;height:34px}}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -286,7 +324,7 @@ const H = window.KikoHub;
 const app = document.getElementById('app');
 const ROLE_LABEL = {parent:'הורה', ot:'מרפא/ה בעיסוק'};
 const AGES = ['2–3','4–5','6–7','8–9','10+'];
-let state = {user:null, children:[], catalog:null, labels:null};
+let state = {user:null, children:[], catalog:null, labels:null, openKiko:{}};
 
 /* ---------- helpers ---------- */
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -548,9 +586,9 @@ function showDashboard(){
     <div class="kids">
       ${kids.map(k => `
         <button class="kid" data-id="${esc(k.child_id)}">
-          <span class="who-kiko">${k.character_color ? `<img src="${headSrc(k.character_color)}" alt="">` : ''}<span>
+          <span class="who-kiko">${(k.kikos && k.kikos.length) ? `<span class="k-heads">${k.kikos.slice(0,3).map(x => `<img src="${headSrc(x.character_color)}" alt="">`).join('')}</span>` : (k.character_color ? `<img src="${headSrc(k.character_color)}" alt="">` : '')}<span>
             <span class="name">${esc(k.child_alias)}</span><br>
-            <span class="meta">${ageTxt(k.age_range)}${!isOT && k.kiko_name ? ' · עם ' + esc(k.kiko_name) : ''}</span></span></span>
+            <span class="meta">${ageTxt(k.age_range)}${!isOT && k.kikos && k.kikos.length > 1 ? ' · ' + k.kikos.length + ' קיקויים' : (!isOT && k.kiko_name ? ' · עם ' + esc(k.kiko_name) : '')}</span></span></span>
           <span class="meta">${!(k.recommendations||k.feedback) ? 'עוד לא התחלנו' : isOT ? `${plural(k.recommendations,'התאמה אחת','התאמות')} · ${plural(k.feedback,'מפגש אחד','מפגשים')}` : (k.feedback ? 'מוכנים למפגש הבא ✨' : 'ה־KIKO מחכה למפגש ✨')}</span>
           ${k.last_activity ? `<span class="meta">פעילות אחרונה: ${fmtDate(k.last_activity)}</span>` : ''}
         </button>`).join('')}
@@ -628,11 +666,52 @@ async function showChild(childId){
   catch(e){ view(`<div class="card"><p class="error">${esc(H.errorText(e))}</p><button class="btn secondary" id="back">חזרה</button></div>`); $('#back').onclick = showDashboard; return; }
   renderChild(ov);
 }
+function showKikoList(c, kikos){
+  const name = esc(c.child_alias), P = id => state.catalog[id];
+  const status = k => {
+    const f = k.last_feedback, cur = k.current;
+    if(f && (!cur || timeOf(f.date) >= timeOf(cur.date))) return `<span class="k-status played">שיחקנו ${relDate(f.date)}</span>`;
+    return `<span class="k-status ready">✨ מחכה למפגש</span>`;
+  };
+  view(`
+  <button class="link back" id="back">→ לאזור האישי</button>
+  <div class="card kikos-card">
+    <h1>הקיקויים של ${name}</h1>
+    <p class="lead">בחרו KIKO כדי לראות מה ננסה איתו, לספר איך היה או להוסיף לו חלקים.</p>
+    <div class="kiko-grid">
+      ${kikos.map(k => `
+      <button class="kiko-card" data-kiko="${esc(k.kiko_id)}">
+        <img class="k-fig" src="${headSrc(k.character_color)}" alt="">
+        <b>${esc(kikoLabel(k))}</b>
+        ${status(k)}
+        <span class="k-parts">${((k.current && k.current.final_part_ids) || []).filter(id => P(id)).map(id => `<img src="${esc(P(id).img)}" alt="${esc(P(id).name)}">`).join('')}</span>
+      </button>`).join('')}
+      <button class="kiko-card new" data-go="pre"><span class="plus">＋</span><b>KIKO חדש</b><small>דמות נוספת עם חלקים משלה</small></button>
+    </div>
+  </div>
+  <div class="card share-soft">
+    <div class="share"><span>מטפל/ת מלווה את ${name}? שלחו לה/לו את הקוד:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
+  </div>`);
+  bindChildPage(c, kikos, null);
+  app.querySelectorAll('.kiko-card[data-kiko]').forEach(b => b.onclick = () => {
+    const k = kikos.find(x => x.kiko_id === b.dataset.kiko); if(!k) return;
+    state.openKiko[c.child_id] = k.kiko_id;
+    showChildStory(c, k.current, k.last_feedback, {kiko:k, kikos});
+  });
+}
+
 function renderChild(ov){
   const c = ov.child, cur = ov.current, last = ov.last_feedback, isOT = ov.role === 'ot';
+  const kikos = kikosOf(ov);
+  if(!isOT){
+    if(!kikos.length) return showChildStory(c, null, last, {kikos});
+    const want = state.openKiko[c.child_id];
+    const k = kikos.find(x => x.kiko_id === want) || (kikos.length === 1 ? kikos[0] : null);
+    if(k) return showChildStory(c, k.current, k.last_feedback, {kiko:k, kikos});
+    return showKikoList(c, kikos);
+  }
   const partCard = id => { const p = state.catalog[id]; return p ? `<div class="part"><img src="${esc(p.img)}" alt="">${esc(p.name)}</div>` : `<div class="part">${esc(id)}</div>`; };
   const hasRec = !!cur;
-  if(!isOT){ showChildStory(c, cur, last); return; }
   view(`
   <button class="link back" id="back">→ ${isOT ? 'כל הילדים' : 'לאזור האישי'}</button>
   <div class="card">
@@ -641,7 +720,7 @@ function renderChild(ov){
     <div class="actions">
       ${hasRec ? `
         <button class="action primary" data-go="post"><span class="ico">💬</span><b>איך היה המפגש?</b><small>ספרו לנו מה עבד ומה פחות – כמה דקות</small></button>
-        <button class="action" data-go="pre"><span class="ico">🔁</span><b>התאמה חדשה</b><small>קבלת המלצה נוספת לחלקים</small></button>`
+        <button class="action" data-go="pre"><span class="ico">✨</span><b>KIKO חדש</b><small>דמות נוספת עם שלושה חלקים</small></button>`
       : `
         <button class="action primary" data-go="pre"><span class="ico">✨</span><b>קבלת המלצה ראשונה</b><small>כמה שאלות קצרות ונמליץ על 3 חלקים</small></button>
         <button class="action" data-go="post"><span class="ico">💬</span><b>כבר שיחקנו – איך היה?</b><small>לספר על מפגש שכבר התקיים</small></button>`}
@@ -649,15 +728,15 @@ function renderChild(ov){
   </div>
 
   <div class="card">
-    <div style="display:flex;align-items:center;gap:14px">
-      ${cur ? `<img src="${headSrc(cur.character_color)}" alt="" style="width:72px;filter:drop-shadow(0 6px 8px rgba(120,60,20,.15))">` : ''}
-      <div><h2 style="margin:0">ה־KIKO הנוכחי${cur && cur.kiko_name ? ' · '+esc(cur.kiko_name) : ''}</h2>
-      ${cur ? `<p class="muted small" style="margin:2px 0 0">ההתאמה מ־${fmtDate(cur.date)}${cur.by ? ' · '+esc(cur.by) : ''}</p>` : ''}</div>
-    </div>
-    ${cur ? `
-      <div class="parts">${(cur.final_part_ids||[]).map(partCard).join('')}</div>`
-      : '<div class="empty">עוד אין התאמה. התחילו ב"קבלת המלצה ראשונה".</div>'}
-    ${last ? `<p style="margin:14px 0 0">🕒 מפגש אחרון: <b>${fmtDate(last.date)}</b>${last.best_part ? ` · עבד הכי טוב: <b>${esc((state.catalog[last.best_part_id]||{}).name || last.best_part)}</b>` : ''}</p>` : ''}
+    <h2>${kikos.length > 1 ? 'הקיקויים של ' + esc(c.child_alias) : 'ה־KIKO של ' + esc(c.child_alias)}</h2>
+    ${kikos.length ? kikos.map(k => `
+    <div class="ot-kiko">
+      <div class="ot-kiko-head"><img src="${headSrc(k.character_color)}" alt="">
+        <div><b>${esc(kikoLabel(k))}</b><small class="muted">${k.current ? 'התאמה אחרונה מ־' + fmtDate(k.current.date) + (k.current.by ? ' · ' + esc(k.current.by) : '') : ''}${k.rounds > 1 ? ' · ' + k.rounds + ' סבבי חלקים' : ''}</small></div></div>
+      <div class="parts">${((k.current && k.current.final_part_ids) || []).map(partCard).join('')}</div>
+      ${k.last_feedback ? `<p class="small" style="margin:10px 0 0">🕒 מפגש אחרון: <b>${fmtDate(k.last_feedback.date)}</b>${k.last_feedback.best_part ? ` · עבד הכי טוב: <b>${esc((state.catalog[k.last_feedback.best_part_id]||{}).name || k.last_feedback.best_part)}</b>` : ''}</p>` : ''}
+      <div class="row" style="margin-top:10px"><button class="btn secondary" data-go="post" data-kiko="${esc(k.kiko_id)}">💬 משוב</button><button class="btn secondary" data-go="more" data-kiko="${esc(k.kiko_id)}">🧩 עוד חלקים</button></div>
+    </div>`).join('') : '<div class="empty">עוד אין התאמה. התחילו ב"קבלת המלצה ראשונה".</div>'}
   </div>
 
   ${isOT ? `
@@ -671,22 +750,32 @@ function renderChild(ov){
     <div class="share"><span>קוד הילד/ה לשיתוף ${isOT ? 'עם ההורים' : 'עם המטפל/ת'}:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
     <p class="muted small" style="margin:10px 0 0">מי שמקבל את הקוד יכול להוסיף את הילד/ה לאזור האישי שלו ולראות את התהליך.</p>
   </div>`);
-  bindChildPage(c, cur);
+  bindChildPage(c, kikos, kikos.slice().sort((a, b) => timeOf(b.updated) - timeOf(a.updated))[0] || null);   // top actions: the most recent KIKO
 }
 
-function bindChildPage(c, cur){
+function bindChildPage(c, kikos, kiko){
   $('#back').onclick = () => {
     showDashboard(); const seq = viewSeq;
     fetchChildren().then(r => { const changed = JSON.stringify(r.children || []) !== JSON.stringify(state.children); state.children = r.children || []; if(changed && seq === viewSeq) rerender(showDashboard); }).catch(() => {});
   };
   $('#copyShare').onclick = async () => { try{ await navigator.clipboard.writeText(c.share_code); $('#copyShare').textContent = '✓ הועתק'; }catch(e){} };
+  kikos = kikos || [];
   app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => {
-    H.setContext({
+    const go = b.dataset.go;
+    const k = kikos.find(x => x.kiko_id === b.dataset.kiko) || kiko || kikos[0] || null;
+    const cur = k && k.current;
+    const ctx = {
       child_id: c.child_id, child_alias: c.child_alias, age_range: c.age_range,
       respondent_role: state.user.role === 'ot' ? 'therapist' : 'parent',
-      current_part_ids: cur ? cur.final_part_ids : [], order_code: cur ? cur.order_code : ''
-    });
-    location.href = (b.dataset.go === 'pre' ? 'pre-use.html' : 'post-use.html') + '?child=' + encodeURIComponent(c.child_id);
+      mode: go === 'more' ? 'more_parts' : go === 'pre' ? 'new_kiko' : 'feedback',
+      current_part_ids: go === 'pre' ? [] : (cur ? cur.final_part_ids : []),
+      order_code: go === 'post' && cur ? cur.order_code : ''
+    };
+    if(k && go !== 'pre') Object.assign(ctx, {kiko_id: k.kiko_id, kiko_name: k.kiko_name || '', character_color: k.character_color || '', owned_part_ids: k.all_part_ids || []});
+    H.setContext(ctx);
+    if(k && go !== 'pre') state.openKiko[c.child_id] = k.kiko_id;
+    const q = '?child=' + encodeURIComponent(c.child_id) + (ctx.kiko_id ? '&kiko=' + encodeURIComponent(ctx.kiko_id) : '');
+    location.href = (go === 'post' ? 'post-use.html' : 'pre-use.html') + q;
   });
 }
 
@@ -740,6 +829,16 @@ function sparkle(el){
 
 /* ---------- parent: the story view ---------- */
 const HEAD_COLORS = ['red','blue','green'];
+const COLOR_HE = {red:'אדום', green:'ירוק', blue:'כחול'};
+const kikoLabel = k => (k && k.kiko_name) || ('KIKO' + (k && COLOR_HE[k.character_color] ? ' ' + COLOR_HE[k.character_color] : ''));
+/** KIKOs of a child; older backends only send the latest matching, so build one KIKO from it */
+function kikosOf(ov){
+  if(Array.isArray(ov.kikos)) return ov.kikos;
+  if(!ov.current) return [];
+  const cur = ov.current;
+  return [{kiko_id: cur.kiko_id || ('K-' + cur.order_code), kiko_name: cur.kiko_name || '', character_color: cur.character_color || '',
+    current: cur, all_part_ids: cur.final_part_ids || [], new_part_ids: [], last_feedback: ov.last_feedback, rounds: 1, updated: cur.date}];
+}
 const sitSrc = color => 'assets/characters/kiko-3d-' + (HEAD_COLORS.indexOf(color) >= 0 ? color : 'red') + '.webp';
 const headSrc = color => 'assets/characters/kiko-3d-' + (HEAD_COLORS.indexOf(color) >= 0 ? color : 'red') + '.webp';
 const timeOf = iso => { const t = new Date(iso||'').getTime(); return isNaN(t) ? 0 : t; };
@@ -769,11 +868,13 @@ const REASON_TXT = {
 };
 const joinHe = arr => arr.length <= 1 ? (arr[0]||'') : arr.slice(0,-1).join(', ') + ' ו' + arr[arr.length-1];
 
-function showChildStory(c, cur, last){
+function showChildStory(c, cur, last, opt){
+  opt = opt || {};
+  const kikos = opt.kikos || [], theKiko = opt.kiko || null;
   const name = esc(c.child_alias);
   const P = id => state.catalog[id];
   const pName = (id, fb) => esc((P(id)||{}).name || fb || '');
-  const kiko = cur ? esc(cur.kiko_name || 'KIKO') : 'KIKO';
+  const kiko = theKiko ? esc(kikoLabel(theKiko)) : (cur ? esc(cur.kiko_name || 'KIKO') : 'KIKO');
   const curIds = cur ? (cur.final_part_ids||[]).filter(id => P(id)) : [];
   // Which moment are we in?
   const fbAfterRec = last && (!cur || timeOf(last.date) >= timeOf(cur.date) || (cur.order_code && last.linked_order_code === cur.order_code));
@@ -806,7 +907,7 @@ function showChildStory(c, cur, last){
         ${ordered.length ? `<div class="parts">${ordered.map((id,i) => tile(id, steps[i] || '', i===0 ? 'star' : '')).join('')}</div>` : ''}
         <p class="tip">💡 מתחילים מהחלק העדין ונותנים ל${name} להוביל. אין דרך לא נכונה לשחק – גם הסתכלות ונגיעה קטנה הן התחלה.</p>
       </div>
-      <div class="cta"><button class="btn" data-go="post">שיחקנו! איך היה? 💬</button><button class="link" data-go="pre">רוצים התאמה אחרת?</button></div>`;
+      <div class="cta"><button class="btn" data-go="post">שיחקנו! איך היה? 💬</button></div>`;
   }else{
     const best = last.best_part_id && P(last.best_part_id) ? last.best_part_id : '';
     const less = last.less_part_id && P(last.less_part_id) && last.less_part_id !== best ? last.less_part_id : '';
@@ -833,17 +934,35 @@ function showChildStory(c, cur, last){
         <div class="parts">${tryIds.map(id => tile(id, label(id), id===best ? 'star' : id===less ? 'rest' : '')).join('')}</div>
       </div>`}
       <div class="cta">${wantNew
-        ? `<button class="btn" data-go="pre">התאמה חדשה עם מה שלמדנו ✨</button><button class="link" data-go="post">שיחקנו שוב – לספר איך היה</button>`
-        : `<button class="btn" data-go="post">שיחקנו שוב – איך היה? 💬</button><button class="link" data-go="pre">התאמה חדשה עם מה שלמדנו</button>`}</div>`;
+        ? `<button class="btn" data-go="more">חלקים חדשים ל${kiko} עם מה שלמדנו ✨</button><button class="link" data-go="post">שיחקנו שוב – לספר איך היה</button>`
+        : `<button class="btn" data-go="post">שיחקנו שוב – איך היה? 💬</button>`}</div>`;
   }
 
+  const many = kikos.length > 1;
+  const allIds = theKiko ? (theKiko.all_part_ids || []).filter(id => P(id)) : [];
+  const newIds = theKiko ? (theKiko.new_part_ids || []) : [];
+  const owned = theKiko && allIds.length > curIds.length ? `
+  <div class="card owned">
+    <h3>כל החלקים של ${kiko}</h3>
+    <div class="owned-row">${allIds.map(id => `<span class="owned-part${newIds.indexOf(id) >= 0 ? ' is-new' : ''}"><img src="${esc(P(id).img)}" alt=""><small>${esc(P(id).name)}</small>${newIds.indexOf(id) >= 0 ? '<i>חדש</i>' : ''}</span>`).join('')}</div>
+  </div>` : '';
+  const more = cur ? `
+  <div class="card more-card">
+    <h2>רוצים עוד?</h2>
+    <div class="more-tiles">
+      <button class="more-tile" data-go="more"><img src="${headSrc(cur.character_color)}" alt=""><b>עוד חלקים ל${kiko}</b><small>אותה דמות – שלושה חלקים חדשים</small></button>
+      <button class="more-tile new" data-go="pre"><span class="plus">＋</span><b>KIKO חדש</b><small>דמות נוספת עם חלקים משלה</small></button>
+    </div>
+  </div>` : '';
   view(`
-  <button class="link back" id="back">→ לאזור האישי</button>
+  <button class="link back" id="back">→ ${many ? 'כל הקיקויים של ' + name : 'לאזור האישי'}</button>
   <div class="card story">${body}</div>
+  ${owned}${more}
   <div class="card share-soft">
     <div class="share"><span>מטפל/ת מלווה את ${name}? שלחו לה/לו את הקוד:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
   </div>`);
-  bindChildPage(c, cur);
+  bindChildPage(c, kikos, theKiko);
+  if(many) $('#back').onclick = () => { delete state.openKiko[c.child_id]; showKikoList(c, kikos); };
   if(cur) playfulKiko(cur.character_color, c.child_alias, cur.kiko_name || 'KIKO');
 }
 
@@ -884,7 +1003,8 @@ function entryHtml(h){
 async function start(){
   const auth = H.getAuth();
   if(!auth || !H.isConfigured()){ showWelcome(); return; }
-  const back = new URLSearchParams(location.search).get('child');
+  const qs = new URLSearchParams(location.search), back = qs.get('child');
+  if(back && qs.get('kiko')) state.openKiko[back] = qs.get('kiko');
   if(back) prefetch[back] = H.api('childOverview', {child_id:back});   // in parallel with the children list
   const cached = cacheGet('children');
   const fresh = fetchChildren();

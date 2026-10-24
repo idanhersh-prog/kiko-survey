@@ -128,6 +128,8 @@ function loadCatalog(){
 }
 loadCatalog().catch(()=>{});
 const HUB_CTX=(window.KikoHub&&KikoHub.getContext())||null;
+const MORE_PARTS=!!(HUB_CTX&&HUB_CTX.mode==='more_parts'&&HUB_CTX.kiko_id);
+const OWNED_PARTS=new Set(MORE_PARTS?(HUB_CTX.owned_part_ids||[]):[]);
 const SUBMIT_URL='https://script.google.com/macros/s/AKfycbxD-weHFTPJ_H2J65DgLpsI8fxbBnMl6R5z9w0VaK2RNH-tuuCNup0NlbGhGmfxLMZ2/exec';
 const data={primary_goal:[],preferred_sensations:[],avoid_sensations:[],preferred_actions:[],character_color:'',kiko_name:''};
 let current=0,recommendations=[],finalParts=[],replaceIndex=null;
@@ -158,7 +160,7 @@ function selectedTags(){let tags=[];data.primary_goal.forEach(v=>tags.push(...(g
 function selectedAvoids(){let tags=[];data.avoid_sensations.forEach(v=>tags.push(...(avoidTags[v]||[])));return new Set(tags)}
 function selectedActions(){let tags=[];data.preferred_actions.forEach(v=>tags.push(...(actionTags[v]||[])));return new Set(tags)}
 function targetIntensity(){if(data.intensity==='low')return 1;if(data.intensity==='medium')return 2;if(data.intensity==='high')return 3;return 1.5}
-function scorePart(p){const t=selectedTags(),a=selectedAvoids(),acts=selectedActions();let score=0,matches=[],actionMatches=[];p.match.forEach(x=>{if(t.has(x)){score+=3;matches.push(x)}});p.actions.forEach(x=>{if(acts.has(x)){score+=2;actionMatches.push(x)}});p.avoid.forEach(x=>{if(a.has(x))score-=9});const d=Math.abs(p.intensity-targetIntensity());score+=d<.6?3:d<1.1?1:-2;if(data.new_place_response==='avoids'){if(p.intensity<=1.5)score+=3;if(p.intensity>=2.5)score-=4}if(data.new_place_response==='observes'||data.new_place_response==='model'){if(p.intensity<=2)score+=1}return{p,score,matches,actionMatches}}
+function scorePart(p){const t=selectedTags(),a=selectedAvoids(),acts=selectedActions();let score=0,matches=[],actionMatches=[];if(OWNED_PARTS.has(p.id))score-=6;p.match.forEach(x=>{if(t.has(x)){score+=3;matches.push(x)}});p.actions.forEach(x=>{if(acts.has(x)){score+=2;actionMatches.push(x)}});p.avoid.forEach(x=>{if(a.has(x))score-=9});const d=Math.abs(p.intensity-targetIntensity());score+=d<.6?3:d<1.1?1:-2;if(data.new_place_response==='avoids'){if(p.intensity<=1.5)score+=3;if(p.intensity>=2.5)score-=4}if(data.new_place_response==='observes'||data.new_place_response==='model'){if(p.intensity<=2)score+=1}return{p,score,matches,actionMatches}}
 function buildRecommendation(){const ranked=CATALOG.parts.map(scorePart).sort((x,y)=>y.score-x.score);const picked=[],families=new Set();for(const r of ranked){if(picked.length>=3)break;if(!families.has(r.p.family)){picked.push(r);families.add(r.p.family)}}for(const r of ranked){if(picked.length>=3)break;if(!picked.find(x=>x.p.id===r.p.id))picked.push(r)}recommendations=picked;finalParts=picked.map(x=>x.p);makeOrderCode();renderResult()}
 function makeOrderCode(){if(data.order_code)return data.order_code;const d=new Date(),ds=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('');data.order_code='KIKO-'+ds+'-'+Math.random().toString(36).slice(2,6).toUpperCase();return data.order_code}
 function reasonFor(r){const bits=[];if(r.matches.length)bits.push('מתאים לפרופיל התחושתי שסימנתם');if(r.actionMatches.length)bits.push('תומך בפעולות הידיים שנבחרו');const ti=targetIntensity();if(Math.abs(r.p.intensity-ti)<.7)bits.push('מתאים לעוצמת ההתחלה');if(!bits.length)bits.push('נבחר כדי ליצור גיוון בין סוגי החלקים');return bits.join(' · ')}
@@ -216,7 +218,7 @@ function renderBuildPreview(){
     img.alt=sourceImg?.alt||'KIKO';
     img.className='char-'+(data.character_color||'red');
   }
-  if(name)name.textContent='KIKO '+(labels.characters[data.character_color]||'');
+  if(name)name.textContent=MORE_PARTS?(HUB_CTX.kiko_name||'KIKO'):'KIKO '+(labels.characters[data.character_color]||'');
   if(parts)parts.innerHTML=finalParts.map((p,i)=>`<div class="build-part"><img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async"><div><b>חלק ${i+1}: ${p.name}</b><small>${CATALOG.familyLabels[p.family]||p.family}${p.badge?' · '+p.badge:''}</small></div></div>`).join('');
 }
 document.getElementById('continueToGuide').onclick=()=>{
@@ -328,7 +330,7 @@ document.getElementById('doneCatalog').onclick=()=>openCatalog();
 function returnToChosenParts(){renderResult();current=8;render()}
 
 document.getElementById('backToChosenPartsBottom').onclick=returnToChosenParts;
-async function saveOrder(){data.recommended_parts=recommendations.map(x=>x.p.name);data.recommendation_reasons=recommendations.map(reasonFor);data.final_parts=finalParts.map(x=>x.name);data.user_changes=finalParts.map(x=>x.id).join('|')!==recommendations.map(x=>x.p.id).join('|');data.confirmed_at=new Date().toISOString();data.order_status='confirmed';data.recommended_part_ids=recommendations.map(x=>x.p.id);data.final_part_ids=finalParts.map(x=>x.id);localStorage.setItem('kiko_preuse_'+data.order_code,JSON.stringify(data));if(HUB_CTX){await KikoHub.api('saveRecommendation',{child_id:HUB_CTX.child_id,data});KikoHub.setContext(Object.assign({},HUB_CTX,{auth:undefined,current_part_ids:data.final_part_ids,order_code:data.order_code}));return{remote:true,hub:true}}if(!SUBMIT_URL)return{remote:false};const body=new URLSearchParams();body.set('payload',JSON.stringify(data));await fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',body});return{remote:true}}
+async function saveOrder(){data.recommended_parts=recommendations.map(x=>x.p.name);data.recommendation_reasons=recommendations.map(reasonFor);data.final_parts=finalParts.map(x=>x.name);data.user_changes=finalParts.map(x=>x.id).join('|')!==recommendations.map(x=>x.p.id).join('|');data.confirmed_at=new Date().toISOString();data.order_status='confirmed';data.recommended_part_ids=recommendations.map(x=>x.p.id);data.final_part_ids=finalParts.map(x=>x.id);localStorage.setItem('kiko_preuse_'+data.order_code,JSON.stringify(data));if(HUB_CTX){if(MORE_PARTS){data.kiko_id=HUB_CTX.kiko_id;data.character_color=data.character_color||HUB_CTX.character_color||'';data.kiko_name=data.kiko_name||HUB_CTX.kiko_name||''}const saved=await KikoHub.api('saveRecommendation',{child_id:HUB_CTX.child_id,data});const kid=(saved&&saved.kiko_id)||HUB_CTX.kiko_id||'';KikoHub.setContext(Object.assign({},HUB_CTX,{auth:undefined,current_part_ids:data.final_part_ids,order_code:data.order_code,kiko_id:kid}));if(kid){const h='index.html?child='+encodeURIComponent(HUB_CTX.child_id)+'&kiko='+encodeURIComponent(kid);document.querySelectorAll('[data-hub-cta],#hubBack').forEach(a=>a.href=h)}return{remote:true,hub:true}}if(!SUBMIT_URL)return{remote:false};const body=new URLSearchParams();body.set('payload',JSON.stringify(data));await fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',body});return{remote:true}}
 saveAndMeetBtn.onclick=async()=>{
   if(saveInFlight)return;
   data.kiko_name=(kikoNameInput?.value||'').trim();
@@ -349,10 +351,27 @@ saveAndMeetBtn.onclick=async()=>{
 };
 bindGroups();
 if(HUB_CTX){
-  const back=document.getElementById('hubBack');back.textContent='→ לאזור האישי';back.href='index.html?child='+encodeURIComponent(HUB_CTX.child_id);
+  const back=document.getElementById('hubBack');back.textContent='→ לאזור האישי';back.href='index.html?child='+encodeURIComponent(HUB_CTX.child_id)+(HUB_CTX.kiko_id?'&kiko='+encodeURIComponent(HUB_CTX.kiko_id):'');
   if(childNameInput&&HUB_CTX.child_alias){childNameInput.value=HUB_CTX.child_alias;data.child_alias=HUB_CTX.child_alias}
   [['age_range',HUB_CTX.age_range],['respondent_role',HUB_CTX.respondent_role]].forEach(([k,v])=>{const b=v&&document.querySelector('[data-single="'+k+'"] .choice[data-value="'+v+'"]');if(b)b.click()});
   updateChildRefs();
+  if(MORE_PARTS){
+    // more parts for an existing KIKO: same character and name, no character/name steps
+    const kn=HUB_CTX.kiko_name||'KIKO';
+    data.character_color=HUB_CTX.character_color||'red';data.kiko_name=HUB_CTX.kiko_name||'';
+    if(kikoNameInput)kikoNameInput.value=data.kiko_name;
+    const set=(id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t};
+    set('resultTitle','עוד חלקים ל'+kn);
+    const rl=document.querySelector('#resultStep .lead');if(rl)rl.textContent='שלושה חלקים חדשים שמתאימים למה שסיפרתם – בלי חלקים שכבר יש ל'+kn+'. אפשר להחליף כל חלק.';
+    const cc=document.getElementById('continueToCharacter');cc.textContent='הוספה ל'+kn;
+    cc.onclick=()=>{renderCharacterSummary();document.getElementById('continueToGuide').click()};
+    document.getElementById('backToCharacter').onclick=()=>{current=8;render()};
+    set('backToCharacter','חזרה לחלקים');
+    const ns=document.getElementById('nameStep');
+    if(ns){const h=ns.querySelector('h1');if(h)h.textContent='החלקים החדשים של '+kn+' 🧡';const l=ns.querySelector('.lead');if(l)l.textContent='אלה החלקים שנוסיף ל'+kn+'. הדמות והשם נשארים כמו שהם.';const nb=ns.querySelector('.name-box');if(nb)nb.style.display='none'}
+    if(saveAndMeetBtn)saveAndMeetBtn.textContent='שמירה והמשך';
+    const sp=document.querySelector('#meetStep .saved-pill');if(sp)sp.textContent='✓ החלקים החדשים נוספו ל'+kn;
+  }
   // the child is already known from the personal area – skip the intro and the details step
   if(data.age_range&&data.respondent_role)current=2;
 }
@@ -360,7 +379,7 @@ render();
 // ---- "to the personal area" call to action on the meet-KIKO page ----
 (function(){
   const ctx=(window.KikoHub&&KikoHub.getContext())||null;
-  const href=ctx?'index.html?child='+encodeURIComponent(ctx.child_id):'index.html';
+  const href=ctx?'index.html?child='+encodeURIComponent(ctx.child_id)+(ctx.kiko_id?'&kiko='+encodeURIComponent(ctx.kiko_id):''):'index.html';
   const label=ctx?(ctx.child_alias?'לאזור האישי של '+ctx.child_alias:'לאזור האישי'):'לאזור האישי – הרשמה ומעקב';
   document.querySelectorAll('[data-hub-cta]').forEach(a=>{a.href=href;const t=a.querySelector('.hub-cta-txt');if(t)t.textContent=label});
   const meet=document.getElementById('meetStep');let vidsOn=false;
