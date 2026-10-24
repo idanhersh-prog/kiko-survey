@@ -279,7 +279,7 @@ body.splash-on #splash{display:block;position:relative;overflow-x:hidden;min-hei
 </div>
 <div id="splash"></div>
 
-<script src="assets/kiko-hub.js"></script>
+<script src="assets/kiko-hub.js?v=20261024"></script>
 <script>
 (function(){
 const H = window.KikoHub;
@@ -294,7 +294,15 @@ const plural = (n, one, many) => n === 1 ? one : n + ' ' + many;
 const ageTxt = a => a ? 'גיל <bdi dir="ltr">' + esc(a) + '</bdi>' : '';
 const fmtDate = iso => { if(!iso) return ''; const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'}); };
 const fmtDateTime = iso => { if(!iso) return ''; const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleDateString('he-IL',{day:'numeric',month:'short',year:'numeric'})+' · '+d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}); };
-function view(html){ document.body.classList.remove('splash-on'); app.innerHTML = html; window.scrollTo({top:0}); }
+let viewSeq = 0, keepScroll = false;
+function view(html){ viewSeq++; document.body.classList.remove('splash-on'); const y = window.scrollY; app.innerHTML = html; window.scrollTo({top: keepScroll ? y : 0}); }
+/* small per-tab cache so returning to a page shows it instantly while fresh data loads */
+const cacheGet = k => { try{ return JSON.parse(sessionStorage.getItem('kc_' + k) || 'null'); }catch(e){ return null; } };
+const cacheSet = (k, v) => { try{ sessionStorage.setItem('kc_' + k, JSON.stringify(v)); }catch(e){} };
+const prefetch = {};
+function fetchOverview(childId){ const p = prefetch[childId] || H.api('childOverview', {child_id:childId}); delete prefetch[childId]; return p.then(ov => { cacheSet('ov_' + childId, ov); return ov; }); }
+function fetchChildren(){ return H.api('children', {}).then(r => { cacheSet('children', {user:r.user, children:r.children || []}); return r; }); }
+function rerender(fn){ keepScroll = true; try{ fn(); } finally { keepScroll = false; } }
 function $(sel){ return app.querySelector(sel); }
 function busy(btn, on, text){ if(!btn) return; if(on){ btn.dataset.t = btn.textContent; btn.textContent = text||'רגע...'; btn.disabled = true; } else { btn.textContent = btn.dataset.t||btn.textContent; btn.disabled = false; } }
 function bindChoice(container, onPick){
@@ -351,6 +359,7 @@ const labList = (key, arr) => (arr||[]).map(v => lab(key, v)).join(' · ');
 
 /* ---------- welcome ---------- */
 function showWelcome(){
+  if(!window.__kikoWarm){ window.__kikoWarm = true; H.api('ping', {}, {noAuth:true}).catch(() => {}); }   // wake the backend while people read
   setWho();
   const sp = document.getElementById('splash');
   sp.innerHTML = `<div class="sp">
@@ -364,7 +373,7 @@ function showWelcome(){
           <div class="sp-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a></div>
         </div>
       </div>
-      <div class="sp-hero"><img src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
+      <div class="sp-hero"><img fetchpriority="high" decoding="async" src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
     </div>`;
   document.body.classList.add('splash-on');
   drawSpeedLines(sp);
@@ -529,6 +538,7 @@ function showLogin(prefill){
 /* ---------- dashboard ---------- */
 function showDashboard(){
   setWho();
+  if(state.user) cacheSet('children', {user:state.user, children:state.children});
   const isOT = state.user.role === 'ot';
   const kids = state.children.slice().sort((a,b) => String(b.last_activity||b.created_at).localeCompare(String(a.last_activity||a.created_at)));
   view(`
@@ -604,11 +614,21 @@ function showLinkChild(){
 
 /* ---------- child page ---------- */
 async function showChild(childId){
+  const cached = cacheGet('ov_' + childId);
+  const fresh = fetchOverview(childId);
+  const libs = Promise.all([loadCatalog(), state.user.role==='ot' ? loadLabels() : null]);
+  if(cached){
+    await libs; renderChild(cached); const seq = viewSeq;
+    fresh.then(ov => { if(seq === viewSeq && JSON.stringify(ov) !== JSON.stringify(cached)) rerender(() => renderChild(ov)); }).catch(() => {});
+    return;
+  }
   view('<div class="spinner"></div>');
   let ov;
-  try{
-    [ov] = await Promise.all([H.api('childOverview', {child_id:childId}), loadCatalog(), state.user.role==='ot' ? loadLabels() : null]);
-  }catch(e){ view(`<div class="card"><p class="error">${esc(H.errorText(e))}</p><button class="btn secondary" id="back">חזרה</button></div>`); $('#back').onclick = showDashboard; return; }
+  try{ [ov] = await Promise.all([fresh, libs]); }
+  catch(e){ view(`<div class="card"><p class="error">${esc(H.errorText(e))}</p><button class="btn secondary" id="back">חזרה</button></div>`); $('#back').onclick = showDashboard; return; }
+  renderChild(ov);
+}
+function renderChild(ov){
   const c = ov.child, cur = ov.current, last = ov.last_feedback, isOT = ov.role === 'ot';
   const partCard = id => { const p = state.catalog[id]; return p ? `<div class="part"><img src="${esc(p.img)}" alt="">${esc(p.name)}</div>` : `<div class="part">${esc(id)}</div>`; };
   const hasRec = !!cur;
@@ -655,7 +675,10 @@ async function showChild(childId){
 }
 
 function bindChildPage(c, cur){
-  $('#back').onclick = async () => { try{ const r = await H.api('children', {}); state.children = r.children; }catch(e){} showDashboard(); };
+  $('#back').onclick = () => {
+    showDashboard(); const seq = viewSeq;
+    fetchChildren().then(r => { const changed = JSON.stringify(r.children || []) !== JSON.stringify(state.children); state.children = r.children || []; if(changed && seq === viewSeq) rerender(showDashboard); }).catch(() => {});
+  };
   $('#copyShare').onclick = async () => { try{ await navigator.clipboard.writeText(c.share_code); $('#copyShare').textContent = '✓ הועתק'; }catch(e){} };
   app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => {
     H.setContext({
@@ -861,12 +884,27 @@ function entryHtml(h){
 async function start(){
   const auth = H.getAuth();
   if(!auth || !H.isConfigured()){ showWelcome(); return; }
+  const back = new URLSearchParams(location.search).get('child');
+  if(back) prefetch[back] = H.api('childOverview', {child_id:back});   // in parallel with the children list
+  const cached = cacheGet('children');
+  const fresh = fetchChildren();
+  if(cached && cached.user){
+    state.user = cached.user; state.children = cached.children; setWho();
+    const onChild = back && state.children.some(k => k.child_id === back);
+    if(onChild) showChild(back); else showDashboard();
+    const seq = viewSeq;
+    fresh.then(r => {
+      const changed = JSON.stringify(r.children || []) !== JSON.stringify(state.children);
+      state.user = r.user; state.children = r.children || []; setWho();
+      if(!onChild && changed && seq === viewSeq) rerender(showDashboard);
+    }).catch(e => { if(e.code === 'auth_failed' || e.code === 'locked'){ H.logout(); showWelcome(); } });
+    return;
+  }
   try{
-    const r = await H.api('children', {});
+    const r = await fresh;
     state.user = r.user; state.children = r.children || [];
     setWho();
-    const back = new URLSearchParams(location.search).get('child');
-    if(back && state.children.some(k => k.child_id === back)) showChild(back); else showDashboard();
+    if(back && state.children.some(k => k.child_id === back)) showChild(back); else { delete prefetch[back]; showDashboard(); }
   }catch(e){
     if(e.code === 'auth_failed' || e.code === 'locked') H.logout();
     showWelcome();

@@ -35,6 +35,9 @@
     let data;
     try { data = await res.json(); } catch (err) { const e = new Error('network'); e.code = 'network'; throw e; }
     if (!data.ok) { const e = new Error(data.error || 'server_error'); e.code = data.error || 'server_error'; throw e; }
+    if ((action === 'saveRecommendation' || action === 'saveFeedback') && payload && payload.child_id) {
+      try { sessionStorage.removeItem('kc_ov_' + payload.child_id); sessionStorage.removeItem('kc_children'); } catch (e) {}
+    }
     return data;
   }
 
@@ -43,7 +46,10 @@
     write(sessionStorage, AUTH_KEY, a);
     write(localStorage, AUTH_KEY, remember ? a : null);
   }
-  function logout() { write(sessionStorage, AUTH_KEY, null); write(localStorage, AUTH_KEY, null); write(sessionStorage, CTX_KEY, null); }
+  function logout() {
+    write(sessionStorage, AUTH_KEY, null); write(localStorage, AUTH_KEY, null); write(sessionStorage, CTX_KEY, null);
+    try { Object.keys(sessionStorage).filter(k => k.indexOf('kc_') === 0).forEach(k => sessionStorage.removeItem(k)); } catch (e) {}
+  }
 
   /** Context handed from the hub to a survey: which child, current parts, linked order. */
   function setContext(ctx) { write(sessionStorage, CTX_KEY, ctx); }
