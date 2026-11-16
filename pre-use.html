@@ -106,6 +106,79 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 .kid-skip{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;font-size:14px}
 body.together #characterStep .character-card{padding:16px}
 @media(max-width:760px){.kid-opts{grid-template-columns:1fr 1fr;gap:10px}.kid-opt b{font-size:17px}.kid-opt small{display:none}}
+
+/* ===== kid adventure ===== */
+body.kw-on{overflow:hidden}
+.kw{position:fixed;inset:0;z-index:100;display:grid;grid-template-columns:1fr minmax(260px,32vw);font-family:Fredoka,Arial,sans-serif;background:linear-gradient(180deg,#fff6ea,#f7e4cc);transition:background .6s;overflow:hidden}
+.kw[data-scene="forest"]{background:linear-gradient(180deg,#e9f6e4 0%,#cfe9c4 60%,#a9d39b 100%)}
+.kw[data-scene="beach"]{background:linear-gradient(180deg,#dff1fb 0%,#bfe3f6 55%,#f6e3b8 56%,#f1d79f 100%)}
+.kw[data-scene="mountain"]{background:linear-gradient(180deg,#e8eefb 0%,#d6def5 55%,#c9c1d9 100%)}
+.kw[data-scene="party"]{background:radial-gradient(ellipse at 50% 30%,#fff3d6,#fbd9c4 70%)}
+.kw-x{position:absolute;top:max(12px,env(safe-area-inset-top));inset-inline-start:12px;z-index:5;width:40px;height:40px;border-radius:99px;border:0;background:rgba(255,255,255,.85);font-size:18px;cursor:pointer}
+.kw-deco{position:absolute;inset:0;pointer-events:none;z-index:0}
+.kw-deco i{position:absolute;font-style:normal;font-size:clamp(34px,6vw,64px);opacity:.85;animation:kw-float 6s ease-in-out infinite;animation-delay:calc(var(--i)*-1.2s)}
+.kw-deco i:nth-child(1){top:8%;left:6%}.kw-deco i:nth-child(2){top:14%;right:34%}.kw-deco i:nth-child(3){bottom:12%;left:10%}.kw-deco i:nth-child(4){top:40%;left:3%}.kw-deco i:nth-child(5){bottom:6%;right:40%}
+@keyframes kw-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.kw-main{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 30px;text-align:center}
+.kw-title{margin:0 0 10px;font-size:clamp(26px,4vw,40px);font-weight:700;color:#3b2f2a}
+.kw-bubble{position:relative;max-width:560px;background:#fff;border-radius:26px;padding:16px 22px;font-size:clamp(19px,2.4vw,24px);font-weight:600;line-height:1.4;box-shadow:0 10px 26px rgba(80,40,10,.12);margin-bottom:24px}
+.kw-bubble::after{content:"";position:absolute;bottom:-12px;inset-inline-end:40px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.kw-bubble.pop{animation:kw-pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes kw-pop{from{transform:scale(.9)}to{transform:none}}
+.kw-chars{display:flex;gap:clamp(10px,3vw,30px);justify-content:center}
+.kw-char{border:0;background:none;cursor:pointer;padding:0;transition:transform .4s,opacity .4s;animation:kw-bob 2.6s ease-in-out infinite;animation-delay:calc(var(--i)*-.8s)}
+.kw-char img{width:clamp(90px,16vw,170px);filter:drop-shadow(0 12px 14px rgba(80,40,10,.18))}
+.kw-char:hover{transform:translateY(-8px) scale(1.04)}
+.kw-char.picked{transform:scale(1.25)!important;animation:none}
+.kw-char.away{opacity:0;transform:scale(.6)}
+@keyframes kw-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.kw-go{border:0;background:#ed5b2d;color:#fff;font:inherit;font-weight:700;font-size:clamp(20px,2.6vw,26px);border-radius:999px;padding:16px 30px;cursor:pointer;box-shadow:0 6px 0 #c4441c,0 14px 28px rgba(237,91,45,.3);position:relative;z-index:3}
+.kw-go:active{transform:translateY(3px);box-shadow:0 3px 0 #c4441c}
+.kw-spots{display:flex;gap:clamp(16px,5vw,60px);justify-content:center}
+.kw-spot{position:relative;width:clamp(130px,22vw,210px);height:clamp(150px,24vw,230px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.kw-found{width:85%;cursor:pointer;opacity:0;transform:scale(.4) translateY(30px);transition:transform .5s cubic-bezier(.2,1.4,.4,1),opacity .3s;filter:drop-shadow(0 10px 12px rgba(0,0,0,.18))}
+.kw-spot.open .kw-found{opacity:1;transform:none;animation:kw-bob 2.4s ease-in-out .5s infinite}
+.kw-spot.open .kw-found:hover{transform:scale(1.06)}
+.kw-name{font-size:18px;font-weight:600;opacity:0;transition:opacity .3s .3s;background:rgba(255,255,255,.8);border-radius:99px;padding:2px 12px;margin-top:6px}
+.kw-spot.open .kw-name{opacity:1}
+.kw-spot.taken .kw-name{opacity:0}
+.kw-hide{position:absolute;inset:0;border:0;background:none;font-size:clamp(110px,18vw,180px);line-height:1;cursor:pointer;transition:transform .55s cubic-bezier(.5,-.3,.6,1.3),opacity .5s;animation:kw-wiggle 2.2s ease-in-out infinite;animation-delay:calc(var(--i)*-1.1s)}
+.kw-hide.gone{transform:translateX(-90%) rotate(-25deg) scale(.6);opacity:0;pointer-events:none;animation:none}
+@keyframes kw-wiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-6deg)}90%{transform:rotate(6deg)}95%{transform:rotate(-3deg)}}
+.kw-towerbox{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:20px 10px 30px}
+.kw-tower{display:flex;flex-direction:column;align-items:center;transition:transform .4s}
+.kw-tower img{display:block;filter:drop-shadow(0 6px 6px rgba(0,0,0,.12))}
+.kw-tower .kw-head{width:clamp(120px,13vw,190px);position:relative;z-index:9}
+.kw-tower .kw-part{width:clamp(132px,14.5vw,210px);margin-top:clamp(-46px,-3.2vw,-30px);animation:kw-snap .45s cubic-bezier(.2,1.5,.4,1)}
+.kw-tower .kw-part:nth-of-type(2){z-index:8}.kw-tower .kw-part:nth-of-type(3){z-index:7}.kw-tower .kw-part:nth-of-type(4){z-index:6}
+.kw-tower .kw-base{width:clamp(120px,13vw,190px);margin-top:clamp(-38px,-2.6vw,-26px)}
+.kw-tower .kw-head.jump{animation:kw-jump .6s cubic-bezier(.3,.7,.4,1)}
+@keyframes kw-snap{from{transform:translateY(-30px) scale(1.1);opacity:.4}to{transform:none;opacity:1}}
+@keyframes kw-jump{0%,100%{transform:none}40%{transform:translateY(-18px) rotate(-6deg)}}
+.kw.party .kw-tower{animation:kw-dance 1s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes kw-dance{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg) translateY(-6px)}}
+.kw-fly{position:fixed;z-index:200;transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .7s;pointer-events:none}
+.kw-confetti{position:fixed;inset:0;pointer-events:none}
+.kw-confetti i{position:absolute;top:-20px;left:var(--x);width:10px;height:16px;background:var(--c);border-radius:3px;animation:kw-fall 2.6s linear infinite;animation-delay:calc(var(--i)*-.11s)}
+@keyframes kw-fall{to{transform:translateY(110vh) rotate(540deg)}}
+.kw-tower.small{margin:0 auto}
+.kw-tower.small .kw-head{width:96px}.kw-tower.small .kw-part{width:106px;margin-top:-24px}.kw-tower.small .kw-base{width:96px;margin-top:-20px}
+@media (max-width:760px){
+  .kw{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .kw-main{padding:64px 14px 170px;justify-content:center}
+  .kw.has-tower .kw-main{padding-bottom:40px}
+  .kw-towerbox{padding:0 0 max(14px,env(safe-area-inset-bottom));position:absolute;bottom:0;inset-inline-end:8px}
+  .kw.has-tower .kw-main{padding-inline-end:96px}
+  .kw-tower .kw-head{width:70px}.kw-tower .kw-part{width:78px;margin-top:-18px}.kw-tower .kw-base{width:70px;margin-top:-15px}
+  .kw-bubble{font-size:17px;padding:12px 16px;margin-bottom:16px}
+  .kw-hide{font-size:96px}
+  .kw-spot{width:120px;height:150px}
+  .kw-found{max-height:120px;object-fit:contain}
+  .kw.big .kw-towerbox{position:static;justify-content:center;padding-bottom:max(24px,env(safe-area-inset-bottom))}
+  .kw.big .kw-main{padding-inline-end:14px;padding-bottom:0}
+  .kw.big .kw-tower .kw-head{width:110px}.kw.big .kw-tower .kw-part{width:120px;margin-top:-28px}.kw.big .kw-tower .kw-base{width:110px;margin-top:-22px}
+}
+@media (prefers-reduced-motion:reduce){.kw *{animation:none!important}}
 </style>
 </head>
 <body>
@@ -124,7 +197,7 @@ body.together #characterStep .character-card{padding:16px}
       <section class="step" data-step="7"><div class="eyebrow">עוצמת התחלה</div><h2>איזו עוצמת תחושה מתאימה להתחלה?</h2><p class="lead">אם לא בטוחים, נתחיל בעוצמה נמוכה–בינונית.</p><div class="scale" data-single="intensity"><button class="choice" data-value="low">🌱 עדינה</button><button class="choice" data-value="medium">🙂 בינונית</button><button class="choice" data-value="high">⚡ חזקה וברורה</button><button class="choice" data-value="unknown">🤔 לא בטוחים</button></div><div class="safety-q"><div class="field">⚠️ בטיחות: האם <span class="childRef">הילד/ה</span> נוטה להכניס חפצים לפה, לנשוך או לקרוע?</div><div class="grid three" data-single="mouthing"><button class="choice" data-value="yes">כן</button><button class="choice" data-value="sometimes">לפעמים</button><button class="choice" data-value="no">לא</button></div><p class="hint">אם כן או לפעמים – לא נמליץ על חלקי בד וחבלים, שאפשר לקרוע או לפרום.</p></div></section>
       <section class="step" data-step="8" id="resultStep"><div class="result-head"><div class="eyebrow">ההתאמה שלכם</div><h1 id="resultTitle">ה-KIKO המומלץ להתחלה</h1><p class="lead">המלצה על שלושה חלקים מתוך הקטלוג. אפשר להחליף כל חלק לפני שממשיכים לבניית KIKO.</p></div><div id="kidPick" class="kid-pick" hidden></div><div class="parts-result" id="resultParts"></div><div class="confirm"><button class="secondary" id="backToQuestions">חזרה לשאלות</button><button class="secondary" id="browseCatalogResult">לצפייה בכל הקטלוג</button><button class="primary" id="continueToCharacter">המשך לבחירת דמות</button></div></section>
       <section class="step" data-step="9" id="characterStep"><div class="result-head"><div class="eyebrow">בחירת הדמות</div><h1>איזה KIKO תרצו להרכיב?</h1><p class="lead">בחרו את צבע הדמות שעליה נרכיב את שלושת החלקים שבחרתם.</p></div><div class="character-parts-summary" id="characterPartsSummary"></div><div class="character-grid" id="characterGrid"><button class="character-card" type="button" data-character="red" aria-pressed="false"><img src="assets/characters/kiko-red.webp?v=20261011-1" alt="KIKO אדום"><div><h3>KIKO אדום</h3><p>הדמות האדומה</p></div></button><button class="character-card" type="button" data-character="green" aria-pressed="false"><img src="assets/characters/kiko-green.webp?v=20261011-1" alt="KIKO ירוק"><div><h3>KIKO ירוק</h3><p>הדמות הירוקה</p></div></button><button class="character-card" type="button" data-character="blue" aria-pressed="false"><img src="assets/characters/kiko-blue.webp?v=20261011-1" alt="KIKO כחול"><div><h3>KIKO כחול</h3><p>הדמות הכחולה</p></div></button></div><div class="character-error" id="characterError"></div><div class="confirm"><button class="secondary" id="backToParts">חזרה לחלקים</button><button class="primary" id="continueToGuide">המשך ל-KIKO שלכם</button></div></section>
-      <section class="step" data-step="10" id="nameStep"><div class="naming-wrap"><div class="guide-intro"><div class="eyebrow">KIKO שלכם</div><h1>ה-KIKO שבניתם מוכן 🧡</h1><p class="lead">בחרתם חלקים ודמות. לפני שנכיר מה אפשר לעשות איתו, אפשר לתת ל-KIKO שלכם שם.</p></div><div class="build-preview"><div class="build-character"><img id="buildCharacterImg" src="" alt=""><h3 id="buildCharacterName"></h3></div><div class="build-parts" id="buildParts"></div></div><div class="name-box"><label for="kikoName">איך תרצו לקרוא ל-KIKO שלכם?</label><input id="kikoName" placeholder="לדוגמה: מיקו — לא חובה" maxlength="30"><p class="hint">אם לא תבחרו שם, נמשיך לקרוא לו KIKO.</p></div><div class="confirm"><button class="secondary" id="backToCharacter">חזרה לבחירת דמות</button><button class="primary" id="saveAndMeet">הכירו את KIKO</button></div><div class="save-status" id="saveStatus"></div></div></section>
+      <section class="step" data-step="10" id="nameStep"><div class="naming-wrap"><div class="guide-intro"><div class="eyebrow">KIKO שלכם</div><h1>ה-KIKO שבניתם מוכן 🧡</h1><p class="lead">בחרתם חלקים ודמות. לפני שנכיר מה אפשר לעשות איתו, אפשר לתת ל-KIKO שלכם שם.</p></div><div class="build-preview"><div class="build-character"><img id="buildCharacterImg" src="" alt=""><div id="buildTower" class="kw-tower small" hidden></div><h3 id="buildCharacterName"></h3></div><div class="build-parts" id="buildParts"></div></div><div class="name-box"><label for="kikoName">איך תרצו לקרוא ל-KIKO שלכם?</label><input id="kikoName" placeholder="לדוגמה: מיקו — לא חובה" maxlength="30"><p class="hint">אם לא תבחרו שם, נמשיך לקרוא לו KIKO.</p></div><div class="confirm"><button class="secondary" id="backToCharacter">חזרה לבחירת דמות</button><button class="primary" id="saveAndMeet">הכירו את KIKO</button></div><div class="save-status" id="saveStatus"></div></div></section>
       <section class="step" data-step="11" id="meetStep"><div class="meet-layout"><div class="saved-pill">✓ ההתאמה והחלקים שבחרתם נשמרו</div><div class="eyebrow">הכירו את KIKO</div><h1 id="meetTitle">הכירו את KIKO 👋</h1><p class="lead">עכשיו מתמקדים רק בשימוש: איך מרכיבים, איך מציגים את KIKO לילד ואילו תחושות אפשר לחקור איתו.</p><div class="experience-flow"><section class="experience-card start-card"><div class="start-grid"><div class="start-copy"><span class="experience-kicker">1</span><h3>איך מתחילים?</h3><p><b>KIKO</b> הוא דמות חושית מודולרית. בוחרים חלקים בעלי מרקמים שונים, משחילים את המיתר הפנימי ומחברים אותם לדמות.</p><div class="mechanism-line"><span>בוחרים חלקים</span><i>←</i><span>משחילים מיתר</span><i>←</i><span>מחברים</span></div></div><div><video class="assembly-visual" data-autoplay muted loop playsinline preload="none" aria-label="סרטון שמדגים את חיבור חלקי KIKO"><source src="assets/kiko-assembly.mp4?v=20261016-src" type="video/mp4"></video><div class="journey-note">משחילים את המיתר דרך החלקים ומחברים אותם לדמות.</div></div></div></section><section class="experience-card"><span class="experience-kicker">2</span><h3>מכירים בקצב של הילד</h3><p>לא חייבים להתחיל ישר במגע. מציגים את KIKO ונותנים לילד להוביל את קצב ההיכרות.</p><div class="exposure-video-wrap"><video class="exposure-video" data-autoplay muted loop playsinline preload="none" aria-label="הדגמה של הצגת חלקי KIKO לילד בקצב שלו"><source src="assets/kiko-show-parts.mp4?v=20261016-src" type="video/mp4"></video></div><div class="exposure-strip"><div class="exposure-step"><span class="exp-icon">👀</span><b>מתבוננים</b><small>פשוט מציגים את KIKO.</small></div><div class="exposure-step"><span class="exp-icon">👉</span><b>בוחרים</b><small>איזה חלק מושך את תשומת הלב?</small></div><div class="exposure-step"><span class="exp-icon">☝️</span><b>נוגעים</b><small>מתחילים במגע קצר ונעים.</small></div><div class="exposure-step"><span class="exp-icon">🤲</span><b>חוקרים</b><small>ממשיכים למשחק וחקירה חופשית.</small></div></div><div class="journey-note">אם מופיעה אי־נוחות, אפשר לחזור שלב, לעבור לחלק עדין יותר או לעצור.</div><a class="guide-cta" href="guide.html" target="_blank" rel="noopener">📖 <span><b>סיפור הכנה והסבר להורים</b><small>סיפור לקרוא יחד עם הילד/ה (אפשר להוסיף שם ותמונה), ושלבי החשיפה – להדפסה</small></span><i aria-hidden="true">←</i></a></section><section class="experience-card"><span class="experience-kicker">3</span><h3>משחקים ומרגישים</h3><p>אפשר להשתמש ב-KIKO בדרכים שונות ולבחור את סוג האינטראקציה שמתאים באותו רגע.</p><div class="interaction-grid"><div class="interaction-item"><span class="int-icon">🫂</span><b>מגע עמוק ועיסוי</b><small>מעבירים את KIKO על הגוף בתנועות איטיות ולחץ שנעים לילד.</small><video class="interaction-video" data-autoplay muted loop playsinline preload="none" aria-label="הדגמה של עיסוי עם KIKO"><source src="assets/kiko-deep-touch.mp4?v=20261016-sq2" type="video/mp4"></video></div><div class="interaction-item"><span class="int-icon">〽️</span><b>רטט</b><small>טפיחות קטנות על הדמות יוצרות תחושת רטט דרך המיתר הפנימי.</small><video class="interaction-video" data-autoplay muted loop playsinline preload="none" aria-label="הדגמה של רטט עם KIKO"><source src="assets/kiko-vibration.mp4?v=20261016-sq" type="video/mp4"></video></div></div></section></div><div class="meet-end"><div class="meet-end-emoji" aria-hidden="true">🎉</div><h3>מוכנים למפגש!</h3><p class="safe-line">⚠️ משחקים בנוכחות מבוגר, בודקים שהחלקים שלמים, ומתרגלים ברגעים רגועים – לא בזמן התפרצות. <a href="guide.html?tab=parents" target="_blank" rel="noopener">שימוש בטוח והסבר להורים</a></p><p>לפני המפגש הראשון כדאי לקרוא יחד את <a href="guide.html" target="_blank" rel="noopener">הסיפור של KIKO</a>. אחרי שתשחקו, חזרו לאזור האישי וספרו לנו איך היה – כך נדייק את ההתאמה הבאה.</p><a class="hub-cta" href="index.html" data-hub-cta><span class="hub-cta-txt">לאזור האישי</span><span class="hub-cta-arrow" aria-hidden="true">←</span></a></div><div class="confirm"><button class="secondary" id="backToChosenPartsBottom">חזרה לחלקים שבחרנו</button><button class="secondary" onclick="location.reload()">התאמה חדשה</button><button class="secondary" id="doneCatalog">פתיחת הקטלוג</button></div></div></section>
       <div class="nav" id="nav"><button class="back" id="backBtn">חזרה</button><div class="error" id="error"></div><div class="space"></div><button class="next" id="nextBtn">מתחילים</button></div>
     </main>
@@ -183,7 +256,7 @@ const labels={
 function bindGroups(){document.querySelectorAll('[data-single],[data-multi]').forEach(g=>{const single=g.dataset.single,multi=g.dataset.multi,key=single||multi;g.querySelectorAll('.choice').forEach(b=>{b.type='button';b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>{error.textContent='';const v=b.dataset.value;if(single){data[key]=v;g.querySelectorAll('.choice').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));}else{let a=Array.isArray(data[key])?data[key]:[];if(b.dataset.exclusive==='true'){const was=a.includes(v);a=[];g.querySelectorAll('.choice').forEach(x=>x.setAttribute('aria-pressed','false'));if(!was){a=[v];b.setAttribute('aria-pressed','true')}}else{const ex=g.querySelector('[data-exclusive="true"]');if(ex){a=a.filter(x=>x!==ex.dataset.value);ex.setAttribute('aria-pressed','false')}if(a.includes(v)){a=a.filter(x=>x!==v);b.setAttribute('aria-pressed','false')}else{a.push(v);b.setAttribute('aria-pressed','true')}}data[key]=a;}})})})}
 function valid(){error.textContent='';if(current===1&&(!data.age_range||!data.respondent_role))return fail('בחרו גיל ומי מבצע/ת את ההתאמה.');if(current===2&&data.primary_goal.length===0)return fail('בחרו לפחות מטרה אחת.');if(current===3&&!data.new_place_response)return fail('בחרו את האפשרות שהכי מתאימה.');if(current===4&&data.preferred_sensations.length===0)return fail('בחרו לפחות אפשרות אחת.');if(current===5&&data.avoid_sensations.length===0)return fail('בחרו לפחות אפשרות אחת.');if(current===6&&data.preferred_actions.length===0)return fail('בחרו לפחות אפשרות אחת.');if(current===7&&!data.intensity)return fail('בחרו עוצמת התחלה.');if(current===7&&!data.mouthing)return fail('ענו על שאלת הבטיחות.');return true}function fail(t){error.textContent=t;return false}
 function render(){steps.forEach((s,i)=>s.classList.toggle('active',i===current));progress.style.width=(current===0?'4':Math.min(100,current/8*100))+'%';backBtn.style.visibility=current===0?'hidden':'visible';nav.classList.toggle('first',current===0);nav.style.display=current>=8?'none':'flex';nextBtn.textContent=current===0?'מתחילים':current===7?'קבלו התאמה':'המשך';window.scrollTo({top:0,behavior:'smooth'})}
-nextBtn.onclick=()=>{if(!valid())return;if(current===1){data.child_alias=document.getElementById('childName').value.trim();updateChildRefs();}if(current===7){nextBtn.disabled=true;loadCatalog().then(()=>{buildRecommendation();current=8;render();if(TOGETHER)startKidPick()}).catch(()=>fail('לא הצלחנו לטעון את קטלוג החלקים. בדקו את החיבור לאינטרנט ונסו שוב.')).finally(()=>{nextBtn.disabled=false});return}current++;render()};backBtn.onclick=()=>{if(current>0){current--;render()}};
+nextBtn.onclick=()=>{if(!valid())return;if(current===1){data.child_alias=document.getElementById('childName').value.trim();updateChildRefs();}if(current===7){nextBtn.disabled=true;loadCatalog().then(()=>{buildRecommendation();current=8;render();if(TOGETHER)startAdventure()}).catch(()=>fail('לא הצלחנו לטעון את קטלוג החלקים. בדקו את החיבור לאינטרנט ונסו שוב.')).finally(()=>{nextBtn.disabled=false});return}current++;render()};backBtn.onclick=()=>{if(current>0){current--;render()}};
 function selectedTags(){let tags=[];data.primary_goal.forEach(v=>tags.push(...(goalTags[v]||[])));data.preferred_sensations.forEach(v=>tags.push(...(likeTags[v]||[])));return new Set(tags)}
 function selectedAvoids(){let tags=[];data.avoid_sensations.forEach(v=>tags.push(...(avoidTags[v]||[])));return new Set(tags)}
 function selectedActions(){let tags=[];data.preferred_actions.forEach(v=>tags.push(...(actionTags[v]||[])));return new Set(tags)}
@@ -248,6 +321,8 @@ document.getElementById('backToQuestions').onclick=()=>{current=7;render()};
 document.getElementById('continueToCharacter').onclick=()=>{renderCharacterSummary();current=9;render()};
 document.getElementById('backToParts').onclick=()=>{current=8;render()};
 function renderBuildPreview(){
+  const bt=document.getElementById('buildTower'),bi=document.getElementById('buildCharacterImg');
+  if(bt){bt.hidden=!TOGETHER;if(TOGETHER){bt.innerHTML=towerHTML(data.character_color||'red',finalParts);if(bi)bi.style.display='none'}else if(bi)bi.style.display=''}
   const selectedBtn=characterGrid?.querySelector('.character-card[aria-pressed="true"]');
   const img=document.getElementById('buildCharacterImg');
   const name=document.getElementById('buildCharacterName');
@@ -439,6 +514,92 @@ function startKidPick(){
   }
   round();
 }
+
+// ================= the kid adventure: choose KIKO, meet KIKO, find parts, build =================
+const PC='assets/parts-cut/';
+const OWN_FACE={green:'happy',red:'excited',blue:'sad'};
+function headImg(color,face){return PC+'head-'+color+(face&&OWN_FACE[color]!==face?'-'+face:'')+'.webp'}
+function towerHTML(color,parts){
+  return `<img class="kw-head" src="${headImg(color)}" alt="">`+parts.map(p=>`<img class="kw-part" data-id="${p.id}" src="${PC}${p.id}.webp" alt="${p.name}">`).join('')+`<img class="kw-base" src="${PC}base-${color}.webp" alt="">`;
+}
+const SCENES=[
+  {key:'forest',title:'פרק 1 · ביער הקסום',hide:'🌳',deco:['🌲','🍄','🦋','🌿','🌼'],say:'ששש... משהו מסתתר מאחורי העצים! נחפש?'},
+  {key:'beach',title:'פרק 2 · על חוף הים',hide:'🐚',deco:['🌊','☀️','🦀','🐠','⛵'],say:'בתוך הצדפים מסתתרים חלקים! לוחצים על צדף?'},
+  {key:'mountain',title:'פרק 3 · על ההר הגבוה',hide:'🪨',deco:['⛰️','☁️','🦅','🌈','🌲'],say:'עוד חלקים מחכים בין הסלעים! מוצאים אותם?'}
+];
+function startAdventure(){
+  const kid=kidName()||'';
+  const W=document.createElement('div');W.id='kidWorld';W.className='kw';
+  W.innerHTML=`<button class="kw-x" type="button" aria-label="יציאה מההרפתקה">✕</button><div class="kw-deco" aria-hidden="true"></div>
+    <div class="kw-main"><p class="kw-title"></p><div class="kw-bubble" aria-live="polite"></div><div class="kw-play"></div></div>
+    <div class="kw-towerbox"><div class="kw-tower" id="kwTower"></div></div>`;
+  document.body.appendChild(W);document.body.classList.add('kw-on');
+  const $w=sel=>W.querySelector(sel);
+  let color='',chosen=[],chapter=0;
+  const say=t=>{const b=$w('.kw-bubble');b.textContent=t;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
+  const setScene=k=>{W.dataset.scene=k;const sc=SCENES.find(x=>x.key===k);$w('.kw-deco').innerHTML=sc?sc.deco.map((e,i)=>`<i style="--i:${i}">${e}</i>`).join(''):''};
+  const tower=()=>{$w('#kwTower').innerHTML=color?towerHTML(color,chosen):'';W.classList.toggle('has-tower',!!color)};
+  const react=()=>{const h=$w('.kw-head');if(!h)return;const f=OWN_FACE[color]==='excited'?'happy':'excited';h.src=headImg(color,f);h.classList.remove('jump');void h.offsetWidth;h.classList.add('jump');setTimeout(()=>{h.src=headImg(color)},1600)};
+  $w('.kw-x').onclick=()=>{if(confirm('לצאת מההרפתקה? נשאיר את החלקים שהומלצו.'))finish(false)};
+
+  // 1 · choose a KIKO
+  function choose(){
+    setScene('home');$w('.kw-title').textContent=(kid?kid+', ':'')+'בוא/י נבחר KIKO!';say('איזה KIKO יצא איתנו להרפתקה?');
+    $w('.kw-play').innerHTML=`<div class="kw-chars">${['green','red','blue'].map((c,i)=>`<button type="button" class="kw-char" data-c="${c}" style="--i:${i}"><img src="assets/characters/kiko-3d-${c}.webp" alt="KIKO ${({green:'ירוק',red:'אדום',blue:'כחול'})[c]}"></button>`).join('')}</div>`;
+    W.querySelectorAll('.kw-char').forEach(b=>b.onclick=()=>{color=b.dataset.c;b.classList.add('picked');W.querySelectorAll('.kw-char').forEach(x=>x!==b&&x.classList.add('away'));setTimeout(meet,700)});
+  }
+  // 2 · meet KIKO
+  function meet(){
+    tower();W.classList.add('big');$w('.kw-title').textContent='נעים להכיר!';
+    say('היי'+(kid?' '+kid:'')+'! אני KIKO 👋 אני יכול להתחבר לחלקים, וכל חלק מרגיש אחרת. רוצה לעזור לי למצוא חלקים?');
+    $w('.kw-play').innerHTML=`<button type="button" class="kw-go">כן! יוצאים להרפתקה 🚀</button>`;
+    $w('.kw-go').onclick=()=>{chapter=0;play()};
+  }
+  // 3 · chapters
+  function play(){
+    if(chapter>=finalParts.length||chapter>=SCENES.length)return done();
+    W.classList.remove('big');const sc=SCENES[chapter];setScene(sc.key);$w('.kw-title').textContent=sc.title;say(sc.say);
+    const a=finalParts[chapter],b=altFor(chapter);const opts=b?(Math.random()<.5?[a,b]:[b,a]):[a];
+    $w('.kw-play').innerHTML=`<div class="kw-spots">${opts.map((p,i)=>`<div class="kw-spot" style="--i:${i}"><img class="kw-found" data-id="${p.id}" src="${PC}${p.id}.webp" alt="${p.name}"><span class="kw-name">${p.name}</span><button type="button" class="kw-hide" aria-label="לחפש">${sc.hide}</button></div>`).join('')}</div>`;
+    let found=0;
+    W.querySelectorAll('.kw-hide').forEach(h=>h.onclick=()=>{
+      h.classList.add('gone');h.closest('.kw-spot').classList.add('open');found++;
+      if(found===opts.length)setTimeout(()=>say(opts.length>1?'מצאנו שני חלקים! איזה נחבר אליי?':'מצאנו חלק! לוחצים עליו כדי לחבר אותו אליי.'),400);
+      else say('יש! עוד אחד מסתתר...');
+    });
+    W.querySelectorAll('.kw-found').forEach(img=>img.onclick=()=>{
+      if(!img.closest('.kw-spot').classList.contains('open')||W.classList.contains('busy'))return;
+      W.classList.add('busy');
+      const p=opts.find(x=>x.id===img.dataset.id);
+      if(p.id!==finalParts[chapter].id){finalParts[chapter]=p;markConfigurationDirty()}
+      flyTo(img,()=>{chosen.push(p);tower();react();say('וואו, הרגשתי את זה! '+(p.sensory?p.sensory.split('–')[0].trim():p.name)+' ✨');
+        setTimeout(()=>{W.classList.remove('busy');chapter++;play()},1900)});
+    });
+  }
+  function flyTo(img,cb){
+    const r=img.getBoundingClientRect(),t=$w('.kw-base')||$w('#kwTower');const tr=t.getBoundingClientRect();
+    const c=img.cloneNode();c.className='kw-fly';Object.assign(c.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px'});document.body.appendChild(c);
+    img.style.visibility='hidden';const sp=img.closest('.kw-spot');if(sp)sp.classList.add('taken');
+    requestAnimationFrame(()=>{c.style.transform=`translate(${tr.left+tr.width/2-(r.left+r.width/2)}px,${tr.top-(r.top+r.height/2)}px) scale(.55) rotate(-8deg)`;c.style.opacity='.4'});
+    setTimeout(()=>{c.remove();cb()},700);
+  }
+  // 4 · done
+  function done(){
+    setScene('party');$w('.kw-title').textContent='KIKO שלם! 🎉';W.classList.add('party','big');
+    say('תודה שעזרת לי'+(kid?', '+kid:'')+'! עכשיו אני יכול להרגיש המון דברים. בוא/י ניתן לי שם!');
+    $w('.kw-play').innerHTML=`<div class="kw-confetti" aria-hidden="true">${Array.from({length:24},(_,i)=>`<i style="--i:${i};--x:${(Math.random()*100).toFixed(0)}%;--c:${['#ed5b2d','#f6cf62','#5b8e7d','#3f7cc0','#f3a6c8'][i%5]}"></i>`).join('')}</div><button type="button" class="kw-go">ממשיכים ✨</button>`;
+    $w('.kw-go').onclick=()=>finish(true);
+  }
+  function finish(ok){
+    W.remove();document.body.classList.remove('kw-on');
+    if(ok&&color){
+      data.character_color=color;markConfigurationDirty();renderResult();renderCharacterSummary();
+      document.getElementById('continueToGuide').click();
+    }else renderResult();
+  }
+  choose();
+}
+
 document.getElementById('togetherStart').onclick=()=>{TOGETHER=true;applyTogetherTexts();nextBtn.click()};
 applyTogetherTexts();
 

@@ -274,6 +274,31 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
 .guide-link b{display:block;font-size:18px}
 .guide-link small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45}
 .guide-link .gl-go{margin-inline-start:auto;font-size:22px;color:var(--orange);font-weight:900}
+.sp-top{position:relative;overflow:hidden}
+.sp-scroll{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:2;color:#8a5a3e;font-weight:700;text-decoration:none;font-size:15px;font-family:Arial,sans-serif;background:rgba(255,253,249,.8);border-radius:99px;padding:6px 14px}
+.sp-scroll span{display:inline-block;animation:sp-bounce 1.6s ease-in-out infinite}
+@keyframes sp-bounce{0%,100%{transform:none}50%{transform:translateY(4px)}}
+.sp-more{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:40px 20px 60px;font-family:Arial,"Segoe UI",sans-serif}
+.sp-h2{font-family:Fredoka,Arial,sans-serif;font-weight:700;font-size:clamp(30px,4vw,42px);text-align:center;margin:0;color:var(--ink)}
+.sp-sub{text-align:center;color:var(--muted);margin:6px 0 22px;font-size:16.5px}
+.how{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:h}
+.how li{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:18px 14px;position:relative;counter-increment:h}
+.how li::before{content:counter(h);position:absolute;top:12px;inset-inline-start:12px;width:24px;height:24px;border-radius:99px;background:var(--orange);color:#fff;font-weight:900;font-size:13px;display:grid;place-items:center}
+.how .hi{display:block;text-align:center;font-size:34px;margin-bottom:6px}
+.how b{display:block;text-align:center;font-family:Fredoka,Arial,sans-serif;font-size:19px;font-weight:600;margin-bottom:4px}
+.how small{display:block;font-size:14px;line-height:1.5;color:#4b423d;text-align:center}
+.how small b{display:inline;font-family:inherit;font-size:inherit;font-weight:800;margin:0}
+.books{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:860px;margin:0 auto}
+.book{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.book-cover img{width:100%;aspect-ratio:297/210;object-fit:cover;border-radius:14px;box-shadow:0 8px 20px rgba(75,53,37,.14);display:block;margin-bottom:6px}
+.book b{font-family:Fredoka,Arial,sans-serif;font-size:21px;font-weight:600}
+.book small{color:var(--muted);font-size:14.5px}
+.book-btns{display:flex;gap:10px;margin-top:8px}
+.sp-btn.sm{font-size:16px;padding:11px 16px;text-decoration:none;text-align:center;flex:1}
+.sp-end{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+.sp-end .sp-btn{min-width:240px}
+@media (max-width:900px){.how{grid-template-columns:1fr 1fr}.how li:last-child{grid-column:1/-1}}
+@media (max-width:620px){.how{grid-template-columns:1fr}.how li{display:grid;grid-template-columns:48px 1fr;column-gap:10px;text-align:right;padding:14px 14px 14px 12px}.how li::before{display:none}.how .hi{grid-row:1/3;font-size:32px;margin:0}.how b,.how small{text-align:right}.books{grid-template-columns:1fr}.sp-end .sp-btn{width:100%}}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -409,7 +434,7 @@ function showWelcome(){
   if(!window.__kikoWarm){ window.__kikoWarm = true; H.api('ping', {}, {noAuth:true}).catch(() => {}); }   // wake the backend while people read
   setWho();
   const sp = document.getElementById('splash');
-  sp.innerHTML = `<div class="sp">
+  sp.innerHTML = `<div class="sp-top"><div class="sp">
       <div class="sp-text">
         <img class="sp-logo" src="assets/Logo.png" alt="">
         <h1 class="sp-word">KIKO</h1>
@@ -421,11 +446,32 @@ function showWelcome(){
         </div>
       </div>
       <div class="sp-hero"><img fetchpriority="high" decoding="async" src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
-    </div>`;
+    </div><a class="sp-scroll" href="#how">איך זה עובד? <span>↓</span></a></div>
+    <section class="sp-more" id="how">
+      <h2 class="sp-h2">איך זה עובד?</h2>
+      <p class="sp-sub">KIKO הוא משחק – וגם תהליך. האתר מלווה אתכם בכל שלב.</p>
+      <ol class="how">
+        <li><span class="hi">👋</span><b>נרשמים</b><small>הורה / בן משפחה או מרפא/ה בעיסוק. נכנסים עם מספר טלפון וסיסמה של 4 ספרות.</small></li>
+        <li><span class="hi">🧩</span><b>מתאימים חלקים</b><small>כמה שאלות על מה שהילד/ה אוהב/ת להרגיש – ונמליץ על 3 חלקים. אפשר גם לבנות <b>יחד עם הילד/ה</b>.</small></li>
+        <li><span class="hi">📖</span><b>מתכוננים ומתרגלים</b><small>קוראים יחד את סיפור ההכנה, ומתרגלים ברגעים רגועים לפי 5 שלבי החשיפה.</small></li>
+        <li><span class="hi">💬</span><b>מספרים איך היה</b><small>משוב קצר אחרי משחק – וכך נדייק את ההתאמה הבאה ונוסיף חלקים.</small></li>
+        <li><span class="hi">🤝</span><b>משתפים עם המטפל/ת</b><small>לכל ילד/ה יש קוד שיתוף. המרפא/ה בעיסוק רואה את כל התהליך ומלווה אתכם.</small></li>
+      </ol>
+      <h2 class="sp-h2" style="margin-top:34px">חוברת ההכנה</h2>
+      <p class="sp-sub">פותחים כאן באתר – בטלפון, בטאבלט או במחשב – או מורידים ומדפיסים.</p>
+      <div class="books">
+        <div class="book"><a class="book-cover" href="guide.html?tab=story"><img src="assets/guide/story-cover.webp" alt="" loading="lazy"></a><b>📖 סיפור הכנה לילד/ה</b><small>קוראים יחד לפני המפגש. אפשר להוסיף שם ותמונה.</small><div class="book-btns"><a class="sp-btn main sm" href="guide.html?tab=story">פתיחה באתר</a><a class="sp-btn ghost sm" href="assets/guide/kiko-story.pdf" download>⬇️ הורדה</a></div></div>
+        <div class="book"><a class="book-cover" href="guide.html?tab=parents"><img src="assets/guide/parents-cover.webp" alt="" loading="lazy"></a><b>💛 הסבר להורים</b><small>איך חושפים בהדרגה, טקס התרגול, בטיחות ורעיונות למשחק.</small><div class="book-btns"><a class="sp-btn main sm" href="guide.html?tab=parents">פתיחה באתר</a><a class="sp-btn ghost sm" href="assets/guide/kiko-parents.pdf" download>⬇️ הורדה</a></div></div>
+      </div>
+      <div class="sp-end"><button class="sp-btn main" id="goRegister2">מתחילים – הרשמה</button><button class="sp-btn ghost" id="goLogin2">יש לי קוד – כניסה</button></div>
+    </section>`;
   document.body.classList.add('splash-on');
-  drawSpeedLines(sp);
+  drawSpeedLines(sp.querySelector('.sp-top'));
   sp.querySelector('#goRegister').onclick = () => showRegister();
   sp.querySelector('#goLogin').onclick = showLogin;
+  sp.querySelector('#goRegister2').onclick = () => showRegister();
+  sp.querySelector('#goLogin2').onclick = showLogin;
+  sp.querySelector('.sp-scroll').onclick = e => { e.preventDefault(); sp.querySelector('#how').scrollIntoView({behavior:'smooth'}); };
 }
 
 const LINE_COLORS = ['#f19a92','#9cc0f0','#f6cf62','#c3a6ee','#a9cf98','#f7b27a','#f3a6c8'];
