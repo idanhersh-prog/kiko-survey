@@ -284,6 +284,10 @@ function childrenFor_(u) {
 }
 
 
+function payloadOf_(x) { try { return JSON.parse(x.payload_json || '{}') || {}; } catch (e) { return {}; } }
+/** why each chosen part was recommended (saved by the survey) */
+function partReasons_(x) { const p = payloadOf_(x).part_reasons; return (p && typeof p === 'object') ? p : {}; }
+
 /* ---------------- KIKOs: matchings grouped by character ---------------- */
 function kikoIdOf_(x) { return x.kiko_id || ('K-' + (x.order_code || x.rec_id)); }
 /** recs and fbs are sorted newest first. Each KIKO: its character, the latest matching, every part it has, its last feedback. */
@@ -321,7 +325,7 @@ function publicChild_(c, u) {
 }
 
 function recSummary_(x, names) {
-  return { date: iso_(x.updated_at || x.created_at), order_code: x.order_code, kiko_id: kikoIdOf_(x), final_part_ids: split_(x.final_part_ids), final_parts: split_(x.final_parts), kiko_name: x.kiko_name, character_color: x.character_color, by: names[x.user_code] || '', by_role: x.user_role };
+  return { date: iso_(x.updated_at || x.created_at), order_code: x.order_code, kiko_id: kikoIdOf_(x), final_part_ids: split_(x.final_part_ids), final_parts: split_(x.final_parts), kiko_name: x.kiko_name, character_color: x.character_color, part_reasons: partReasons_(x), built_with_child: payloadOf_(x).built_with_child || '', by: names[x.user_code] || '', by_role: x.user_role };
 }
 function recDetail_(x, names) {
   return Object.assign(recSummary_(x, names), {

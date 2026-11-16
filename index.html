@@ -230,6 +230,9 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
 
 /* ---------- KIKOs ---------- */
 .more-card h2{margin-bottom:12px}
+.part .why{margin-top:4px;font-size:12.5px}.part .why summary{cursor:pointer;color:var(--orange);font-weight:800}.part .why span{display:block;color:#4b423d;line-height:1.45;margin-top:2px}
+.together-tile{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;border:2px dashed #9cc9a8;background:#eef7f0;border-radius:20px;padding:14px 16px;cursor:pointer;font:inherit;font-size:28px;text-align:right}
+.together-tile b{display:block;font-size:16px}.together-tile small{display:block;font-size:13px;color:var(--muted)}
 .more-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .more-tile{border:1.5px solid var(--line);background:#fff;border-radius:22px;padding:16px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}
 .more-tile:hover{transform:translateY(-3px);border-color:#ed9f80;box-shadow:0 10px 22px rgba(120,60,20,.10)}
@@ -693,6 +696,7 @@ function showKikoList(c, kikos){
         <span class="k-parts">${((k.current && k.current.final_part_ids) || []).filter(id => P(id)).map(id => `<img src="${esc(P(id).img)}" alt="${esc(P(id).name)}">`).join('')}</span>
       </button>`).join('')}
       <button class="kiko-card new" data-go="pre"><span class="plus">＋</span><b>KIKO חדש</b><small>דמות נוספת עם חלקים משלה</small></button>
+      <button class="kiko-card new" data-go="together" style="background:#eef7f0;border-color:#9cc9a8"><span class="plus" style="background:#d7eedd">🧒</span><b>בונים יחד</b><small>${name} בוחר/ת חלקים ודמות</small></button>
     </div>
   </div>
   <div class="card share-soft">
@@ -773,15 +777,16 @@ function bindChildPage(c, kikos, kiko){
     const ctx = {
       child_id: c.child_id, child_alias: c.child_alias, age_range: c.age_range,
       respondent_role: state.user.role === 'ot' ? 'therapist' : 'parent',
-      mode: go === 'more' ? 'more_parts' : go === 'pre' ? 'new_kiko' : 'feedback',
-      current_part_ids: go === 'pre' ? [] : (cur ? cur.final_part_ids : []),
+      mode: go === 'more' ? 'more_parts' : (go === 'pre' || go === 'together') ? 'new_kiko' : 'feedback',
+      together: go === 'together',
+      current_part_ids: (go === 'pre' || go === 'together') ? [] : (cur ? cur.final_part_ids : []),
       order_code: go === 'post' && cur ? cur.order_code : ''
     };
-    if(k && go !== 'pre') Object.assign(ctx, {kiko_id: k.kiko_id, kiko_name: k.kiko_name || '', character_color: k.character_color || '', owned_part_ids: k.all_part_ids || []});
+    if(k && go !== 'pre' && go !== 'together') Object.assign(ctx, {kiko_id: k.kiko_id, kiko_name: k.kiko_name || '', character_color: k.character_color || '', owned_part_ids: k.all_part_ids || []});
     H.setContext(ctx);
-    if(k && go !== 'pre') state.openKiko[c.child_id] = k.kiko_id;
+    if(k && go !== 'pre' && go !== 'together') state.openKiko[c.child_id] = k.kiko_id;
     const q = '?child=' + encodeURIComponent(c.child_id) + (ctx.kiko_id ? '&kiko=' + encodeURIComponent(ctx.kiko_id) : '');
-    location.href = (go === 'post' ? 'post-use.html' : 'pre-use.html') + q;
+    location.href = (go === 'post' ? 'post-use.html' : 'pre-use.html') + q + (go === 'together' ? '&together=1' : '');
   });
 }
 
@@ -886,7 +891,8 @@ function showChildStory(c, cur, last, opt){
   const fbAfterRec = last && (!cur || timeOf(last.date) >= timeOf(cur.date) || (cur.order_code && last.linked_order_code === cur.order_code));
   const mode = !cur && !last ? 'hello' : (fbAfterRec ? 'recap' : 'ready');
 
-  const tile = (id, step, cls) => { const p = P(id); return `<div class="part ${cls||''}"><img src="${esc(p.img)}" alt="">${step ? `<span class="step">${step}</span>` : ''}<div><b>${esc(p.name)}</b>${p.sensory ? `<br><small>${esc(p.sensory)}</small>` : ''}</div></div>`; };
+  const reasons = (cur && cur.part_reasons) || {};
+  const tile = (id, step, cls) => { const p = P(id); const why = reasons[id]; return `<div class="part ${cls||''}"><img src="${esc(p.img)}" alt="">${step ? `<span class="step">${step}</span>` : ''}<div><b>${esc(p.name)}</b>${p.sensory ? `<br><small>${esc(p.sensory)}</small>` : ''}${why ? `<details class="why"><summary>למה החלק הזה?</summary><span>${esc(why)}</span></details>` : ''}</div></div>`; };
   const figure = `<button type="button" class="kiko-fig" id="kikoFig" aria-label="לחצו על ${kiko}"><span class="kiko-body"><img src="${sitSrc(cur && cur.character_color)}" alt="${kiko}" id="kikoImg"></span><span class="tagname">${kiko}</span><span class="tap-hint" aria-hidden="true">👆 לחצו עליי</span></button>`;
   let body = '';
 
@@ -896,7 +902,7 @@ function showChildStory(c, cur, last, opt){
       <div style="text-align:center">
         <h1>הפרופיל של ${name} מוכן ✨</h1>
         <p class="lead" style="max-width:460px;margin-inline:auto">עכשיו כמה שאלות קצרות על מה ש${name} אוהב/ת להרגיש – ונמצא יחד את ה־KIKO והחלקים שהכי יתאימו.</p>
-        <div class="cta" style="justify-content:center"><button class="btn" data-go="pre">בואו נתחיל ✨</button></div>
+        <div class="cta" style="justify-content:center"><button class="btn" data-go="pre">בואו נתחיל ✨</button><button class="btn secondary" data-go="together">🧒 בונים יחד עם ${name}</button></div>
         <button class="link" data-go="post" style="margin-top:6px">כבר שיחקנו – רוצים לספר איך היה</button>
       </div>`;
   }else if(mode === 'ready'){
@@ -959,6 +965,7 @@ function showChildStory(c, cur, last, opt){
       <button class="more-tile" data-go="more"><img src="${headSrc(cur.character_color)}" alt=""><b>עוד חלקים ל${kiko}</b><small>אותה דמות – שלושה חלקים חדשים</small></button>
       <button class="more-tile new" data-go="pre"><span class="plus">＋</span><b>KIKO חדש</b><small>דמות נוספת עם חלקים משלה</small></button>
     </div>
+    <button class="together-tile" data-go="together">🧒 <span><b>בונים KIKO חדש יחד עם ${name}</b><small>אתם עונים על השאלות, ${name} בוחר/ת חלקים ודמות</small></span></button>
   </div>` : '';
   const guide = `
   <a class="card guide-link" href="guide.html?name=${encodeURIComponent(c.child_alias)}"><span class="gl-ic">📖</span><span><b>סיפור הכנה ל${name}</b><small>לקרוא יחד לפני המפגש – עם השם והתמונה של ${name}. וגם הסבר להורים: איך חושפים בהדרגה</small></span><span class="gl-go">←</span></a>`;
