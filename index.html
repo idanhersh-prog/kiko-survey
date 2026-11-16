@@ -265,6 +265,12 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
 .ot-kiko-head b{display:block;font-size:17px}
 .ot-kiko .btn.secondary{padding:10px 14px;font-size:14px}
 @media (max-width:620px){.more-tiles{grid-template-columns:1fr 1fr;gap:10px}.kiko-grid{grid-template-columns:1fr 1fr;gap:10px}.kiko-card .k-fig{height:84px}.kiko-card b{font-size:16px}.k-parts img{width:34px;height:34px}}
+.guide-link{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);background:linear-gradient(180deg,#fff7e6,#fffdf9);border-color:#f3d9a4}
+.guide-link:hover{border-color:#e9b85c}
+.guide-link .gl-ic{font-size:34px}
+.guide-link b{display:block;font-size:18px}
+.guide-link small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45}
+.guide-link .gl-go{margin-inline-start:auto;font-size:22px;color:var(--orange);font-weight:900}
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
 /* ---------- splash ---------- */
 #splash{display:none}
@@ -408,7 +414,7 @@ function showWelcome(){
         <div class="sp-actions">
           <button class="sp-btn main" id="goRegister">פעם ראשונה? הרשמה</button>
           <button class="sp-btn ghost" id="goLogin">יש לי קוד – כניסה</button>
-          <div class="sp-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a></div>
+          <div class="sp-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a><a href="guide.html">📖 איך משחקים עם KIKO</a></div>
         </div>
       </div>
       <div class="sp-hero"><img fetchpriority="high" decoding="async" src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
@@ -954,10 +960,12 @@ function showChildStory(c, cur, last, opt){
       <button class="more-tile new" data-go="pre"><span class="plus">＋</span><b>KIKO חדש</b><small>דמות נוספת עם חלקים משלה</small></button>
     </div>
   </div>` : '';
+  const guide = `
+  <a class="card guide-link" href="guide.html"><span class="gl-ic">📖</span><span><b>איך משחקים נכון?</b><small>חוברת ההדרכה: חשיפה בהדרגה, סיפור לקרוא יחד עם ${name} וכרטיסים להדפסה</small></span><span class="gl-go">←</span></a>`;
   view(`
   <button class="link back" id="back">→ ${many ? 'כל הקיקויים של ' + name : 'לאזור האישי'}</button>
   <div class="card story">${body}</div>
-  ${owned}${more}
+  ${guide}${owned}${more}
   <div class="card share-soft">
     <div class="share"><span>מטפל/ת מלווה את ${name}? שלחו לה/לו את הקוד:</span><code>${esc(c.share_code)}</code><button class="mini" id="copyShare">העתקה</button></div>
   </div>`);
