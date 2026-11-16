@@ -3,418 +3,528 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>איך משחקים עם KIKO – חוברת הדרכה</title>
-<meta name="description" content="חוברת ההדרכה של KIKO: מי אנחנו, איך חושפים בהדרגה, סיפור לילד להדפסה, כרטיסי בחירה ולוח מעקב.">
+<title>מכירים את KIKO – סיפור הכנה</title>
+<meta name="description" content="סיפור הכנה לילד/ה לקראת המפגש עם KIKO, ודף הסבר להורים: איך חושפים בהדרגה. להדפסה, עם אפשרות להוסיף שם ותמונה.">
 <link rel="icon" href="assets/Logo.png">
 <link rel="preload" href="assets/fonts/fredoka-he-latin.woff" as="font" type="font/woff" crossorigin>
 <style>
 @font-face{font-family:Fredoka;src:url(assets/fonts/fredoka-he-latin.woff) format('woff');font-weight:500 700;font-display:swap}
-:root{--bg:#f7ead8;--paper:#fffdf9;--orange:#ed5b2d;--orange2:#fff0e9;--ink:#342d2a;--muted:#756b65;--line:#ead9ca;--green:#5b8e7d;--green2:#edf6ee;--blue:#3b6fa8;--blue2:#eaf1f8;--yellow2:#fff7e6;--shadow:0 16px 42px rgba(75,53,37,.10)}
+:root{--bg:#f7ead8;--paper:#fffdf9;--orange:#ed5b2d;--orange2:#fff0e9;--ink:#342d2a;--muted:#756b65;--line:#ead9ca;--frame:#fbecd3;--green2:#edf6ee;--yellow2:#fff7e6;--blue2:#eaf1f8}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Segoe UI",sans-serif;line-height:1.6}
-body{padding:max(12px,env(safe-area-inset-top)) 16px 60px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Segoe UI",sans-serif}
+body{padding:max(12px,env(safe-area-inset-top)) 14px 50px}
 a{color:var(--orange)}
-.fd{font-family:Fredoka,Arial,sans-serif}
 
-/* ---------- toolbar ---------- */
-.bar{max-width:900px;margin:0 auto 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:20px;text-decoration:none;color:var(--ink)}
+/* ---------------- toolbar ---------------- */
+.bar{max-width:1000px;margin:0 auto 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:20px;text-decoration:none;color:var(--orange)}
 .brand img{width:38px;height:38px;border-radius:10px}
-.brand span{color:var(--orange)}
 .bar .space{flex:1}
 .pill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--orange);background:var(--paper);color:var(--orange);border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;text-decoration:none;cursor:pointer;font-family:inherit}
 .pill.solid{background:var(--orange);color:#fff}
-.gender{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
-.gender button{border:0;background:none;border-radius:999px;padding:6px 14px;font-weight:800;cursor:pointer;color:var(--muted);font-family:inherit;font-size:14px}
-.gender button[aria-pressed="true"]{background:var(--orange);color:#fff}
-.gender-label{font-size:13px;color:var(--muted);font-weight:700}
+.tabs{max-width:1000px;margin:0 auto 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tab{border:2px solid var(--line);background:var(--paper);border-radius:20px;padding:12px 14px;cursor:pointer;text-align:right;font-family:inherit;display:flex;gap:12px;align-items:center}
+.tab .ic{font-size:30px}
+.tab b{display:block;font-family:Fredoka,Arial,sans-serif;font-size:20px;font-weight:600}
+.tab small{color:var(--muted);font-size:13px}
+.tab[aria-selected="true"]{border-color:var(--orange);background:var(--orange2)}
 
-/* ---------- booklet ---------- */
-.book{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-.page{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:30px 30px 34px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.kicker{display:inline-flex;align-items:center;gap:6px;font-weight:900;font-size:13px;color:#b6401b;background:var(--orange2);border-radius:999px;padding:4px 12px;margin-bottom:10px}
-h1,h2,h3{line-height:1.25;margin:0}
-h2.title{font-family:Fredoka,Arial,sans-serif;font-weight:700;font-size:clamp(28px,5vw,38px);margin-bottom:8px}
-.lead{font-size:19px;font-weight:700;margin:0 0 18px;max-width:640px}
-.muted{color:var(--muted)}
-.small{font-size:14px}
-details{margin-top:10px}
-details summary{cursor:pointer;color:var(--orange);font-weight:800;font-size:14px;list-style:none;display:inline-flex;gap:6px;align-items:center}
-details summary::-webkit-details-marker{display:none}
-details summary::before{content:"＋";display:inline-grid;place-items:center;width:20px;height:20px;border-radius:99px;background:var(--orange2);font-size:13px}
-details[open] summary::before{content:"－"}
-details .more{margin-top:8px;font-size:15px;color:#4b423d}
-.draft{position:absolute;top:18px;inset-inline-end:18px;background:var(--yellow2);color:#7a5410;border:1px solid #f3d9a4;border-radius:999px;font-size:12px;font-weight:800;padding:3px 10px}
+/* personalise */
+.personal{max-width:1000px;margin:0 auto 14px;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px 18px}
+.personal h2{font-family:Fredoka,Arial,sans-serif;font-size:20px;font-weight:600;margin:0 0 4px}
+.personal p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 14px}
+.fields label{display:block;font-weight:800;font-size:13.5px}
+.fields input[type=text]{width:100%;margin-top:4px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;background:#fff}
+.fields .file{display:flex;align-items:center;gap:8px;margin-top:4px}
+.fields .file input{display:none}
+.fields .file span{flex:1;font-weight:400;font-size:13px;color:var(--muted)}
+.fields .file button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;font:inherit;font-size:14px;cursor:pointer}
+.privacy{font-size:12.5px;color:#4f7256;margin-top:10px}
+
+/* ---------------- the pages ---------------- */
+.book{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.slide{container-type:inline-size;position:relative;width:100%;aspect-ratio:297/210;background:#fff;border-radius:18px;box-shadow:0 14px 36px rgba(75,53,37,.10);overflow:hidden;display:flex;flex-direction:column;padding:4.2cqw 5cqw 0}
+.slide .body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:0;padding-bottom:1.5cqw}
+.h{font-family:Fredoka,Arial,sans-serif;font-weight:700;color:var(--orange);font-size:5.6cqw;line-height:1.15;margin:0}
+.sub{font-family:Fredoka,Arial,sans-serif;font-weight:500;color:var(--ink);font-size:3.5cqw;line-height:1.3;margin:1.4cqw 0 0}
+.txt{font-size:2.05cqw;line-height:1.5;color:#3d3531;margin:1.2cqw 0 0}
+.txt b{font-weight:800}
+.accent{font-family:Fredoka,Arial,sans-serif;font-weight:700;color:var(--orange);font-size:4.4cqw;margin:1.6cqw 0 0}
+.row{display:flex;gap:2.6cqw;justify-content:center;align-items:flex-start;margin-top:2.6cqw;width:100%}
+.frame{background:var(--frame);padding:1.3cqw 1.3cqw .9cqw;border-radius:1.2cqw;flex:0 1 30cqw;display:flex;flex-direction:column;align-items:center}
+.frame .pic{width:100%;aspect-ratio:4/3;border-radius:.8cqw;overflow:hidden;background:#fff;display:grid;place-items:center;position:relative}
+.frame .pic img{width:100%;height:100%;object-fit:cover}
+.frame .pic img.fit{object-fit:contain;padding:1cqw}
+.frame .cap{font-family:Fredoka,Arial,sans-serif;font-size:2.4cqw;margin-top:.7cqw}
+.frame.big{flex-basis:44cqw}
+.frame.wide{flex-basis:56cqw}
+.split{display:flex;gap:4cqw;align-items:center;justify-content:center;width:100%;margin-top:2.4cqw;text-align:right}
+.split .frame{flex:0 0 40cqw}
+.split .side{flex:0 1 40cqw}
+.icons{display:flex;gap:4cqw;justify-content:center;margin-top:2.4cqw}
+.icon{display:flex;flex-direction:column;align-items:center;gap:.8cqw;width:20cqw}
+.icon .e{width:13cqw;height:13cqw;border-radius:99px;background:var(--orange2);display:grid;place-items:center;font-size:7cqw;line-height:1}
+.icon span{font-family:Fredoka,Arial,sans-serif;font-size:2.5cqw;line-height:1.25}
+.slot{border:.35cqw dashed #8a7d74;border-radius:2.6cqw;display:grid;place-items:center;text-align:center;color:#6d625b;font-size:1.9cqw;background:#fff;overflow:hidden;padding:1cqw}
+.slot img{width:100%;height:100%;object-fit:cover;border-radius:2cqw}
+.slot.has{border-style:solid;border-color:#fff;padding:0;box-shadow:0 .6cqw 1.6cqw rgba(0,0,0,.15)}
+.blank{display:inline-block;min-width:22cqw;border-bottom:.3cqw dotted #c9a98f;margin:0 .6cqw;line-height:1.1}
+.blank.filled{border-bottom:0;min-width:0}
+.foot{height:6.4cqw;margin:0 -5cqw;padding:0 5cqw;display:flex;align-items:center;gap:1.4cqw;border-top:.25cqw dotted #e3b79d;font-size:1.6cqw;color:var(--muted);flex:none}
+.foot img{width:3.6cqw;height:3.6cqw;border-radius:.8cqw}
+.foot b{color:var(--orange);font-size:2cqw;font-family:Fredoka,Arial,sans-serif}
+.foot .pg{margin-inline-start:auto}
+.num-badge{position:absolute;top:.8cqw;inset-inline-start:.8cqw;width:4cqw;height:4cqw;border-radius:99px;background:var(--orange);color:#fff;font-weight:900;font-size:2.2cqw;display:grid;place-items:center;z-index:1}
+.check{width:100%;height:5.5cqw;background:#fff;border-radius:.8cqw;margin-top:.8cqw}
+.draft{position:absolute;top:2cqw;inset-inline-end:2cqw;background:var(--yellow2);color:#7a5410;border:1px solid #f3d9a4;border-radius:99px;font-size:1.5cqw;font-weight:800;padding:.4cqw 1.2cqw}
 
 /* cover */
-.cover{text-align:center;background:radial-gradient(ellipse 80% 70% at 50% 0%,#fdf1e2 0%,var(--paper) 65%);padding-top:36px}
-.cover .logo{width:56px;height:56px;border-radius:14px}
-.cover h1{font-family:Fredoka,Arial,sans-serif;font-weight:700;font-size:clamp(34px,7vw,56px);margin:8px 0 4px}
-.cover .tag{font-family:Fredoka,Arial,sans-serif;font-size:20px;color:var(--muted);margin:0 0 14px}
-.cover .team{display:block;width:100%;max-width:520px;margin:6px auto 18px}
-.toc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:right;margin-top:6px}
-.toc a{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px;text-decoration:none;color:var(--ink)}
-.toc a:hover{border-color:#ed9f80}
-.toc .n{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:99px;background:var(--orange2);color:var(--orange);font-weight:900}
-.toc b{display:block;font-size:15px}
-.toc small{color:var(--muted);font-size:12.5px;line-height:1.35;display:block}
-.howto{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0 0;font-size:14px;color:var(--muted)}
-.howto span{background:#fff;border:1px dashed var(--line);border-radius:999px;padding:5px 12px}
+.cover{background:radial-gradient(ellipse 80% 75% at 70% 20%,#fff6ea 0%,#fbe9d3 70%)}
+.cover .body{flex-direction:row;justify-content:space-between!important;align-items:center;justify-content:space-between;text-align:right;gap:3cqw}
+.cover .slot{width:30cqw;height:30cqw;flex:none;transform:rotate(-3deg);background:#fffdf9}
+.cover .h{font-size:7cqw}
+.cover .team{width:46cqw;display:block;margin-top:2cqw}
+.end{background:radial-gradient(ellipse 80% 75% at 50% 30%,#fff6ea 0%,#fbe9d3 75%)}
+.end .body{justify-content:center}
+.end .h{font-size:9cqw}
 
-/* who we are */
-.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:6px 0 16px}
-.pillar{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 16px}
-.pillar .ic{font-size:30px;line-height:1}
-.pillar h3{font-family:Fredoka,Arial,sans-serif;font-size:21px;margin:8px 0 4px}
-.pillar p{margin:0;font-size:15px;color:#4b423d}
-.note{background:var(--blue2);border-radius:18px;padding:12px 16px;font-size:14.5px;color:#2f5f8f}
+/* week grid */
+.week{border-collapse:collapse;background:#fff;font-family:Fredoka,Arial,sans-serif}
+.week th{background:#fde7b5;font-size:2.4cqw;width:4.6cqw;height:4.2cqw;border:.15cqw solid #a39182}
+.week td{height:4.2cqw;border:.15cqw solid #a39182}
 
-/* golden rules */
-.rules{list-style:none;padding:0;margin:4px 0 0;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;counter-reset:r}
-.rules li{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 12px;text-align:center}
-.rules .ic{font-size:30px;display:block}
-.rules b{display:block;font-family:Fredoka,Arial,sans-serif;font-size:18px;margin:4px 0 2px}
-.rules small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
+/* parents */
+.ptext{text-align:right;width:100%;max-width:82cqw;margin-top:1.6cqw}
+.ptext p{font-size:2.15cqw;line-height:1.55;margin:0 0 1cqw}
+.ptext .dots{border-top:.3cqw dotted #e3b79d;margin:1.6cqw 0}
+.mini{display:flex;gap:3cqw;justify-content:center;margin:1cqw 0}
+.mini div{text-align:center}
+.mini b{display:block;font-family:Fredoka,Arial,sans-serif;font-size:2.8cqw;color:var(--orange)}
+.mini small{font-size:1.8cqw;color:var(--muted)}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;width:100%;margin-top:2.4cqw}
+.card{background:var(--frame);border-radius:1.6cqw;padding:2cqw 1.6cqw;text-align:center}
+.card .e{font-size:5cqw;line-height:1}
+.card b{display:block;font-family:Fredoka,Arial,sans-serif;font-size:3cqw;margin:.6cqw 0 .3cqw}
+.card small{font-size:1.9cqw;line-height:1.45;display:block;color:#4b423d}
+.rules{display:grid;grid-template-columns:repeat(5,1fr);gap:1.6cqw;width:100%;margin-top:2.6cqw}
+.rules .card b{font-size:2.6cqw}
+.stages{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4cqw;width:100%;margin-top:2.4cqw}
+.stages .frame{padding:1cqw}
+.stages .frame .cap{font-size:2.3cqw;font-weight:600}
+.stages .frame small{font-size:1.6cqw;line-height:1.35;color:#4b423d;margin-top:.3cqw}
+.ptable{width:100%;border-collapse:separate;border-spacing:0 .8cqw;margin-top:1cqw;font-size:1.7cqw;text-align:right}
+.ptable th{font-size:1.7cqw;color:var(--muted);font-weight:800;padding:0 1cqw}
+.ptable td{background:var(--frame);padding:1cqw 1.2cqw;line-height:1.4;vertical-align:top}
+.ptable td:first-child{border-radius:0 1cqw 1cqw 0;font-family:Fredoka,Arial,sans-serif;font-size:2.2cqw;white-space:nowrap}
+.ptable td:last-child{border-radius:1cqw 0 0 1cqw}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw;width:100%;margin-top:2cqw;text-align:right}
+.box{border-radius:1.6cqw;padding:1.6cqw 2cqw}
+.box b{font-family:Fredoka,Arial,sans-serif;font-size:2.8cqw;display:block;margin-bottom:.6cqw}
+.box ul{margin:0;padding-inline-start:2.4cqw;font-size:2cqw;line-height:1.55}
+.box.good{background:var(--green2)}.box.slow{background:var(--yellow2)}
+.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;width:100%;margin-top:2.6cqw;flex:1;padding-bottom:2.4cqw}
+.cc{border:.35cqw dashed #d9b99e;border-radius:2cqw;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cc .e{font-size:11cqw;line-height:1.1}
+.cc b{font-family:Fredoka,Arial,sans-serif;font-size:4.4cqw}
+.cc.more{background:#eef7f0}.cc.stop{background:#fdecea}.cc.pause{background:#eef3fb}.cc.try{background:#fff4e6}
+.track{width:100%;border-collapse:collapse;margin-top:2cqw;font-size:1.8cqw;background:#fff}
+.track th{background:#fde7b5;padding:1cqw;font-weight:800;border:.15cqw solid #c9b4a2}
+.track td{border:.15cqw solid #c9b4a2;height:4.6cqw;padding:0 1cqw}
+.track .st span{display:inline-grid;place-items:center;width:3cqw;height:3cqw;border:.2cqw solid #c9b4a2;border-radius:99px;font-size:1.5cqw;margin-inline-end:.4cqw;color:var(--muted)}
+.track .fe{font-size:2.6cqw;letter-spacing:1cqw;white-space:nowrap}
 
-/* protocol */
-.ladder{display:flex;gap:6px;align-items:flex-end;margin:4px 0 18px}
-.ladder i{flex:1;border-radius:10px 10px 4px 4px;background:var(--orange2);color:#b6401b;font-style:normal;font-weight:900;font-size:13px;text-align:center;padding:6px 2px}
-.ladder i:nth-child(1){height:34px}.ladder i:nth-child(2){height:46px}.ladder i:nth-child(3){height:58px}.ladder i:nth-child(4){height:70px}.ladder i:nth-child(5){height:82px;background:var(--orange);color:#fff}
-.stage{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start;border-top:1px dashed var(--line);padding:18px 0}
-.stage:first-of-type{border-top:0}
-.stage .pic{position:relative;border-radius:18px;background:#f6ebdd;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
-.stage .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px}
-.stage .pic .num{position:absolute;z-index:1;top:8px;inset-inline-start:8px;width:34px;height:34px;border-radius:99px;background:var(--orange);color:#fff;font-weight:900;display:grid;place-items:center;font-size:17px}
-.stage .pic .emo{font-size:62px}
-.stage h3{font-family:Fredoka,Arial,sans-serif;font-size:24px;margin:2px 0 4px}
-.stage .what{font-size:17px;font-weight:700;margin:0 0 10px}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fact{border-radius:16px;padding:10px 12px;font-size:14.5px}
-.fact b{display:block;font-size:13px;margin-bottom:2px}
-.fact.go{background:var(--green2);color:#3f6249}
-.fact.hard{background:var(--yellow2);color:#6d4c12}
+body[data-tab="story"] .for-parents,body[data-tab="parents"] .for-story{display:none}
+.endnote{max-width:1000px;margin:16px auto 0;text-align:center;font-size:13px;color:var(--muted)}
 
-/* signs + session */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.box{border-radius:22px;padding:16px 18px}
-.box h3{font-family:Fredoka,Arial,sans-serif;font-size:21px;margin-bottom:8px}
-.box ul{margin:0;padding-inline-start:20px}
-.box li{margin:3px 0}
-.box.good{background:var(--green2)}
-.box.slow{background:var(--yellow2)}
-.session{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.session div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;text-align:center}
-.session .ic{font-size:28px;display:block}
-.session b{display:block;font-family:Fredoka,Arial,sans-serif;font-size:19px}
-.session small{color:var(--muted);font-size:13.5px;line-height:1.45;display:block}
-
-/* story cards */
-.cut-note{display:flex;gap:10px;align-items:center;background:var(--orange2);border-radius:16px;padding:10px 14px;font-size:14.5px;margin-bottom:14px}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.scard{border:2px dashed #e7cdb8;border-radius:22px;padding:14px;display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff;break-inside:avoid}
-.scard .art{position:relative;width:100%;aspect-ratio:4/3;border-radius:16px;background:#f6ebdd;display:grid;place-items:center;overflow:hidden;margin-bottom:10px}
-.scard .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px}
-.scard .art img.photo{padding:0;object-fit:cover}
-.scard .art .big{font-size:84px;line-height:1}
-.scard .art .over{position:absolute;z-index:1;font-size:44px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18))}
-.scard p{margin:0;font-family:Fredoka,Arial,sans-serif;font-size:21px;font-weight:600;line-height:1.4}
-.scard .no{align-self:flex-start;font-size:12px;color:var(--muted);font-weight:800}
-
-/* choice cards */
-.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.ccard{border:2px dashed #e7cdb8;border-radius:22px;padding:16px 10px;text-align:center;background:#fff;break-inside:avoid}
-.ccard .big{font-size:64px;line-height:1.1;display:block}
-.ccard b{font-family:Fredoka,Arial,sans-serif;font-size:28px;display:block;margin-top:6px}
-.ccard.more{background:#eef7f0}.ccard.stop{background:#fdecea}.ccard.pause{background:#eef3fb}.ccard.try{background:#fff4e6}
-
-/* tracker */
-.track{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.track th{background:var(--orange2);color:#8a3a1c;padding:9px 8px;text-align:right;font-size:13.5px}
-.track td{border-top:1px solid var(--line);padding:0 8px;height:46px;vertical-align:middle}
-.track .stages span{display:inline-grid;place-items:center;width:22px;height:22px;border:1.5px solid #d9c2ae;border-radius:99px;font-size:11.5px;font-weight:800;color:var(--muted);margin-inline-end:3px}
-.track .feel{font-size:18px;letter-spacing:6px;white-space:nowrap}
-.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin-top:10px}
-.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-
-.foot{max-width:900px;margin:18px auto 0;text-align:center;color:var(--muted);font-size:13px}
-
-/* ---------- phone ---------- */
 @media (max-width:720px){
-  .page{padding:22px 16px 26px;border-radius:24px}
-  .toc,.pillars,.cols,.session{grid-template-columns:1fr}
-  .rules{grid-template-columns:1fr 1fr}
-  .rules li:last-child{grid-column:1/-1}
-  .stage{grid-template-columns:96px 1fr;gap:12px}
-  .stage .pic .emo{font-size:44px}
-  .stage h3{font-size:21px}
-  .stage .what{font-size:16px}
-  .facts{grid-template-columns:1fr}
-  .cards{grid-template-columns:1fr}
-  .choices{grid-template-columns:1fr 1fr}
-  .track{font-size:12.5px}
-  .track .hide-sm{display:none}
-  .draft{position:static;display:inline-block;margin-bottom:8px}
-  .gender-label{display:none}
+  .fields{grid-template-columns:1fr}
+  .tab{padding:10px 12px}.tab .ic{font-size:24px}.tab b{font-size:17px}.tab small{display:none}
+  .slide{border-radius:12px}
 }
 
-/* ---------- print: an A4 booklet ---------- */
-@page{size:A4;margin:11mm}
+/* ---------------- print: one page per slide, A4 landscape ---------------- */
+@page{size:A4 landscape;margin:0}
 @media print{
   html,body{background:#fff}
   body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bar,.foot,.no-print,.howto{display:none!important}
+  .bar,.tabs,.personal,.endnote,.draft{display:none!important}
   .book{max-width:none;gap:0}
-  .page{box-shadow:none;border:0;border-radius:0;padding:0 0 0;break-after:page;overflow:visible}
-  .page:last-child{break-after:auto}
-  #who{break-after:auto;margin-bottom:10mm}
-  .details-print .more{display:block}
-  details{margin-top:6px}
-  details summary{display:none}
-  details .more{display:block!important;font-size:12.5px;margin-top:4px}
-  .toc a{padding:8px 10px}
-  .stage{grid-template-columns:110px 1fr;padding:9px 0;break-inside:avoid}
-  .stage h3{font-size:19px}.stage .what{font-size:14.5px;margin-bottom:6px}.fact{font-size:12.5px;padding:7px 9px}
-  .lead{font-size:16px;margin-bottom:10px}
-  h2.title{font-size:28px}
-  .cards{grid-template-columns:repeat(2,1fr);gap:8mm}
-  .scard{height:84mm;padding:4mm;justify-content:flex-start}
-  .scard .art{aspect-ratio:auto;height:52mm}
-  .scard p{font-size:16px}
-  .story-head{break-after:avoid}
-  .choices{grid-template-columns:repeat(2,1fr);gap:8mm}
-  .ccard{height:98mm;display:flex;flex-direction:column;justify-content:center}
-  .ccard .big{font-size:110px}.ccard b{font-size:40px}
-  .track td{height:13.5mm}
-  .draft{display:none}
+  .slide{width:297mm;height:210mm;aspect-ratio:auto;border-radius:0;box-shadow:none;break-after:page}
+  .slide:last-child{break-after:auto}
 }
 </style>
 </head>
-<body>
+<body data-tab="story">
 <div class="bar">
-  <a class="brand" href="index.html"><img src="assets/Logo.png" alt=""><span>KIKO</span></a>
+  <a class="brand" href="index.html"><img src="assets/Logo.png" alt="">KIKO</a>
   <a class="pill" id="backLink" href="index.html">→ חזרה</a>
   <span class="space"></span>
-  <span class="gender-label">הטקסט מותאם ל:</span>
-  <span class="gender" role="group" aria-label="לשון הפנייה בחוברת"><button type="button" data-g="m" aria-pressed="true">ילד</button><button type="button" data-g="f" aria-pressed="false">ילדה</button></span>
   <button class="pill" type="button" id="printBtn">🖨️ הדפסה</button>
-  <a class="pill solid" id="pdfLink" href="assets/guide/kiko-guide-boy.pdf" download>⬇️ PDF</a>
+  <a class="pill solid" id="pdfLink" href="assets/guide/kiko-story.pdf" download>⬇️ PDF</a>
 </div>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-tab="story" aria-selected="true"><span class="ic">📖</span><span><b>סיפור הכנה לילד/ה</b><small>קוראים יחד לפני המפגש עם KIKO</small></span></button>
+  <button class="tab" role="tab" data-tab="parents" aria-selected="false"><span class="ic">💛</span><span><b>הסבר להורים</b><small>איך חושפים בהדרגה, צעד אחר צעד</small></span></button>
+</div>
+
+<section class="personal for-story" aria-label="התאמה אישית של הסיפור">
+  <h2>✨ הופכים את הסיפור לאישי</h2>
+  <p>אפשר להוסיף שם ותמונות – הם יופיעו בסיפור ובהדפסה. אפשר גם להשאיר ריק ולמלא ביד אחרי ההדפסה.</p>
+  <div class="fields">
+    <label>שם הילד/ה<input type="text" id="fName" maxlength="24" placeholder="למשל: נועם"></label>
+    <label>מתי נפגוש את KIKO?<input type="text" id="fDay" maxlength="24" placeholder="למשל: יום שלישי"></label>
+    <label>עם מי משחקים?<input type="text" id="fWith" maxlength="30" placeholder="למשל: אמא ואבא"></label>
+    <label>תמונה של הילד/ה<span class="file"><button type="button" data-for="pChild">בחירת תמונה</button><span id="pChildName">לא נבחרה</span><input type="file" accept="image/*" id="pChild"></span></label>
+    <label>תמונה של מי שמשחק איתו/ה<span class="file"><button type="button" data-for="pWith">בחירת תמונה</button><span id="pWithName">לא נבחרה</span><input type="file" accept="image/*" id="pWith"></span></label>
+  </div>
+  <div class="privacy">🔒 התמונות והשם נשארים רק במכשיר שלכם – הם לא נשלחים ולא נשמרים באתר.</div>
+</section>
 
 <main class="book">
 
-<!-- ============ cover ============ -->
-<section class="page cover" id="top">
-  <img class="logo" src="assets/Logo.png" alt="">
-  <h1>איך משחקים עם KIKO</h1>
-  <p class="tag">צעדים קטנים, חוויה חושית גדולה</p>
-  <img class="team" src="assets/characters/kiko-3d-team.webp" alt="שלוש דמויות KIKO: ירוקה, אדומה וכחולה">
-  <div class="toc">
-    <a href="#who"><span class="n">1</span><span><b>מי אנחנו</b><small>משחק – וגם תהליך</small></span></a>
-    <a href="#protocol"><span class="n">2</span><span><b>חשיפה בהדרגה</b><small>5 שלבים, צעד אחר צעד</small></span></a>
-    <a href="#story"><span class="n">3</span><span><b>הסיפור של KIKO</b><small>כרטיסיות לקרוא יחד עם <span class="g">{הילד|הילדה}</span></small></span></a>
-    <a href="#choices"><span class="n">4</span><span><b>כרטיסי בחירה</b><small>עוד · די · הפסקה · לנסות</small></span></a>
-    <a href="#tracker"><span class="n">5</span><span><b>לוח מעקב</b><small>מסמנים אחרי כל מפגש</small></span></a>
-    <a href="#signs"><span class="n">★</span><span><b>סימנים ומבנה מפגש</b><small>מתי ממשיכים ומתי עוצרים</small></span></a>
+<!-- ======================= STORY ======================= -->
+<section class="slide cover for-story">
+  <div class="body">
+    <div>
+      <p class="h"><span class="who"><span class="blank"></span></span><br>פוגש.ת את KIKO</p>
+      <p class="sub">צעדים קטנים, חוויה חושית גדולה</p>
+      <img class="team" src="assets/characters/kiko-3d-team.webp" alt="">
+    </div>
+    <div class="slot" data-photo="child">צרפו כאן תמונה<br>של הילד/ה</div>
   </div>
-  <div class="howto"><span>⏱️ ממהרים? קראו רק את הכותרות</span><span>🖼️ אוהבים תמונות? עברו על הכרטיסיות</span><span>📖 רוצים להעמיק? לחצו על ＋</span></div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span>סיפור הכנה</span></div>
 </section>
 
-<!-- ============ who we are ============ -->
-<section class="page" id="who">
-  <span class="kicker">1 · מי אנחנו</span>
-  <h2 class="title">KIKO הוא משחק. וגם תהליך.</h2>
-  <p class="lead">KIKO באמת משחק – אבל מאחורי כל חלק מחכה תחושה חדשה. אנחנו כאן כדי להדריך אתכם איך לשחק נכון, צעד אחר צעד.</p>
-  <div class="pillars">
-    <div class="pillar"><span class="ic">🧸</span><h3>משחק</h3><p>דמות עם פנים, צבעים וחלקים שמרכיבים לבד. <span class="g">{הילד|הילדה}</span> פוגש<span class="g">{|ת}</span> חבר, לא תרגיל.</p></div>
-    <div class="pillar"><span class="ic">✋</span><h3>חוויה חושית</h3><p>כל חלק מרגיש אחרת: חלק, רך, מחוספס, עם בליטות או עם רטט. כך מכירים תחושות חדשות דרך הידיים.</p></div>
-    <div class="pillar"><span class="ic">🐢</span><h3>בקצב של <span class="g">{הילד|הילדה}</span></h3><p>חשיפה הדרגתית: מתחילים במה שנעים ומוכר, ומתקדמים רק כש<span class="g">{הוא|היא}</span> מוכן<span class="g">{|ה}</span>.</p></div>
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">ביום <span class="day"><span class="blank"></span></span> אפגוש את KIKO</p>
+    <p class="sub">עם <span class="with"><span class="blank"></span></span></p>
+    <div class="row" style="align-items:center">
+      <div class="frame"><div class="pic"><img class="fit" src="assets/characters/kiko-3d-team-640.webp" alt=""></div><span class="cap">KIKO</span></div>
+      <div class="frame"><div class="pic"><div class="slot" data-photo="with" style="width:100%;height:100%;border-radius:.8cqw">צרפו כאן תמונה של מי שמשחק עם הילד/ה</div></div><span class="cap with-cap">מי שמשחק איתי</span></div>
+      <div class="frame" style="flex-basis:24cqw"><table class="week"><tr><th>א</th><th>ב</th><th>ג</th><th>ד</th><th>ה</th></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></table><span class="cap">עוד כמה ימים?</span></div>
+    </div>
+    <p class="accent">איזה כיף!</p>
   </div>
-  <details><summary>למה צריך הדרכה בכלל?</summary><div class="more">
-    <p>היכרות הדרגתית עם תחושות היא חלק מוכר מעבודה טיפולית עם ילדים, ויש לה הרבה שיטות וגישות. מבחוץ זה נראה כמו "סתם לשחק", אבל הדרך שבה מציגים את המשחק משנה הכול: אותו חלק יכול להיות מסקרן כשמציעים אותו בעדינות, ומלחיץ כשמבקשים לגעת בו מיד.</p>
-    <p>לכן לא יצאנו מנקודת הנחה שכולם יודעים מה לעשות. החוברת הזו מסבירה בדיוק מה עושים בכל שלב, איך יודעים שאפשר להתקדם, ומה עושים כשקשה. כשברור מה עושים – פשוט עושים.</p>
-  </div></details>
-  <p class="note" style="margin-top:14px">💙 KIKO לא מחליף טיפול מקצועי. אם <span class="g">{הילד|הילדה}</span> בטיפול – שתפו את המטפל/ת ותתאימו יחד את הקצב.</p>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ golden rules ============ -->
-<section class="page" id="rules">
-  <span class="kicker">לפני שמתחילים</span>
-  <h2 class="title">5 כללי זהב</h2>
-  <p class="lead">אם זוכרים רק דבר אחד מהחוברת – זה העמוד.</p>
-  <ul class="rules">
-    <li><span class="ic">🧭</span><b><span class="g">{הילד|הילדה}</span> מוביל<span class="g">{|ה}</span></b><small>מציעים, לא מבקשים. מחכים ליוזמה.</small></li>
-    <li><span class="ic">⏱️</span><b>קצר ומתוק</b><small>3–10 דקות מספיקות. עדיף קצר וטוב.</small></li>
-    <li><span class="ic">🤝</span><b>בלי להכריח</b><small>"לא" זו תשובה. מכבדים אותה.</small></li>
-    <li><span class="ic">🌟</span><b>מסיימים כשטוב</b><small>עוצרים ברגע נעים, לא אחרי בכי.</small></li>
-    <li><span class="ic">🔁</span><b>אותו טקס</b><small>אותה שעה, מקום ומשפט פתיחה.</small></li>
-  </ul>
-  <details><summary>למה זה עובד?</summary><div class="more">
-    <p>כשילד/ה יודע/ת מה עומד לקרות ומרגיש/ה שיש לו/ה שליטה – קל יותר לנסות דבר חדש. טקס קבוע יוצר צפיות, מפגש קצר שומר על חוויה טובה, וסיום ברגע נעים גורם לרצות לחזור. ההתקדמות מגיעה מהרבה מפגשים קטנים וטובים, לא ממפגש אחד ארוך.</p>
-  </div></details>
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">זה KIKO.</p>
+    <p class="sub">KIKO הוא צעצוע שאפשר לגעת בו, להרכיב אותו ולשחק איתו.</p>
+    <div class="row"><div class="frame wide"><div class="pic" style="aspect-ratio:2.2/1"><img class="fit" src="assets/characters/kiko-3d-team.webp" alt=""></div><span class="cap">יש KIKO ירוק, אדום וכחול</span></div></div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ protocol ============ -->
-<section class="page" id="protocol">
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">ל־KIKO יש חלקים.</p>
+    <p class="sub">כל חלק מרגיש אחרת.</p>
+    <div class="row">
+      <div class="frame"><div class="pic"><img src="catalog/images/almond_no_hole.webp" alt=""></div><span class="cap">חלק</span></div>
+      <div class="frame"><div class="pic"><img src="catalog/images/layers_soft.webp" alt=""></div><span class="cap">רך</span></div>
+      <div class="frame"><div class="pic"><img src="catalog/images/spikes_high.webp" alt=""></div><span class="cap">עם קוצים</span></div>
+    </div>
+    <p class="txt">מרכיבים את החלקים על KIKO. אפשר להוריד אותם ולהחליף.</p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">קודם רק מסתכלים.</p>
+    <p class="sub">מותר להסתכל על KIKO כמה שרוצים.</p>
+    <div class="split">
+      <div class="frame"><div class="pic"><img src="assets/guide/parts-and-kiko.webp" alt=""></div><span class="cap">מסתכלים על KIKO</span></div>
+      <div class="side"><p class="txt" style="font-size:2.5cqw">לא צריך לגעת עדיין.<br>אפשר לשבת קרוב,<br>או קצת רחוק.</p></div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">מי שמשחק איתי מראה לי איך נוגעים.</p>
+    <p class="sub">אפשר להסתכל ולנסות לעשות אותו דבר.</p>
+    <div class="row"><div class="frame big"><div class="pic"><img src="assets/guide/touch.webp" alt=""></div><span class="cap">ככה נוגעים ב־KIKO</span></div></div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">אני יכול.ה לבחור חלק.</p>
+    <p class="sub">איזה חלק מעניין אותי היום?</p>
+    <div class="row">
+      <div class="frame"><div class="pic"><img src="catalog/images/almond_no_hole.webp" alt=""></div><span class="cap">זה?</span></div>
+      <div class="frame"><div class="pic"><img src="catalog/images/layers_soft.webp" alt=""></div><span class="cap">או זה?</span></div>
+    </div>
+    <p class="txt">מצביעים על החלק שבחרנו.</p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">נוגעים לאט ובעדינות.</p>
+    <p class="sub">קודם עם אצבע אחת, ואחר כך עם כל היד.</p>
+    <div class="icons">
+      <div class="icon"><span class="e">☝️</span><span>אצבע אחת</span></div>
+      <div class="icon" style="justify-content:center;padding-top:4cqw"><span style="font-size:5cqw;color:var(--orange)">←</span></div>
+      <div class="icon"><span class="e">✋</span><span>כל היד</span></div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">לפעמים משהו מרגיש מוזר או לא נעים.</p>
+    <p class="sub">זה בסדר.</p>
+    <p class="txt" style="font-size:2.4cqw"><b>אם זה לא נעים, אפשר:</b></p>
+    <div class="icons" style="margin-top:1.2cqw">
+      <div class="icon"><span class="e">✋</span><span>להגיד "די"</span></div>
+      <div class="icon"><span class="e">🔄</span><span>לבחור חלק אחר</span></div>
+      <div class="icon"><span class="e">🛋️</span><span>לנוח קצת</span></div>
+    </div>
+    <p class="txt" style="font-size:2.4cqw"><b>ההרגשה הזאת עוברת.</b></p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">כשנעים – ממשיכים לשחק!</p>
+    <p class="sub">אפשר ללחוץ, לגלגל ולטפוף.</p>
+    <div class="row">
+      <div class="frame"><div class="pic"><img src="assets/guide/touch.webp" alt=""></div><span class="cap">לגלגל על היד</span></div>
+      <div class="frame"><div class="pic"><img class="fit" src="assets/guide/tap.webp" alt=""></div><span class="cap">לטפוף ולהרגיש רטט</span></div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h">בסוף KIKO הולך לנוח בקופסה.</p>
+    <p class="sub">נשחק שוב בפעם אחרת.</p>
+    <div class="split" style="justify-content:center">
+      <div class="frame" style="flex-basis:30cqw"><div class="pic"><img class="fit" src="assets/characters/kiko-3d-green-excited.webp" alt=""></div><span class="cap">להתראות, KIKO!</span></div>
+      <div class="side" style="flex-basis:30cqw;text-align:center"><span style="font-size:10cqw">👏</span><p class="accent" style="margin-top:0">אפשר גם<br>למחוא כפיים!</p></div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-story">
+  <div class="body">
+    <p class="h"><span style="color:var(--ink)">סמנו:</span> עד איפה הגענו היום?</p>
+    <div class="row" style="gap:1.4cqw">
+      <div class="frame" style="flex-basis:17cqw"><div class="pic"><span class="num-badge">1</span><img src="assets/guide/parts-and-kiko.webp" alt=""></div><span class="cap">הסתכלתי</span><div class="check"></div></div>
+      <div class="frame" style="flex-basis:17cqw"><div class="pic"><span class="num-badge">2</span><img src="assets/guide/touch.webp" alt=""></div><span class="cap">ראיתי איך</span><div class="check"></div></div>
+      <div class="frame" style="flex-basis:17cqw"><div class="pic"><span class="num-badge">3</span><img src="catalog/images/layers_soft.webp" alt=""></div><span class="cap">בחרתי חלק</span><div class="check"></div></div>
+      <div class="frame" style="flex-basis:17cqw"><div class="pic"><span class="num-badge">4</span><img class="fit" src="assets/characters/kiko-3d-red-happy.webp" alt=""></div><span class="cap">נגעתי</span><div class="check"></div></div>
+      <div class="frame" style="flex-basis:17cqw"><div class="pic"><span class="num-badge">5</span><img class="fit" src="assets/guide/tap.webp" alt=""></div><span class="cap">שיחקתי</span><div class="check"></div></div>
+    </div>
+    <p class="txt">אפשר להדביק מדבקה או לצייר כוכב בכל שלב שעשינו.</p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide end for-story">
+  <div class="body">
+    <img src="assets/characters/kiko-3d-team-640.webp" alt="" style="width:40cqw">
+    <p class="h">משחק נעים!</p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span>צעדים קטנים, חוויה חושית גדולה</span></div>
+</section>
+
+<!-- ======================= PARENTS ======================= -->
+<section class="slide for-parents">
+  <div class="body">
+    <div class="ptext">
+      <p style="font-size:2.6cqw"><b>הורים יקרים שלום,</b></p>
+      <p>סיפור הכנה עוזר לילדים להתכונן לחוויה חדשה. הוא מראה מה יקרה, מה מותר, ומה אפשר לעשות כשמשהו לא נעים – וכך מגביר תחושת שליטה וביטחון.</p>
+      <p><b>לקראת המפגש עם KIKO הכנו עבורכם:</b></p>
+      <div class="mini"><div><b>📖 סיפור הכנה</b><small>לקרוא יחד עם הילד/ה</small></div><div><b>💛 הסבר להורים</b><small>איך חושפים בהדרגה</small></div></div>
+      <div class="dots"></div>
+      <p>הוסיפו לסיפור את השם והתמונה של הילד/ה – באתר או ביד אחרי ההדפסה.</p>
+      <p>קראו את הסיפור כמה פעמים בימים שלפני המפגש, וגם רגע לפני כל מפגש.</p>
+      <p>אפשר להשמיט עמודים שלא מתאימים לילד/ה שלכם.</p>
+      <p>בסוף הסיפור יש עמוד לסימון: עד איפה הגעתם היום.</p>
+      <div class="dots"></div>
+      <p><b style="color:var(--orange)">מאחלים לכם משחק נעים,</b><br>צוות KIKO</p>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span>הסבר להורים</span></div>
+</section>
+
+<section class="slide for-parents">
+  <div class="body">
+    <p class="h">KIKO הוא משחק. וגם תהליך.</p>
+    <p class="sub">אנחנו כאן כדי להדריך אתכם איך לשחק נכון.</p>
+    <div class="cols3">
+      <div class="card"><span class="e">🧸</span><b>משחק</b><small>דמות עם פנים וחלקים שמרכיבים. הילד/ה פוגש.ת חבר, לא תרגיל.</small></div>
+      <div class="card"><span class="e">✋</span><b>חוויה חושית</b><small>כל חלק מרגיש אחרת. כך מכירים תחושות חדשות דרך הידיים.</small></div>
+      <div class="card"><span class="e">🐢</span><b>בקצב של הילד/ה</b><small>יש הרבה שיטות. אנחנו מראים לכם צעד אחר צעד מה עושים.</small></div>
+    </div>
+    <p class="txt">KIKO לא מחליף טיפול מקצועי. אם הילד/ה בטיפול – שתפו את המטפל/ת והתאימו יחד את הקצב.</p>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-parents">
+  <div class="body">
+    <p class="h">5 כללי זהב</p>
+    <p class="sub">אם זוכרים רק דבר אחד – זה העמוד.</p>
+    <div class="rules">
+      <div class="card"><span class="e">🧭</span><b>הילד/ה מוביל.ה</b><small>מציעים, לא מבקשים.</small></div>
+      <div class="card"><span class="e">⏱️</span><b>קצר ומתוק</b><small>3–10 דקות מספיקות.</small></div>
+      <div class="card"><span class="e">🤝</span><b>בלי להכריח</b><small>"לא" זו תשובה.</small></div>
+      <div class="card"><span class="e">🌟</span><b>מסיימים כשטוב</b><small>עוצרים ברגע נעים.</small></div>
+      <div class="card"><span class="e">🔁</span><b>אותו טקס</b><small>אותה שעה, מקום ומשפט.</small></div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
+</section>
+
+<section class="slide for-parents">
   <span class="draft">טיוטה · בבדיקה מקצועית</span>
-  <span class="kicker">2 · חשיפה בהדרגה</span>
-  <h2 class="title">5 שלבים, צעד אחר צעד</h2>
-  <p class="lead">עולים שלב רק כשהקודם נעים. ירידה שלב אחורה היא חלק מהדרך – לא כישלון.</p>
-  <div class="ladder" aria-hidden="true"><i>1 מתכוננים</i><i>2 מתבוננים</i><i>3 מדגימים ובוחרים</i><i>4 נוגעים</i><i>5 חוקרים</i></div>
-
-  <div class="stage">
-    <div class="pic"><span class="num">1</span><span class="emo">📖</span></div>
-    <div>
-      <h3>מתכוננים</h3>
-      <p class="what">קוראים יחד את "הסיפור של KIKO" (בעמודים הבאים) – כמה פעמים, כמה ימים לפני המפגש הראשון.</p>
-      <div class="facts"><div class="fact go"><b>✓ ממשיכים כש…</b><span class="g">{הילד|הילדה}</span> מסתכל<span class="g">{|ת}</span> בכרטיסיות בנוחות, ואולי מצביע<span class="g">{|ה}</span> על KIKO.</div><div class="fact hard"><b>✋ אם קשה…</b>קוראים רק 2–3 כרטיסיות, ומשאירים את הסיפור במקום שאפשר לחזור אליו.</div></div>
-      <details><summary>טיפים לשלב הזה</summary><div class="more">קראו בקול רגוע ובאותו נוסח בכל פעם. אפשר לתלות את הכרטיסיות במקרר או ליד מקום המשחק. אם <span class="g">{הילד|הילדה}</span> מדבר<span class="g">{|ת}</span> מעט – הצביעו על התמונות ותנו <span class="g">{לו|לה}</span> להצביע בחזרה.</div></details>
+  <div class="body">
+    <p class="h">חושפים בהדרגה: 5 שלבים</p>
+    <p class="sub">לפני הכול קוראים יחד את סיפור ההכנה.</p>
+    <div class="stages">
+      <div class="frame"><div class="pic"><span class="num-badge">1</span><img src="assets/guide/parts-and-kiko.webp" alt=""></div><span class="cap">מסתכלים</span><small>KIKO בטווח ראייה, בלי לבקש לגעת</small></div>
+      <div class="frame"><div class="pic"><span class="num-badge">2</span><img src="assets/guide/touch.webp" alt=""></div><span class="cap">מדגימים</span><small>המבוגר נוגע ומתאר במילים</small></div>
+      <div class="frame"><div class="pic"><span class="num-badge">3</span><img src="catalog/images/layers_soft.webp" alt=""></div><span class="cap">בוחרים</span><small>מציעים שני חלקים לבחירה</small></div>
+      <div class="frame"><div class="pic"><span class="num-badge">4</span><img class="fit" src="assets/characters/kiko-3d-red-happy.webp" alt=""></div><span class="cap">נוגעים</span><small>אצבע אחת, ואחר כך כל היד</small></div>
+      <div class="frame"><div class="pic"><span class="num-badge">5</span><img class="fit" src="assets/guide/tap.webp" alt=""></div><span class="cap">משחקים</span><small>לוחצים, מגלגלים, טופחים</small></div>
     </div>
+    <p class="txt"><b>עולים שלב רק כשהקודם נעים.</b> ירידה שלב אחורה היא חלק מהדרך – לא כישלון.</p>
   </div>
-
-  <div class="stage">
-    <div class="pic"><span class="num">2</span><img src="assets/characters/kiko-3d-green.webp" alt=""></div>
-    <div>
-      <h3>מתבוננים</h3>
-      <p class="what">מניחים את KIKO בטווח ראייה – על השולחן או על השטיח – בלי לבקש לגעת. משחקים לידו במשהו אחר.</p>
-      <div class="facts"><div class="fact go"><b>✓ ממשיכים כש…</b><span class="g">{הילד|הילדה}</span> מסתכל<span class="g">{|ת}</span>, מתקרב<span class="g">{|ת}</span> או מושיט<span class="g">{|ה}</span> יד מעצמ<span class="g">{ו|ה}</span>.</div><div class="fact hard"><b>✋ אם קשה…</b>מרחיקים קצת את KIKO, ומשאירים רק את הדמות – בלי החלקים.</div></div>
-      <details><summary>טיפים לשלב הזה</summary><div class="more">אל תפנו תשומת לב מיוחדת ל־KIKO – פשוט שיהיה שם. מבט ארוך או התקרבות הם כבר התקדמות. אם <span class="g">{הילד|הילדה}</span> מתעלם<span class="g">{|ת}</span> לגמרי, זה בסדר: נסו שוב במפגש הבא.</div></details>
-    </div>
-  </div>
-
-  <div class="stage">
-    <div class="pic"><span class="num">3</span><img src="assets/guide/parts.webp" alt=""></div>
-    <div>
-      <h3>מדגימים ובוחרים</h3>
-      <p class="what">המבוגר נוגע בחלק ומתאר במילים ("זה רך… זה עם קוצים קטנים"). אחר כך מציעים שני חלקים ושואלים: "איזה?"</p>
-      <div class="facts"><div class="fact go"><b>✓ ממשיכים כש…</b><span class="g">{הילד|הילדה}</span> מצביע<span class="g">{|ה}</span>, בוחר<span class="g">{|ת}</span> או מנסה לחקות את התנועה.</div><div class="fact hard"><b>✋ אם קשה…</b>מציעים רק חלק אחד, הכי עדין (החלק החלק), ומדגימים שוב.</div></div>
-      <details><summary>טיפים לשלב הזה</summary><div class="more">תארו מה <em>אתם</em> מרגישים, בלי לשאול "את/ה רוצה לגעת?". בחירה בין שניים נותנת תחושת שליטה – וגם "אף אחד" היא בחירה לגיטימית. התחילו מהחלק הכי עדין שקיבלתם בהתאמה.</div></details>
-    </div>
-  </div>
-
-  <div class="stage">
-    <div class="pic"><span class="num">4</span><img src="assets/guide/touch.webp" alt=""></div>
-    <div>
-      <h3>נוגעים</h3>
-      <p class="what">מגע קצר ביוזמת <span class="g">{הילד|הילדה}</span>: אצבע אחת, אחר כך כף יד. אפשר שהחלק יישאר על השולחן ולא ביד.</p>
-      <div class="facts"><div class="fact go"><b>✓ ממשיכים כש…</b><span class="g">{הוא|היא}</span> נוגע<span class="g">{|ת}</span> שוב ושוב בלי סימני מצוקה, ב־2–3 מפגשים רצופים.</div><div class="fact hard"><b>✋ אם קשה…</b>חוזרים לשלב 3, או עוברים לחלק עדין יותר. מסיימים במגע שהצליח.</div></div>
-      <details><summary>טיפים לשלב הזה</summary><div class="more">שבחו את הניסיון, לא את התוצאה: "נגעת בעדינות!". אל תחזיקו את היד של <span class="g">{הילד|הילדה}</span> ואל תצמידו את החלק לגוף. אם <span class="g">{הוא|היא}</span> מושך<span class="g">{|ת}</span> את היד – זה הסימן לעצור לרגע.</div></details>
-    </div>
-  </div>
-
-  <div class="stage">
-    <div class="pic"><span class="num">5</span><img src="assets/guide/tap.webp" alt=""></div>
-    <div>
-      <h3>חוקרים ומשחקים</h3>
-      <p class="what">לוחצים, מגלגלים על היד, טופחים כדי להרגיש רטט, מרכיבים ומפרקים. מוסיפים חלק חדש רק כשהקודם כבר אהוב.</p>
-      <div class="facts"><div class="fact go"><b>✓ ממשיכים כש…</b><span class="g">{הילד|הילדה}</span> חוזר<span class="g">{|ת}</span> ל־KIKO מעצמ<span class="g">{ו|ה}</span> ומבקש<span class="g">{|ת}</span> עוד. אפשר להאריך את הזמן ולהוסיף חלק.</div><div class="fact hard"><b>✋ אם קשה…</b>חוזרים לחלק המוכר והאהוב, ומסיימים בו.</div></div>
-      <details><summary>טיפים לשלב הזה</summary><div class="more">עכשיו אפשר לשלב את KIKO בשגרה: לפני השינה, בהמתנה, במעברים. ספרו לנו באזור האישי איך היה – כך נדייק את ההתאמה הבאה ונמליץ על החלקים הנכונים.</div></details>
-    </div>
-  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ signs & session ============ -->
-<section class="page" id="signs">
+<section class="slide for-parents">
   <span class="draft">טיוטה · בבדיקה מקצועית</span>
-  <span class="kicker">איך יודעים?</span>
-  <h2 class="title">מתי ממשיכים ומתי עוצרים</h2>
-  <p class="lead">הגוף של <span class="g">{הילד|הילדה}</span> מספר לנו הרבה לפני המילים.</p>
-  <div class="cols">
-    <div class="box good"><h3>😊 סימנים טובים – אפשר להמשיך</h3><ul><li>מסתכל<span class="g">{|ת}</span>, מתקרב<span class="g">{|ת}</span>, מושיט<span class="g">{|ה}</span> יד</li><li>מחייך<span class="g">{|ת}</span>, צוחק<span class="g">{|ת}</span>, משמיע<span class="g">{|ה}</span> קולות שמחים</li><li>חוזר<span class="g">{|ת}</span> לאותו חלק שוב ושוב</li><li>מבקש<span class="g">{|ת}</span> "עוד" (במילים, בסימן או בכרטיס)</li></ul></div>
-    <div class="box slow"><h3>🛑 סימנים לעצור או להאט</h3><ul><li>מסיט<span class="g">{|ה}</span> מבט, מסתובב<span class="g">{|ת}</span> או מתרחק<span class="g">{|ת}</span></li><li>דוחף<span class="g">{|ת}</span> את KIKO או מושך<span class="g">{|ת}</span> את היד</li><li>גוף מתוח, מכסה פנים או אוזניים</li><li>בוכה, צועק<span class="g">{|ת}</span> או מראה כרטיס "די"</li></ul></div>
+  <div class="body">
+    <p class="h" style="font-size:4.4cqw">מתי ממשיכים, ומה עושים כשקשה</p>
+    <table class="ptable">
+      <tr><th></th><th>מה עושים</th><th>✓ ממשיכים כש…</th><th>✋ אם קשה…</th></tr>
+      <tr><td>1 מסתכלים</td><td>מניחים את KIKO על השולחן ומשחקים לידו במשהו אחר.</td><td>הילד/ה מסתכל.ת, מתקרב.ת או מושיט.ה יד.</td><td>מרחיקים קצת, משאירים רק את הדמות בלי חלקים.</td></tr>
+      <tr><td>2 מדגימים</td><td>נוגעים בחלק ומתארים: "זה רך… זה עם קוצים".</td><td>הילד/ה מתעניין.ת או מנסה לחקות.</td><td>מדגימים רק על החלק הכי עדין.</td></tr>
+      <tr><td>3 בוחרים</td><td>מציעים שני חלקים: "איזה?". גם "אף אחד" זו בחירה.</td><td>הילד/ה מצביע.ה או בוחר.ת.</td><td>מציעים חלק אחד בלבד.</td></tr>
+      <tr><td>4 נוגעים</td><td>מגע קצר ביוזמת הילד/ה. לא מחזיקים את היד שלו/ה.</td><td>נוגע.ת שוב ושוב, בלי סימני מצוקה, ב־2–3 מפגשים.</td><td>חוזרים לשלב 3 או לחלק עדין יותר.</td></tr>
+      <tr><td>5 משחקים</td><td>לוחצים, מגלגלים, טופחים, מרכיבים. מוסיפים חלק חדש בהדרגה.</td><td>חוזר.ת ל־KIKO מעצמו/ה ומבקש.ת עוד.</td><td>חוזרים לחלק האהוב ומסיימים בו.</td></tr>
+    </table>
   </div>
-  <details><summary>מה עושים כשמופיע סימן לעצור?</summary><div class="more">עוצרים בשקט ובלי ויכוח – מרחיקים את החלק ואומרים "בסדר, KIKO נח". אחר כך חוזרים למשהו שכבר הצליח, ומסיימים בו. בפעם הבאה מתחילים שלב אחד אחורה. עצירה בזמן בונה אמון – ובזכותה <span class="g">{הילד ירצה|הילדה תרצה}</span> לחזור.</div></details>
-
-  <h3 class="fd" style="font-size:24px;margin:22px 0 4px">מבנה של מפגש</h3>
-  <div class="session">
-    <div><span class="ic">👋</span><b>פתיחה</b><small>אותו משפט בכל פעם: "עכשיו זמן KIKO". אפשר להראות את כרטיס הסיפור.</small></div>
-    <div><span class="ic">🧩</span><b>משחק</b><small>3–10 דקות בשלב שבו אתם נמצאים. <span class="g">{הילד|הילדה}</span> מוביל<span class="g">{|ה}</span>.</small></div>
-    <div><span class="ic">😴</span><b>סיום</b><small>"KIKO הולך לנוח בקופסה". מילה טובה, ואז פעילות אהובה.</small></div>
-  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ social story ============ -->
-<section class="page story-head" id="story">
-  <span class="kicker">3 · לקרוא יחד</span>
-  <h2 class="title">הסיפור של KIKO</h2>
-  <p class="lead">סיפור קצר שמכין את <span class="g">{הילד|הילדה}</span> למפגש: מה יקרה, מה מותר, ומה עושים כשלא נעים.</p>
-  <div class="cut-note no-print-hide">✂️ <span>מדפיסים, גוזרים לאורך הקו המקווקו, וקוראים יחד – כרטיס אחד בכל פעם, באותו סדר. אפשר להחזיק את הכרטיסים ליד KIKO בזמן המשחק.</span></div>
-  <div class="cards">
-    <div class="scard"><span class="no">1</span><div class="art"><img src="assets/characters/kiko-3d-team-640.webp" alt=""></div><p>זה KIKO. KIKO הוא צעצוע שאפשר לגעת בו, להרכיב אותו ולשחק איתו.</p></div>
-    <div class="scard"><span class="no">2</span><div class="art"><img class="photo" src="assets/guide/parts.webp" alt=""></div><p>ל־KIKO יש חלקים. כל חלק מרגיש אחרת: חלק, רך, מחוספס או עם בליטות.</p></div>
-    <div class="scard"><span class="no">3</span><div class="art"><img class="photo" src="assets/guide/parts-and-kiko.webp" alt=""></div><p>קודם אני רק <span class="g">{מסתכל|מסתכלת}</span> על KIKO. מותר לי להסתכל כמה שאני <span class="g">{רוצה|רוצה}</span>.</p></div>
-    <div class="scard"><span class="no">4</span><div class="art"><img class="photo" src="assets/guide/touch.webp" alt=""></div><p>מי שמשחק איתי מראה לי איך נוגעים ב־KIKO.</p></div>
-    <div class="scard"><span class="no">5</span><div class="art"><img class="photo" src="assets/guide/parts.webp" alt=""><span class="over">👆</span></div><p>אני <span class="g">{יכול|יכולה}</span> לבחור חלק אחד שמעניין אותי.</p></div>
-    <div class="scard"><span class="no">6</span><div class="art"><img src="assets/characters/kiko-3d-red-happy.webp" alt=""><span class="over" style="inset-inline-end:18%;top:12%">☝️</span></div><p>אני <span class="g">{נוגע|נוגעת}</span> בחלק לאט ובעדינות – קודם עם אצבע אחת, ואחר כך עם כל היד.</p></div>
-    <div class="scard"><span class="no">7</span><div class="art"><img src="assets/characters/kiko-3d-blue.webp" alt=""></div><p>לפעמים משהו מרגיש לי מוזר או לא נעים. זה בסדר.</p></div>
-    <div class="scard"><span class="no">8</span><div class="art"><span class="big">✋</span></div><p>אז אני <span class="g">{יכול|יכולה}</span> להגיד "די" או להראות את הכרטיס. נחים קצת, ואפשר לנסות חלק אחר.</p></div>
-    <div class="scard"><span class="no">9</span><div class="art"><img src="assets/guide/tap.webp" alt=""></div><p>כשמשהו מרגיש לי נעים, אני <span class="g">{ממשיך|ממשיכה}</span>: ללחוץ, לגלגל ולטפוף. KIKO אפילו עושה רעש!</p></div>
-    <div class="scard"><span class="no">10</span><div class="art"><img src="assets/characters/kiko-3d-green-excited.webp" alt=""></div><p>בסוף KIKO הולך לנוח בקופסה. נשחק שוב בפעם אחרת. אני <span class="g">{גאה|גאה}</span> בעצמי!</p></div>
+<section class="slide for-parents">
+  <span class="draft">טיוטה · בבדיקה מקצועית</span>
+  <div class="body">
+    <p class="h">הגוף מספר לנו הרבה.</p>
+    <p class="sub">שימו לב לסימנים – לפני המילים.</p>
+    <div class="two">
+      <div class="box good"><b>😊 אפשר להמשיך</b><ul><li>מסתכל.ת, מתקרב.ת, מושיט.ה יד</li><li>מחייך.ת, צוחק.ת</li><li>חוזר.ת לאותו חלק</li><li>מבקש.ת "עוד"</li></ul></div>
+      <div class="box slow"><b>🛑 עוצרים או מאטים</b><ul><li>מסיט.ה מבט, מתרחק.ת</li><li>דוחף.ת את KIKO, מושך.ת את היד</li><li>גוף מתוח, מכסה פנים או אוזניים</li><li>בוכה או מראה כרטיס "די"</li></ul></div>
+    </div>
+    <p class="txt"><b>כשעוצרים:</b> בשקט ובלי ויכוח – "בסדר, KIKO נח". חוזרים למשהו שהצליח ומסיימים בו.</p>
   </div>
-  <details class="no-print"><summary>איך קוראים סיפור כזה נכון?</summary><div class="more">
-    <p>קוראים בקול רגוע, בגובה העיניים, באותו נוסח בכל פעם – החזרה היא מה שיוצר ביטחון. אפשר לקרוא בכל יום כמה ימים לפני המפגש הראשון, וגם רגע לפני כל מפגש. אם <span class="g">{הילד|הילדה}</span> רוצה לדלג – מדלגים. אם <span class="g">{הוא|היא}</span> חוזר<span class="g">{|ת}</span> לכרטיס מסוים – נשארים בו.</p>
-  </div></details>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ choice cards ============ -->
-<section class="page" id="choices">
-  <span class="kicker">4 · להדפיס ולגזור</span>
-  <h2 class="title">כרטיסי בחירה</h2>
-  <p class="lead">לא תמיד יש מילים. עם הכרטיסים <span class="g">{הילד|הילדה}</span> יכול<span class="g">{|ה}</span> להראות מה <span class="g">{הוא|היא}</span> רוצה – ואנחנו מקשיבים.</p>
-  <div class="choices">
-    <div class="ccard more"><span class="big">🤲</span><b>עוד</b></div>
-    <div class="ccard stop"><span class="big">✋</span><b>די</b></div>
-    <div class="ccard pause"><span class="big">⏸️</span><b>הפסקה</b></div>
-    <div class="ccard try"><span class="big">☝️</span><b>רוצה לנסות</b></div>
+<section class="slide for-parents">
+  <div class="body">
+    <p class="h">כרטיסי בחירה</p>
+    <p class="sub">גוזרים ומניחים ליד KIKO. כשהילד/ה מראה כרטיס – מגיבים מיד.</p>
+    <div class="choices">
+      <div class="cc more"><span class="e">🤲</span><b>עוד</b></div>
+      <div class="cc stop"><span class="e">✋</span><b>די</b></div>
+      <div class="cc pause"><span class="e">⏸️</span><b>הפסקה</b></div>
+      <div class="cc try"><span class="e">☝️</span><b>רוצה לנסות</b></div>
+    </div>
   </div>
-  <details><summary>איך משתמשים בכרטיסים?</summary><div class="more">מניחים את הכרטיסים ליד KIKO בכל מפגש. כש<span class="g">{הילד|הילדה}</span> מראה כרטיס – מגיבים מיד ובדיוק לפיו, גם כשזה "די". כך <span class="g">{הוא|היא}</span> לומד<span class="g">{|ת}</span> שהבחירה <span class="g">{שלו|שלה}</span> נשמעת, וקל יותר לנסות.</div></details>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span class="pg"></span></div>
 </section>
 
-<!-- ============ tracker ============ -->
-<section class="page" id="tracker">
-  <span class="kicker">5 · אחרי כל מפגש</span>
-  <h2 class="title">לוח המעקב שלנו</h2>
-  <p class="lead">דקה אחרי כל מפגש: באיזה שלב הייתם, עם איזה חלק, ואיך היה.</p>
-  <table class="track">
-    <thead><tr><th style="width:15%">תאריך</th><th style="width:27%">שלב (מקיפים)</th><th style="width:20%">החלק</th><th style="width:18%">איך היה</th><th class="hide-sm">הערות</th></tr></thead>
-    <tbody id="trackRows"></tbody>
-  </table>
-  <div class="legend"><span>1 מתכוננים</span><span>2 מתבוננים</span><span>3 מדגימים ובוחרים</span><span>4 נוגעים</span><span>5 חוקרים</span><span>😀 נהדר · 🙂 טוב · 😐 ככה · 😟 קשה</span></div>
-  <div class="cta-row no-print"><a class="pill solid" href="index.html">לאזור האישי – לספר לנו איך היה</a><button class="pill" type="button" onclick="window.print()">🖨️ הדפסת החוברת</button></div>
+<section class="slide for-parents">
+  <div class="body">
+    <p class="h">לוח המעקב שלנו</p>
+    <p class="sub">דקה אחרי כל מפגש.</p>
+    <table class="track">
+      <tr><th style="width:14%">תאריך</th><th style="width:26%">שלב (מקיפים)</th><th style="width:20%">החלק</th><th style="width:18%">איך היה</th><th>הערות</th></tr>
+      <tbody id="trackRows"></tbody>
+    </table>
+  </div>
+  <div class="foot"><img src="assets/Logo.png" alt=""><b>KIKO</b><span>ספרו לנו איך היה באזור האישי באתר</span></div>
 </section>
 
 </main>
-<p class="foot">© KIKO · החוברת מתעדכנת עם הזמן. יש לכם הערה? נשמח לשמוע.</p>
+<p class="endnote">החוברת מתעדכנת עם הזמן. יש לכם הערה? נשמח לשמוע.</p>
 
 <script>
 (function(){
-  // ---- him / her: text written as {his|hers} ----
-  const parts = [...document.querySelectorAll('.g')];
-  parts.forEach(el => el.dataset.src = el.textContent);
-  function setGender(g){
-    parts.forEach(el => el.textContent = el.dataset.src.replace(/\{([^|}]*)\|([^}]*)\}/g, (_, m, f) => g === 'f' ? f : m));
-    document.querySelectorAll('.gender button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.g === g)));
-    const pdf = document.getElementById('pdfLink'); if(pdf) pdf.href = 'assets/guide/kiko-guide-' + (g === 'f' ? 'girl' : 'boy') + '.pdf';
-    try{ localStorage.setItem('kiko_guide_g', g); }catch(e){}
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  // ---- tabs ----
+  function setTab(t){
+    document.body.dataset.tab = t;
+    document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
+    $('#pdfLink').href = t === 'parents' ? 'assets/guide/kiko-parents.pdf' : 'assets/guide/kiko-story.pdf';
+    numberPages();
   }
-  let g = 'm';
-  try{ g = new URLSearchParams(location.search).get('g') || localStorage.getItem('kiko_guide_g') || 'm'; }catch(e){}
-  setGender(g === 'f' ? 'f' : 'm');
-  document.querySelectorAll('.gender button').forEach(b => b.onclick = () => setGender(b.dataset.g));
+  document.querySelectorAll('.tab').forEach(b => b.onclick = () => { setTab(b.dataset.tab); try{ history.replaceState(null, '', '#' + b.dataset.tab); }catch(e){} });
+
+  function numberPages(){
+    const vis = [...document.querySelectorAll('.slide')].filter(s => getComputedStyle(s).display !== 'none');
+    vis.forEach((s, i) => { const p = s.querySelector('.pg'); if(p) p.textContent = (i + 1); });
+  }
+
+  // ---- personal details: kept only in this page ----
+  const photos = {child:null, with:null};
+  function render(){
+    const name = $('#fName').value.trim(), day = $('#fDay').value.trim(), withW = $('#fWith').value.trim();
+    const fill = (sel, v) => document.querySelectorAll(sel).forEach(el => el.innerHTML = v ? esc(v) : '<span class="blank"></span>');
+    fill('.who', name); fill('.day', day); fill('.with', withW);
+    document.querySelectorAll('.with-cap').forEach(el => el.textContent = withW || 'מי שמשחק איתי');
+    document.querySelectorAll('[data-photo]').forEach(el => {
+      const src = photos[el.dataset.photo];
+      if(!el.dataset.empty) el.dataset.empty = el.innerHTML;
+      el.classList.toggle('has', !!src);
+      el.innerHTML = src ? '<img src="' + src + '" alt="">' : el.dataset.empty;
+    });
+  }
+  ['fName','fDay','fWith'].forEach(id => $('#' + id).addEventListener('input', render));
+  document.querySelectorAll('.file button').forEach(b => b.onclick = () => $('#' + b.dataset.for).click());
+  [['pChild','child'],['pWith','with']].forEach(([id, key]) => $('#' + id).addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    $('#' + id + 'Name').textContent = f.name;
+    const r = new FileReader(); r.onload = () => { photos[key] = r.result; render(); }; r.readAsDataURL(f);
+  }));
+  try{ const q = new URLSearchParams(location.search).get('name'); if(q) $('#fName').value = q.slice(0, 24); }catch(e){}
 
   // ---- tracker rows ----
-  const rows = document.getElementById('trackRows');
-  rows.innerHTML = Array.from({length: 10}, () => '<tr><td></td><td class="stages"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></td><td></td><td class="feel">😀🙂😐😟</td><td class="hide-sm"></td></tr>').join('');
+  $('#trackRows').innerHTML = Array.from({length: 7}, () => '<tr><td></td><td class="st"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></td><td></td><td class="fe">😀🙂😐😟</td><td></td></tr>').join('');
 
   // ---- print / back ----
-  document.getElementById('printBtn').onclick = () => window.print();
-  // the printed booklet includes the "read more" parts
-  let opened = [];
-  window.addEventListener('beforeprint', () => { opened = [...document.querySelectorAll('details:not([open])')]; opened.forEach(d => d.open = true); });
-  window.addEventListener('afterprint', () => { opened.forEach(d => d.open = false); opened = []; });
+  $('#printBtn').onclick = () => window.print();
   try{
     const ref = document.referrer && new URL(document.referrer);
-    if(ref && ref.origin === location.origin && !/guide\.html/.test(ref.pathname)){ const b = document.getElementById('backLink'); b.href = ref.pathname.split('/').pop() + ref.search; }
+    if(ref && ref.origin === location.origin && !/guide\.html/.test(ref.pathname)) $('#backLink').href = ref.pathname.split('/').pop() + ref.search;
   }catch(e){}
+
+  render();
+  let start = 'story';
+  try{ start = (location.hash === '#parents' || new URLSearchParams(location.search).get('tab') === 'parents') ? 'parents' : 'story'; }catch(e){}
+  setTab(start);
+  window.addEventListener('hashchange', () => setTab(location.hash === '#parents' ? 'parents' : 'story'));
 })();
 </script>
 </body>
