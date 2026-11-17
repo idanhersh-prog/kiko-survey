@@ -295,6 +295,7 @@ html[dir=rtl] .bubble::before{transform:translateY(-50%) rotate(-135deg)}
 .book small{color:var(--muted);font-size:14.5px}
 .book-btns{display:flex;gap:10px;margin-top:8px}
 .sp-btn.sm{font-size:16px;padding:11px 16px;text-decoration:none;text-align:center;flex:1}
+.sp-try{text-align:center;color:var(--muted);font-size:14.5px;margin:18px 0 0}.sp-try a{color:#c8401c;font-weight:700}
 .sp-end{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
 .sp-end .sp-btn{min-width:240px}
 @media (max-width:900px){.how{grid-template-columns:1fr 1fr}.how li:last-child{grid-column:1/-1}}
@@ -442,7 +443,6 @@ function showWelcome(){
         <div class="sp-actions">
           <button class="sp-btn main" id="goRegister">פעם ראשונה? הרשמה</button>
           <button class="sp-btn ghost" id="goLogin">יש לי קוד – כניסה</button>
-          <div class="sp-guest">בלי הרשמה:<a href="pre-use.html">התאמה חד־פעמית</a><a href="post-use.html">משוב חד־פעמי</a><a href="guide.html">📖 סיפור הכנה והסבר להורים</a></div>
         </div>
       </div>
       <div class="sp-hero"><img fetchpriority="high" decoding="async" src="assets/hero/kiko-team.webp" srcset="assets/hero/kiko-team-720.webp 720w, assets/hero/kiko-team.webp 1122w" sizes="(max-width:760px) 430px, 640px" alt="צוות KIKO – דמויות בצבעים שונים, כל אחת בנויה מחלקים במרקמים שונים, עפות לעבר המסך"></div>
@@ -464,6 +464,7 @@ function showWelcome(){
         <div class="book"><a class="book-cover" href="guide.html?tab=parents"><img src="assets/guide/parents-cover.webp" alt="" loading="lazy"></a><b>💛 הסבר להורים</b><small>איך חושפים בהדרגה, טקס התרגול, בטיחות ורעיונות למשחק.</small><div class="book-btns"><a class="sp-btn main sm" href="guide.html?tab=parents">פתיחה באתר</a><a class="sp-btn ghost sm" href="assets/guide/kiko-parents.pdf" download>⬇️ הורדה</a></div></div>
       </div>
       <div class="sp-end"><button class="sp-btn main" id="goRegister2">מתחילים – הרשמה</button><button class="sp-btn ghost" id="goLogin2">יש לי קוד – כניסה</button></div>
+      <p class="sp-try">רוצים לנסות בלי הרשמה? <a href="pre-use.html">התאמה חד־פעמית</a> · <a href="post-use.html">משוב חד־פעמי</a></p>
     </section>`;
   document.body.classList.add('splash-on');
   drawSpeedLines(sp.querySelector('.sp-top'));
@@ -1035,6 +1036,9 @@ function entryHtml(h){
     if(h.preferred_sensations && h.preferred_sensations.length) rows.push(['תחושות מועדפות', labList('preferred_sensations', h.preferred_sensations)]);
     if(h.avoid_sensations && h.avoid_sensations.length) rows.push(['להימנע', labList('avoid_sensations', h.avoid_sensations)]);
     if(h.intensity) rows.push(['עוצמה', lab('intensity', h.intensity)]);
+    if(h.temperature && h.temperature.length) rows.push(['טמפרטורה', labList('temperature', h.temperature)]);
+    if(h.visual && h.visual.length) rows.push(['ויזואלי', labList('visual', h.visual)]);
+    if(h.safety_mouthing) rows.push(['מכניס/ה לפה', ({yes:'כן',sometimes:'לפעמים',no:'לא'})[h.safety_mouthing] || h.safety_mouthing]);
     rows.push(['הומלץ', (h.recommended_part_ids||[]).map(pn).join(' · ')]);
     rows.push(['נבחר', (h.final_part_ids||[]).map(pn).join(' · ') + (h.user_changes === 'yes' ? ' (שונה מההמלצה)' : '')]);
   }else{

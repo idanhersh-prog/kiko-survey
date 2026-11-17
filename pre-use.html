@@ -66,7 +66,7 @@ button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18p
 .intro{text-align:center;padding:6px 0 4px}.intro h1{margin:6px 0 8px}.intro .lead{margin:0 auto;max-width:440px}
 .intro-team{display:block;width:100%;max-width:440px;margin:4px auto 14px}.intro-heads{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin:0 auto 6px}.intro-heads img{width:104px;filter:drop-shadow(0 10px 12px rgba(120,60,20,.16));animation:introbob 3.2s ease-in-out infinite}.intro-heads img:nth-child(2){width:124px;animation-delay:-1s}.intro-heads img:nth-child(3){animation-delay:-2s}
 @keyframes introbob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
-.nav.first{justify-content:center}.nav.first .space,.nav.first .back{display:none}.nav.first .next{min-width:240px;font-size:19px;padding:16px 34px}
+.nav.first{display:none!important}.nav.first .space,.nav.first .back{display:none}.nav.first .next{min-width:240px;font-size:19px;padding:16px 34px}
 @media(max-width:760px){.top{align-items:flex-start}.brand{font-size:18px;gap:8px}.brand-logo{width:34px;height:34px}.brand .sub-title{display:none}.catalog-btn{padding:7px 12px;font-size:13.5px}.intro-heads img{width:84px}.intro-heads img:nth-child(2){width:100px}.nav.first .next{width:100%}}
 @media(prefers-reduced-motion:reduce){.intro-heads img{animation:none}}
 
@@ -179,6 +179,34 @@ body.kw-on{overflow:hidden}
   .kw.big .kw-tower .kw-head{width:110px}.kw.big .kw-tower .kw-part{width:120px;margin-top:-28px}.kw.big .kw-tower .kw-base{width:110px;margin-top:-22px}
 }
 @media (prefers-reduced-motion:reduce){.kw *{animation:none!important}}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:640px;margin:20px auto 0;text-align:right}
+.path-card{border:2px solid var(--line);background:#fff;border-radius:24px;padding:18px 18px 16px;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:6px;transition:transform .15s,border-color .15s,box-shadow .15s}
+.path-card:hover{transform:translateY(-3px);border-color:#ed9f80;box-shadow:0 12px 24px rgba(120,60,20,.10)}
+.path-card .pi{font-size:34px}
+.path-card b{font-size:20px}
+.path-card small{color:var(--muted);font-size:14px;line-height:1.55}
+.path-card small b{font-size:14px;color:var(--ink)}
+.path-card .pgo{margin-top:auto;padding-top:8px;color:var(--orange);font-weight:900}
+.path-card.kid{background:linear-gradient(180deg,#eef7f0,#fff);border-color:#b9dcc2}
+.path-card.kid .pgo{color:#3f7a52}
+.together-banner{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 16px;background:none;border:0;padding:0}
+.together-banner .st{border-radius:99px;padding:5px 12px;font-size:13px;font-weight:800;background:#f1ebe5;color:var(--muted)}
+.together-banner .st.on{background:#eef7f0;color:#3f6249;border:1px solid #cfe5d4}
+.together-banner .arr{color:var(--muted)}
+.together-banner .st.done{background:#f1ebe5;color:var(--muted);text-decoration:line-through}
+.extra-q{margin-top:20px}
+.extra-q .field{font-weight:900;margin-bottom:10px}
+.extra-q .opt{font-weight:600;color:var(--muted);font-size:13px}
+.extra-q .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;gap:8px}
+.extra-q .choice{padding:10px 12px;font-size:15px}
+@media(max-width:760px){.extra-q .grid{grid-template-columns:1fr 1fr!important}}
+.kw-full{width:clamp(150px,17vw,240px);transition:width .4s;}
+.kw.big .kw-full{width:clamp(180px,24vw,320px)}
+.kw-full{animation:kw-bob 2.6s ease-in-out infinite;filter:drop-shadow(0 12px 14px rgba(80,40,10,.18))}
+.kw-peek{display:flex;gap:10px;justify-content:center;margin-bottom:22px}
+.kw-peek img{width:clamp(70px,11vw,120px);animation:kw-bob 2.6s ease-in-out infinite}
+.kw-peek img:nth-child(2){animation-delay:-.8s}.kw-peek img:nth-child(3){animation-delay:-1.6s}
+@media(max-width:760px){.paths{grid-template-columns:1fr}.kw.big .kw-full{width:150px}.kw-full{width:90px}}
 </style>
 </head>
 <body>
@@ -187,12 +215,12 @@ body.kw-on{overflow:hidden}
   <div class="progress-shell"><div class="progress" id="progress"></div></div>
   <div class="layout">
     <main class="card">
-      <section class="step active" data-step="0"><div class="intro"><img class="intro-team" src="assets/characters/kiko-3d-team.webp" srcset="assets/characters/kiko-3d-team-640.webp 640w, assets/characters/kiko-3d-team.webp 1100w" sizes="(max-width:760px) 92vw, 560px" alt="שלוש דמויות KIKO"><h1>בואו נבנה KIKO שמתאים למפגש</h1><p class="lead">כמה שאלות קצרות – ונמליץ על 3 חלקים. תמיד אפשר להחליף.</p><button type="button" class="together-btn" id="togetherStart">🧒 בונים יחד עם הילד/ה<small>המבוגר עונה על השאלות, והילד/ה בוחר/ת את החלקים ואת הדמות</small></button></div></section>
+      <section class="step active" data-step="0"><div class="intro"><img class="intro-team" src="assets/characters/kiko-3d-team.webp" srcset="assets/characters/kiko-3d-team-640.webp 640w, assets/characters/kiko-3d-team.webp 1100w" sizes="(max-width:760px) 92vw, 560px" alt="שלוש דמויות KIKO"><h1>בואו נבנה KIKO שמתאים למפגש</h1><p class="lead">כמה שאלות קצרות – ונמליץ על 3 חלקים. תמיד אפשר להחליף.</p><div class="paths"><button type="button" class="path-card" id="soloStart"><span class="pi">🧑</span><b>ממלאים לבד</b><small>כמה שאלות קצרות – ונמליץ על 3 חלקים</small><span class="pgo">מתחילים ←</span></button><button type="button" class="path-card kid" id="togetherStart"><span class="pi">🧒</span><b>בונים יחד עם הילד/ה</b><small><b>שלב 1:</b> אתם עונים על שאלות קצרות (כ־2 דקות)<br><b>שלב 2:</b> הילד/ה יוצא/ת להרפתקה, מוצא/ת חלקים ובונה KIKO</small><span class="pgo">יוצאים להרפתקה ←</span></button></div></div></section>
       <section class="step" data-step="1"><div class="eyebrow">היכרות קצרה</div><h2>למי אנחנו מתאימים את KIKO?</h2><label class="field" for="childName">שם או כינוי של הילד/ה</label><input id="childName" placeholder="לא חובה"><div class="field">גיל</div><div class="grid three" data-single="age_range"><button class="choice" data-value="2–3">2–3</button><button class="choice" data-value="4–5">4–5</button><button class="choice" data-value="6–7">6–7</button><button class="choice" data-value="8–9">8–9</button><button class="choice" data-value="10+">10+</button></div><div class="field">מי מבצע/ת את ההתאמה?</div><div class="grid three" data-single="respondent_role"><button class="choice" data-value="therapist">מטפל/ת</button><button class="choice" data-value="parent">הורה</button><button class="choice" data-value="other">אחר</button></div></section>
       <section class="step" data-step="2"><div class="eyebrow">מטרת המפגש</div><h2>מה הייתם רוצים לעודד בעזרת KIKO?</h2><p class="lead">אפשר לבחור יותר ממטרה אחת.</p><div class="grid" data-multi="primary_goal"><button class="choice" data-value="explore">🔍 לעורר סקרנות וחקירה</button><button class="choice" data-value="pleasant">🌱 לספק תחושה נעימה ונוחה</button><button class="choice" data-value="hands">🤲 לעודד שימוש פעיל בידיים</button><button class="choice" data-value="independent">🚀 לעודד חקירה עצמאית</button><button class="choice" data-value="shared">🤝 לעודד משחק משותף עם מבוגר</button><button class="choice" data-value="open">✨ אין מטרה מסוימת — פשוט להכיר את KIKO</button></div></section>
       <section class="step" data-step="3"><div class="eyebrow">גישה לחדש</div><h2>איך <span class="childRef">הילד/ה</span> בדרך כלל ניגש/ת לדבר חדש?</h2><div class="grid" data-single="new_place_response"><button class="choice" data-value="independent">ניגש/ת וחוקר/ת באופן עצמאי</button><button class="choice" data-value="observes">מתבונן/ת ואז מצטרף/ת</button><button class="choice" data-value="model">משתתף/ת אחרי הדגמה או עידוד</button><button class="choice" data-value="avoids">מעדיף/ה חפצים מוכרים ונמנע/ת מהתנסות</button></div></section>
       <section class="step" data-step="4"><div class="eyebrow">מה מושך?</div><h2>אילו תחושות בדרך כלל מושכות את <span class="childRef">הילד/ה</span>?</h2><p class="lead">אפשר לבחור כמה.</p><div class="grid" data-multi="preferred_sensations"><button class="choice" data-value="gentle">🧸 עדין / נעים / חומר רך</button><button class="choice" data-value="raised">⭕ בליטות וצלעות</button><button class="choice" data-value="grooves">〰️ חריצים, קווים ומסלולים</button><button class="choice" data-value="rough">🪨 מחוספס או לא אחיד</button><button class="choice" data-value="pointed">🌵 קוצים / גירוי ממוקד</button><button class="choice" data-value="holes">◌ חורים, שקעים ופתחים</button><button class="choice" data-value="unknown">🤔 עדיין לא ברור</button></div></section>
-      <section class="step" data-step="5"><div class="eyebrow">מה דורש זהירות?</div><h2>מה בדרך כלל פחות נעים עבור <span class="childRef">הילד/ה</span> או דורש התחלה הדרגתית?</h2><p class="lead">הבחירות כאן יורידו את הדירוג של חלקים שעלולים להיות פחות מתאימים להתחלה.</p><div class="grid" data-multi="avoid_sensations"><button class="choice" data-value="rough">מחוספס</button><button class="choice" data-value="pointed">קוצים / חד</button><button class="choice" data-value="raised">בליטות חזקות</button><button class="choice" data-value="holes">חורים / שקעים</button><button class="choice" data-value="irregular">טקסטורה לא סדירה</button><button class="choice" data-value="fibrous">חוטים / חומר סיבי</button><button class="choice" data-value="none" data-exclusive="true">לא ידוע / אין משהו מסוים</button></div></section>
+      <section class="step" data-step="5"><div class="eyebrow">מה דורש זהירות?</div><h2>מה בדרך כלל פחות נעים עבור <span class="childRef">הילד/ה</span> או דורש התחלה הדרגתית?</h2><p class="lead">הבחירות כאן יורידו את הדירוג של חלקים שעלולים להיות פחות מתאימים להתחלה.</p><div class="grid" data-multi="avoid_sensations"><button class="choice" data-value="rough">מחוספס</button><button class="choice" data-value="pointed">קוצים / חד</button><button class="choice" data-value="raised">בליטות חזקות</button><button class="choice" data-value="holes">חורים / שקעים</button><button class="choice" data-value="irregular">טקסטורה לא סדירה</button><button class="choice" data-value="fibrous">חוטים / חומר סיבי</button><button class="choice" data-value="none" data-exclusive="true">לא ידוע / אין משהו מסוים</button></div><div class="extra-q"><div class="field">🌡️ טמפרטורה: מה נעים עבור <span class="childRef">הילד/ה</span>? <small class="opt">(לא חובה)</small></div><div class="grid" data-multi="temperature"><button class="choice" data-value="warm">☀️ חמים</button><button class="choice" data-value="cool">❄️ קריר</button><button class="choice" data-value="sensitive_cold">🥶 רגיש/ה לקור</button><button class="choice" data-value="sensitive_heat">🥵 רגיש/ה לחום</button><button class="choice" data-value="any" data-exclusive="true">🤷 לא משנה / לא ידוע</button></div></div><div class="extra-q"><div class="field">👀 ויזואלי: מה <span class="childRef">הילד/ה</span> אוהב/ת לראות? <small class="opt">(לא חובה)</small></div><div class="grid" data-multi="visual"><button class="choice" data-value="bright">🌈 צבעים חזקים</button><button class="choice" data-value="calm_colors">🍃 צבעים רכים ורגועים</button><button class="choice" data-value="contrast">⚫⚪ שחור-לבן וניגודיות</button><button class="choice" data-value="lights">✨ אורות ונצנוצים</button><button class="choice" data-value="avoid_flashing">🚫 רגיש/ה לאור מהבהב או חזק</button><button class="choice" data-value="unknown" data-exclusive="true">🤷 לא ידוע</button></div></div></section>
       <section class="step" data-step="6"><div class="eyebrow">אינטראקציה</div><h2>איזה סוג פעולה <span class="childRef">הילד/ה</span> אוהב/ת לעשות עם הידיים?</h2><p class="lead">אפשר לבחור כמה.</p><div class="grid" data-multi="preferred_actions"><button class="choice" data-value="touch">☝️ למשש וללטף</button><button class="choice" data-value="trace">👉 לעקוב עם האצבע אחרי קווים וצורות</button><button class="choice" data-value="press">🤲 ללחוץ</button><button class="choice" data-value="grip">✊ לאחוז ולהחזיק</button><button class="choice" data-value="openings">◌ לחקור חורים ופתחים</button><button class="choice" data-value="rotate">🔄 לסובב את KIKO ביד</button><button class="choice" data-value="unknown">🤔 עדיין לא ברור</button></div></section>
       <section class="step" data-step="7"><div class="eyebrow">עוצמת התחלה</div><h2>איזו עוצמת תחושה מתאימה להתחלה?</h2><p class="lead">אם לא בטוחים, נתחיל בעוצמה נמוכה–בינונית.</p><div class="scale" data-single="intensity"><button class="choice" data-value="low">🌱 עדינה</button><button class="choice" data-value="medium">🙂 בינונית</button><button class="choice" data-value="high">⚡ חזקה וברורה</button><button class="choice" data-value="unknown">🤔 לא בטוחים</button></div><div class="safety-q"><div class="field">⚠️ בטיחות: האם <span class="childRef">הילד/ה</span> נוטה להכניס חפצים לפה, לנשוך או לקרוע?</div><div class="grid three" data-single="mouthing"><button class="choice" data-value="yes">כן</button><button class="choice" data-value="sometimes">לפעמים</button><button class="choice" data-value="no">לא</button></div><p class="hint">אם כן או לפעמים – לא נמליץ על חלקי בד וחבלים, שאפשר לקרוע או לפרום.</p></div></section>
       <section class="step" data-step="8" id="resultStep"><div class="result-head"><div class="eyebrow">ההתאמה שלכם</div><h1 id="resultTitle">ה-KIKO המומלץ להתחלה</h1><p class="lead">המלצה על שלושה חלקים מתוך הקטלוג. אפשר להחליף כל חלק לפני שממשיכים לבניית KIKO.</p></div><div id="kidPick" class="kid-pick" hidden></div><div class="parts-result" id="resultParts"></div><div class="confirm"><button class="secondary" id="backToQuestions">חזרה לשאלות</button><button class="secondary" id="browseCatalogResult">לצפייה בכל הקטלוג</button><button class="primary" id="continueToCharacter">המשך לבחירת דמות</button></div></section>
@@ -476,8 +504,8 @@ function applyTogetherTexts(){
   if(cl)cl.textContent='לוחצים על הדמות שהכי אוהבים.';
   const nl=document.querySelector('#nameStep label[for="kikoName"]');if(nl)nl.textContent='איך נקרא לו? '+(n?n+' בוחר/ת שם':'הילד/ה בוחר/ת שם');
   let banner=document.getElementById('togetherBanner');
-  if(!banner){banner=document.createElement('div');banner.id='togetherBanner';banner.className='together-banner';const app=document.querySelector('.card')||document.body;app.parentNode.insertBefore(banner,app)}
-  banner.innerHTML='🧒 בונים יחד: <b>את השאלות עונה המבוגר</b> – ובסוף '+(n||'הילד/ה')+' בוחר/ת את החלקים ואת הדמות.';
+  if(!banner){banner=document.createElement('div');banner.id='togetherBanner';banner.className='together-banner';const app=document.querySelector('main.card')||document.body;app.insertBefore(banner,app.firstChild)}
+  banner.innerHTML='<span class="st on">שלב 1 · שאלות קצרות למבוגר</span><span class="arr">←</span><span class="st">שלב 2 · הרפתקה עם '+(n||'הילד/ה')+' 🧒</span>';
 }
 function altFor(i){
   const cur=finalParts[i],taken=new Set(finalParts.map(p=>p.id));
@@ -538,10 +566,17 @@ function startAdventure(){
   let color='',chosen=[],chapter=0;
   const say=t=>{const b=$w('.kw-bubble');b.textContent=t;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
   const setScene=k=>{W.dataset.scene=k;const sc=SCENES.find(x=>x.key===k);$w('.kw-deco').innerHTML=sc?sc.deco.map((e,i)=>`<i style="--i:${i}">${e}</i>`).join(''):''};
-  const tower=()=>{$w('#kwTower').innerHTML=color?towerHTML(color,chosen):'';W.classList.toggle('has-tower',!!color)};
+  const tower=()=>{$w('#kwTower').innerHTML=!color?'':chosen.length?towerHTML(color,chosen):`<img class="kw-full" src="assets/characters/kiko-3d-${color}.webp" alt="">`;W.classList.toggle('has-tower',!!color)};
   const react=()=>{const h=$w('.kw-head');if(!h)return;const f=OWN_FACE[color]==='excited'?'happy':'excited';h.src=headImg(color,f);h.classList.remove('jump');void h.offsetWidth;h.classList.add('jump');setTimeout(()=>{h.src=headImg(color)},1600)};
   $w('.kw-x').onclick=()=>{if(confirm('לצאת מההרפתקה? נשאיר את החלקים שהומלצו.'))finish(false)};
 
+  // 0 · hand the device to the child
+  function handoff(){
+    setScene('home');$w('.kw-title').textContent='השאלות מוכנות! 🎉';
+    say('עכשיו קוראים ל'+(kid||'ילד/ה')+'. מכאן '+(kid||'הילד/ה')+' בוחר/ת – ואתם רק עוזרים.');
+    $w('.kw-play').innerHTML=`<div class="kw-peek" aria-hidden="true"><img src="assets/characters/kiko-3d-green.webp" alt=""><img src="assets/characters/kiko-3d-red.webp" alt=""><img src="assets/characters/kiko-3d-blue.webp" alt=""></div><button type="button" class="kw-go">${kid||'הילד/ה'} כאן – יוצאים לדרך! 🚀</button>`;
+    $w('.kw-go').onclick=choose;
+  }
   // 1 · choose a KIKO
   function choose(){
     setScene('home');$w('.kw-title').textContent=(kid?kid+', ':'')+'בוא/י נבחר KIKO!';say('איזה KIKO יצא איתנו להרפתקה?');
@@ -577,7 +612,7 @@ function startAdventure(){
     });
   }
   function flyTo(img,cb){
-    const r=img.getBoundingClientRect(),t=$w('.kw-base')||$w('#kwTower');const tr=t.getBoundingClientRect();
+    const r=img.getBoundingClientRect(),t=$w('.kw-base')||$w('.kw-full')||$w('#kwTower');const tr=t.getBoundingClientRect();
     const c=img.cloneNode();c.className='kw-fly';Object.assign(c.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px'});document.body.appendChild(c);
     img.style.visibility='hidden';const sp=img.closest('.kw-spot');if(sp)sp.classList.add('taken');
     requestAnimationFrame(()=>{c.style.transform=`translate(${tr.left+tr.width/2-(r.left+r.width/2)}px,${tr.top-(r.top+r.height/2)}px) scale(.55) rotate(-8deg)`;c.style.opacity='.4'});
@@ -592,14 +627,16 @@ function startAdventure(){
   }
   function finish(ok){
     W.remove();document.body.classList.remove('kw-on');
+    const bn=document.getElementById('togetherBanner');if(bn&&ok){const st=bn.querySelectorAll('.st');if(st[0])st[0].className='st done';if(st[1])st[1].className='st on'}
     if(ok&&color){
       data.character_color=color;markConfigurationDirty();renderResult();renderCharacterSummary();
       document.getElementById('continueToGuide').click();
     }else renderResult();
   }
-  choose();
+  handoff();
 }
 
+document.getElementById('soloStart').onclick=()=>nextBtn.click();
 document.getElementById('togetherStart').onclick=()=>{TOGETHER=true;applyTogetherTexts();nextBtn.click()};
 applyTogetherTexts();
 

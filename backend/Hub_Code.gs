@@ -332,7 +332,8 @@ function recDetail_(x, names) {
     respondent_role: x.respondent_role, primary_goal: split_(x.primary_goal), new_place_response: x.new_place_response,
     preferred_sensations: split_(x.preferred_sensations), avoid_sensations: split_(x.avoid_sensations),
     preferred_actions: split_(x.preferred_actions), intensity: x.intensity,
-    recommended_part_ids: split_(x.recommended_part_ids), recommended_parts: split_(x.recommended_parts), user_changes: x.user_changes
+    recommended_part_ids: split_(x.recommended_part_ids), recommended_parts: split_(x.recommended_parts), user_changes: x.user_changes,
+    temperature: payloadOf_(x).temperature || [], visual: payloadOf_(x).visual || [], safety_mouthing: payloadOf_(x).safety_mouthing || ''
   });
 }
 function fbSummary_(x, names) {
